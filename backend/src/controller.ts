@@ -1,4 +1,4 @@
-export function translateKitalistJson(input: any): Kita[] {
+export function kitaList(input: any): Kita[] {
   const facilities = input.einrichtungen.map((facility: any) => {
     const availability: { [key: string]: boolean } = {};
     facility.freiplatzstatus.forEach((status: any) => {
@@ -34,61 +34,57 @@ export function kitaDetail(input: any): KitaDetail {
   const facility = input
 
   const availability: { [key: string]: boolean } = {};
-  input.einrichtungsauszug.freiplatzstatus.forEach((status: any) => {
+  facility.einrichtungsauszug.freiplatzstatus.forEach((status: any) => {
     availability[status.gueltigAb] = status.plaetzeVerfuegbar;
   });
 
-  console.log("LOG: " + input.oeffnungszeiten)
-  console.log("LOG: " + input.oeffnungszeiten[0])
-  console.log("LOG: " + input.oeffnungszeiten[0].von)
-
   const facilityObj: KitaDetail = {
-    uuid: input.einrichtungsauszug.id.toString(),
-    name: input.einrichtungsauszug.name,
-    number: input.einrichtungsauszug.nummer,
+    uuid: facility.einrichtungsauszug.id.toString(),
+    name: facility.einrichtungsauszug.name,
+    number: facility.einrichtungsauszug.nummer,
     coordinates: {
-      lat: input.einrichtungsauszug.geokoordinate.lat,
-      lng: input.einrichtungsauszug.geokoordinate.lon,
-      dist: input.einrichtungsauszug.geokoordinate.entfernung,
+      lat: facility.einrichtungsauszug.geokoordinate.lat,
+      lng: facility.einrichtungsauszug.geokoordinate.lon,
+      dist: facility.einrichtungsauszug.geokoordinate.entfernung,
     },
     address: {
-      street: input.einrichtungsauszug.adresse.strasse,
-      houseNumber: input.einrichtungsauszug.adresse.hausnummer,
-      zip: input.einrichtungsauszug.adresse.plz,
-      city: input.einrichtungsauszug.adresse.ort,
+      street: facility.einrichtungsauszug.adresse.strasse,
+      houseNumber: facility.einrichtungsauszug.adresse.hausnummer,
+      zip: facility.einrichtungsauszug.adresse.plz,
+      city: facility.einrichtungsauszug.adresse.ort,
     },
     availability,
-    imageUrl: 'https://kita-navigator.berlin.de' + input.einrichtungsauszug.vorschaubild.url,
+    imageUrl: 'https://kita-navigator.berlin.de' + facility.einrichtungsauszug.vorschaubild.url,
     capacity: {
-      "total": input.betreuung.anzahlKinder,
-      "underThree": input.betreuung.anzahlKinderUnter3
+      "total": facility.betreuung.anzahlKinder,
+      "underThree": facility.betreuung.anzahlKinderUnter3
     },
-    minimumAcceptanceAgeInMonths: input.betreuung.aufnahmealter * 12,
+    minimumAcceptanceAgeInMonths: facility.betreuung.aufnahmealter * 12,
     contactDetails: {
-      email: input.kontaktdaten.emailadresse,
-      phone: input.kontaktdaten.telefonnummer,
-      website: input.kontaktdaten.webadresse
+      email: facility.kontaktdaten.emailadresse,
+      phone: facility.kontaktdaten.telefonnummer,
+      website: facility.kontaktdaten.webadresse
     },
     openingHours: {
       "monday": {
-        from: input.oeffnungszeiten[0].von,
-        to: input.oeffnungszeiten[0].bis
+        from: facility.oeffnungszeiten[0].von,
+        to: facility.oeffnungszeiten[0].bis
       },
       "tuesday": {
-        from: input.oeffnungszeiten[1].von,
-        to: input.oeffnungszeiten[1].bis
+        from: facility.oeffnungszeiten[1].von,
+        to: facility.oeffnungszeiten[1].bis
       },
       "wednesday": {
-        from: input.oeffnungszeiten[2].von,
-        to: input.oeffnungszeiten[2].bis
+        from: facility.oeffnungszeiten[2].von,
+        to: facility.oeffnungszeiten[2].bis
       },
       "thursday": {
-        from: input.oeffnungszeiten[3].von,
-        to: input.oeffnungszeiten[3].bis
+        from: facility.oeffnungszeiten[3].von,
+        to: facility.oeffnungszeiten[3].bis
       },
       "friday": {
-        from: input.oeffnungszeiten[4].von,
-        to: input.oeffnungszeiten[4].bis
+        from: facility.oeffnungszeiten[4].von,
+        to: facility.oeffnungszeiten[4].bis
       }
     },
     approach: {
