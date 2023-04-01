@@ -30,6 +30,8 @@ router.get("/kita/:uuid", async (req, res) => {
     res.send(result);
   } catch (err: any) {
     console.log(err.message);
+  } catch (err: any) {
+    console.log(err.message);
   }
 });
 
