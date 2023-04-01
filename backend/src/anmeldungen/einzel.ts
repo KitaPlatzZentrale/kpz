@@ -13,7 +13,6 @@ const handler: RequestHandler<
   }
 
   try {
-    console.log(req.body);
     const { email, interneKitaId, kitaName, name } = req.body;
 
     const airtableApi = new AirtableAPIService();
