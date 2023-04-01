@@ -1,12 +1,17 @@
-import express = require('express');
-import { kitaList, kitaDetail } from './controller';
-const router = express.Router();
-const axios = require('axios');
+import express = require("express");
 
-router.get('/kitas', async (req, res) => {
+import einzelBenachrichtigungHandler from "./anmeldungen/einzel";
+import arealBenachrichtigungHandler from "./anmeldungen/areal";
+import serviceAnmeldungHandler from "./anmeldungen/service";
+
+import { kitaList, kitaDetail } from "./controller";
+const router = express.Router();
+const axios = require("axios");
+
+router.get("/kitas", async (req, res) => {
   try {
     let kitas = await axios.get(
-      'https://kita-navigator.berlin.de/api/v1/kitas/umkreissuche?entfernung=500&seite=0&max=2'
+      "https://kita-navigator.berlin.de/api/v1/kitas/umkreissuche?entfernung=500&seite=0&max=2"
     );
     const result = kitaList(kitas.data);
     res.send(result);
@@ -15,7 +20,7 @@ router.get('/kitas', async (req, res) => {
   }
 });
 
-router.get('/kita/:uuid', async (req, res) => {
+router.get("/kita/:uuid", async (req, res) => {
   try {
     let kita = await axios.get(
       `https://kita-navigator.berlin.de/api/v1/kitas/${req.params.uuid}`
@@ -28,6 +33,8 @@ router.get('/kita/:uuid', async (req, res) => {
   }
 });
 
+router.post("/anmeldungen/service", serviceAnmeldungHandler);
+router.post("/anmeldungen/einzel", einzelBenachrichtigungHandler);
+router.post("/anmeldungen/areal", arealBenachrichtigungHandler);
+
 export = router;
-
-

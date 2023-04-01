@@ -3,6 +3,8 @@ import serverless = require("serverless-http");
 import routes = require("./routes");
 const app = express();
 
+require("dotenv").config();
+
 // Endpoint to consume LAT/LONG
 // Request Berlin API for Kitas in Radius
 // Transform JSON into our Schema ( English, Full URL for image)
