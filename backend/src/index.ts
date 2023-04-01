@@ -1,9 +1,10 @@
 import express = require("express");
-import serverless = require("serverless-http");
 import routes = require("./routes");
 const app = express();
 
 require("dotenv").config();
+
+app.use(express.json());
 
 // Endpoint to consume LAT/LONG
 // Request Berlin API for Kitas in Radius
@@ -15,8 +16,8 @@ require("dotenv").config();
 // Save Kita in DB
 // Request Berlin API for specific Kita
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
+app.use("", routes);
 
-module.exports.handler = serverless(app);
+app.listen(3000, () => {
+  console.log("Server started on port 3000");
+});

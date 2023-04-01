@@ -5,6 +5,7 @@ import arealBenachrichtigungHandler from "./anmeldungen/areal";
 import serviceAnmeldungHandler from "./anmeldungen/service";
 
 import { kitaList, kitaDetail } from "./controller";
+
 const router = express.Router();
 const axios = require("axios");
 
@@ -28,8 +29,6 @@ router.get("/kita/:uuid", async (req, res) => {
     console.log(kita.data);
     const result = kitaDetail(kita.data);
     res.send(result);
-  } catch (err: any) {
-    console.log(err.message);
   } catch (err: any) {
     console.log(err.message);
   }

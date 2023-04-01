@@ -12,6 +12,7 @@ type AirtableEinzelbenachrichtigungen = {
 type AirtableArealbenachrichtigungen = {
   ID: string; //unique
   Name: string;
+  Region: string;
   Email: string;
   "Erstellt am": string;
 };
@@ -33,6 +34,7 @@ export interface CreateEinzelbenachrichtigungPayload {
 export interface CreateArealbenachrichtigungPayload {
   name: string;
   email: string;
+  region: string;
 }
 
 export interface CreateServiceAnmeldungPayload {
@@ -96,6 +98,7 @@ class AirtableAPIService implements IAirtableAPIService {
         fields: {
           Name: payload.name,
           Email: payload.email,
+          Region: payload.region,
         } as AirtableArealbenachrichtigungen,
       },
     ]);

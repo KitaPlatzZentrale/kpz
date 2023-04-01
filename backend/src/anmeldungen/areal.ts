@@ -13,13 +13,14 @@ const handler: RequestHandler<
   }
 
   try {
-    const { email, name } = req.body;
+    const { email, name, region } = req.body;
 
     const airtableApi = new AirtableAPIService();
 
     const anmeldung = await airtableApi.createArealbenachrichtigung({
       email,
       name,
+      region,
     });
 
     return !!anmeldung
