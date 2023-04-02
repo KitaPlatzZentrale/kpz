@@ -1,9 +1,12 @@
-import express = require("express");
-import routes = require("./routes");
+import express = require('express');
+import routes = require('./routes');
+import cors from 'cors';
+
 const app = express();
 
 require("dotenv").config();
 
+app.use(cors())
 app.use(express.json());
 
 // Endpoint to consume LAT/LONG
