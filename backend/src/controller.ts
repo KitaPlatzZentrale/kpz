@@ -1,3 +1,10 @@
+import { Kita, KitaDetail } from "../../type";
+
+/**
+ * Transforms and translates all the json objects from the kita-navigator API response
+ * @param JSON input - The JSON response from the kita-navigator API
+ * @returns {Kita[]} - A list of kita centers in JSON format
+ */
 export function kitaList(input: any): Kita[] {
   const facilities = input.einrichtungen.map((facility: any) => {
     const availability: { [key: string]: boolean } = {};
@@ -23,13 +30,16 @@ export function kitaList(input: any): Kita[] {
       availability,
       imageUrl: 'https://kita-navigator.berlin.de' + facility.vorschaubild.url,
     };
-
     return facilityObj;
   });
-
   return facilities;
 }
 
+/**
+ * Transforms and translates the kita-navigator API response of a specific kita center
+ * @param input ID if the kita center 
+ * @returns transformed and translated json object
+ */
 export function kitaDetail(input: any): KitaDetail {
   const facility = input
 
@@ -97,54 +107,4 @@ export function kitaDetail(input: any): KitaDetail {
     closingDate: facility.schliessdatum
   }
   return facilityObj;
-}
-
-
-
-type Kita = {
-  uuid: string;
-  name: string;
-  number: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-    dist: number;
-  };
-  address: {
-    street: string;
-    houseNumber: string;
-    zip: string;
-    city: string;
-  };
-  availability: {
-    [key: string]: boolean; // "2023-01-01": true
-  };
-  imageUrl: string;
-};
-
-interface KitaDetail extends Kita {
-  capacity: {
-    total: number;
-    underThree: number;
-  };
-  minimumAcceptanceAgeInMonths: number;
-  contactDetails: {
-    email?: string;
-    phone?: string;
-    website?: string;
-  };
-  openingHours: {
-    [key: string]: {
-      from: string;
-      to: string
-    }
-  };
-  approach: {
-    pedagogicalConcepts: string[];
-    emphasis: string[];
-    languages?: string[];
-    mixedAgesDescriptions?: string[];
-  };
-  foundingDate: string;
-  closingDate?: string;
 }
