@@ -70,7 +70,6 @@ const theme = extendTheme({
           fontSize: "14px",
           fontWeight: 800,
           ...(ownerState.size === "lg" && {
-            padding: "16px 32px",
             fontSize: "16px",
             "--Button-paddingInline": "1rem",
           }),
@@ -79,9 +78,44 @@ const theme = extendTheme({
     },
     JoyInput: {
       styleOverrides: {
-        root: ({ ownerState }) => ({
+        root: ({ ownerState, theme }) => ({
           fontSize: "16px",
           padding: "11px 16px",
+        }),
+        input: ({ ownerState, theme }) => ({
+          "&::placeholder": {
+            color: theme.colorSchemes.light.palette.neutral[900],
+            fontWeight: 600,
+          },
+        }),
+        startDecorator: ({ ownerState, theme }) => ({
+          color: theme.colorSchemes.light.palette.info[600],
+          "& svg": { fontSize: "20px" },
+        }),
+      },
+    },
+    JoyModalDialog: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          borderRadius: "20px",
+        }),
+      },
+    },
+    JoyModal: {
+      styleOverrides: {
+        backdrop: {
+          backgroundColor: "rgba(0, 0, 0, 0.25)",
+          backdropFilter: "blur(1px)",
+        },
+      },
+    },
+    JoyFormLabel: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          fontWeight: 600,
+          marginBottom: "4px",
+          fontSize: "14px",
+          color: theme.colorSchemes.light.palette.neutral[500],
         }),
       },
     },

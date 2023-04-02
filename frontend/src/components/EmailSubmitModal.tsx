@@ -1,3 +1,4 @@
+import { Mail, MailOutline } from "@material-ui/icons";
 import { Button, Modal, ModalClose, ModalDialog, Typography } from "@mui/joy";
 import React from "react";
 
@@ -21,6 +22,7 @@ const EmailSubmitModal: React.FC<EmailSubmitModalProps> = ({
           paddingRight: "32px",
           paddingLeft: "32px",
           paddingTop: "16px",
+          border: "none",
         }}
         className="w-full max-w-lg"
       >
@@ -41,10 +43,16 @@ const EmailSubmitModal: React.FC<EmailSubmitModalProps> = ({
           </Balancer>
         </div>
         <div className="w-full">
-          <FormField label="Email Adresse" placeholder="Ihre Email Adresse" />
+          <FormField
+            inputProps={{
+              startDecorator: <MailOutline />,
+            }}
+            label="Email Adresse"
+            placeholder="Ihre Email Adresse"
+          />
         </div>
         <div className="mt-8 flex w-full flex-row-reverse">
-          <Button variant="solid" size="md" color="primary">
+          <Button variant="solid" size="lg" color="primary">
             Benachrichtigen lassen
           </Button>
         </div>
