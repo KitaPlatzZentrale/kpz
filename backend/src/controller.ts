@@ -1,4 +1,4 @@
-import { Kita, KitaDetail } from "../../type";
+import { Kita, KitaDetail } from "./type";
 
 /**
  * Transforms and translates all the json objects from the kita-navigator API response
