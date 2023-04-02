@@ -3,7 +3,7 @@
 ## Used Software
 
 - Node v14.20.0
-- NPM 8.19.3
+- npm 8.19.3
 
 ## Setup AWS EC2 Instance
 
@@ -15,8 +15,6 @@
 - [ ] Install Node
 
 ### Problems
-
-- [ ] How fetch repo from Github?
 
 ## Typescript
 
@@ -31,3 +29,9 @@ Watch for changes
 ```bash
 npx tsc --watch
 ```
+
+## Deployment
+
+### Requirements
+
+- [ ] Install PM2 on the server (used [this tutorial](https://medium.com/monstar-lab-bangladesh-engineering/deploying-node-js-apps-in-amazon-linux-with-pm2-7fc3ef5897bb))
