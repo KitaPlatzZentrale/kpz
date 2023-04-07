@@ -34,6 +34,9 @@ export default {
         "sea-blue": {
           DEFAULT: "#4DA9B7",
         },
+        "deep-blue": {
+          DEFAULT: "#496C80",
+        },
       },
     },
   },

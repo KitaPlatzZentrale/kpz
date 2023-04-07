@@ -12,18 +12,24 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@fontsource/nunito": "^4.5.12",
-    "@material-ui/core": "^4.12.4",
-    "@material-ui/icons": "^4.11.3",
+    "@hookform/resolvers": "^3.0.1",
+    "@mui/icons-material": "^5.11.16",
     "@mui/joy": "^5.0.0-alpha.73",
+    "@mui/material": "npm:@mui/joy@latest",
     "clsx": "^1.2.1",
     "dotenv": "^16.0.3",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-router-dom": "^6.10.0",
     "react-wrap-balancer": "^0.4.0",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "yup": "^1.0.2"
+  },
+  "resolutions": {
+    "@mui/material": "npm:@mui/joy@latest"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",

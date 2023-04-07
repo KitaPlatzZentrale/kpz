@@ -3,6 +3,7 @@ import {
   FormControl,
   FormControlProps,
   FormLabel,
+  InputProps,
 } from "@mui/joy";
 import React from "react";
 
@@ -11,7 +12,7 @@ type FormAutocompleteProps = {
   options: string[];
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<{}>, value: string | null) => void;
-  inputProps?: any;
+  inputProps?: InputProps;
 } & FormControlProps;
 
 const FormAutocomplete: React.FC<FormAutocompleteProps> = ({

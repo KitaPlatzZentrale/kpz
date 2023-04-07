@@ -90,10 +90,34 @@ const theme = extendTheme({
         }),
         startDecorator: ({ ownerState, theme }) => ({
           color: theme.colorSchemes.light.palette.info[600],
-          "& svg": { fontSize: "20px" },
+          "& > svg": { fontSize: "20px" },
         }),
       },
     },
+    JoyAutocomplete: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          fontSize: "16px",
+          padding: "11px 16px",
+        }),
+        input: ({ ownerState, theme }) => ({
+          "&::placeholder": {
+            color: theme.colorSchemes.light.palette.neutral[900],
+            fontWeight: 600,
+            fontSize: "16px",
+          },
+        }),
+        startDecorator: ({ ownerState, theme }) => ({
+          color: theme.colorSchemes.light.palette.info[600],
+          "& > svg": { fontSize: "20px" },
+        }),
+        clearIndicator: ({ ownerState, theme }) => ({
+          color: theme.colorSchemes.light.palette.neutral[600],
+          padding: 4,
+        }),
+      },
+    },
+
     JoyModalDialog: {
       styleOverrides: {
         root: ({ ownerState, theme }) => ({

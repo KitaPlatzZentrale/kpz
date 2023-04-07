@@ -1,16 +1,16 @@
 import {
   FormControl,
   FormControlProps,
+  FormHelperText,
   FormLabel,
   Input,
   InputProps,
-  TextField,
 } from "@mui/joy";
 import React from "react";
 
 type FormFieldProps = {
   label: string;
-  inputProps?: InputProps;
+  inputProps?: InputProps & { helperText?: string };
 } & FormControlProps;
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -20,10 +20,15 @@ const FormField: React.FC<FormFieldProps> = ({
   inputProps,
   ...formControlProps
 }) => {
+  const { error, helperText } = inputProps || {};
+
   return (
-    <FormControl {...formControlProps}>
+    <FormControl error={error} {...formControlProps}>
       <FormLabel>{label}</FormLabel>
       <Input placeholder={placeholder} {...inputProps} />
+      {helperText && (
+        <FormHelperText color="primary">{helperText}</FormHelperText>
+      )}
     </FormControl>
   );
 };

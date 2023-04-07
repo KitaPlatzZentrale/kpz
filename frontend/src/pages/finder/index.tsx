@@ -1,9 +1,8 @@
-import { Autocomplete, Button, FormControl, FormLabel } from "@mui/joy";
+import { DateRange } from "@mui/icons-material";
+import { Button } from "@mui/joy";
 import React from "react";
 import EmailSubmitModal from "../../components/EmailSubmitModal";
 import FormAutocomplete from "../../components/FormAutocomplete";
-import LabelledInput from "../../components/LabelledInput";
-import { generateKitasAndDetails } from "../../mswHandlers";
 import { Kita } from "../../types";
 import Layout from "../layout";
 import AddressLookup from "./components/AddressLookup";
@@ -13,7 +12,7 @@ import ServiceBanner from "./components/ServiceBanner";
 type FinderPageProps = {};
 
 const fetchResults = async (lat: number, lng: number): Promise<Kita[]> => {
-  return generateKitasAndDetails(10).kitas;
+  //return generateKitasAndDetails(10).kitas;
 
   const results = await fetch(`http://3.70.176.52:3000/kitas/${lat}/${lng}`);
 
@@ -41,6 +40,9 @@ const FinderPage: React.FC<FinderPageProps> = () => {
               className="w-2/6"
               label="Gewünschter Beginn"
               placeholder="z.B. Mai 2023"
+              inputProps={{
+                startDecorator: <DateRange />,
+              }}
               options={[
                 "Mai 2023",
                 "Juni 2023",
@@ -68,7 +70,7 @@ const FinderPage: React.FC<FinderPageProps> = () => {
                 "April 2025",
               ]}
             />
-            <Button className="w-1/6" color="primary" variant="solid">
+            <Button className="w-1/6" color="primary" size="lg" variant="solid">
               Kitas finden
             </Button>
           </div>

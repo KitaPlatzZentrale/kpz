@@ -1,3 +1,5 @@
+import { Home } from "@mui/icons-material";
+import { CircularProgress } from "@mui/joy";
 import React from "react";
 import FormAutocomplete from "../../../components/FormAutocomplete";
 
@@ -17,6 +19,8 @@ const AddressLookup: React.FC<AddressLookupProps> = ({}) => {
     lat: null,
     lng: null,
   });
+
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const [timer, setTimer] = React.useState<NodeJS.Timeout | null>(null);
 
@@ -73,9 +77,11 @@ const AddressLookup: React.FC<AddressLookupProps> = ({}) => {
     }
 
     setTimer(
-      setTimeout(() => {
+      setTimeout(async () => {
         if (value?.length > 3) {
-          fetchSuggestions(value);
+          setIsLoading(true);
+          await fetchSuggestions(value);
+          setIsLoading(false);
         } else {
           setSuggestions([]);
         }
@@ -106,6 +112,14 @@ const AddressLookup: React.FC<AddressLookupProps> = ({}) => {
         freeSolo: true,
         onInputChange: handleInputChange,
         onChange: (e, value) => handleAddressSelection(e, value),
+        startDecorator: <Home />,
+        loading: isLoading,
+        loadingText: (
+          <span className="flex flex-row items-center gap-3">
+            <CircularProgress color="neutral" size="sm" />
+            <span className="ml-2">Lade Adressen...</span>
+          </span>
+        ),
         value: selectedAddress,
       }}
     />
