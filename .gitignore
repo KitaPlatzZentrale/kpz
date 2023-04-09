@@ -2,3 +2,9 @@
 node_modules/
 
 *.log
+
+backend/.build/
+
+backend/.DS_Store
+
+.DS_Store
