@@ -17,7 +17,7 @@ const axios = require("axios");
 router.get("/kitas/:lat/:lon", async (req, res) => {
   try {
     let kitas = await axios.get(
-      `https://kita-navigator.berlin.de/api/v1/kitas/umkreissuche?entfernung=2&lat=${req.params.lat}&lon=${req.params.lon}&seite=0&max=30`
+      `https://kita-navigator.berlin.de/api/v1/kitas/umkreissuche?entfernung=2&lat=${req.params.lat}&lon=${req.params.lon}&seite=0&max=4000`
     );
     const result = kitaList(kitas.data);
     logger.info(`Retrieved ${result.length} kitas.`);
