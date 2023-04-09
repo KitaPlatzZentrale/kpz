@@ -1,3 +1,15 @@
+interface KitaResponse {
+  anzahl: number;
+  einrichtungen: Array<{
+    name: string;
+    adresse: {
+      plz: string;
+      ort: string;
+    };
+  }>;
+}
+
+
 type Weekday =
   | "monday"
   | "tuesday"
@@ -55,4 +67,4 @@ interface KitaDetail extends Kita {
   closingDate?: string;
 }
 
-export { Kita, KitaDetail, Weekday };
+export { Kita, KitaDetail, KitaResponse, Weekday };
