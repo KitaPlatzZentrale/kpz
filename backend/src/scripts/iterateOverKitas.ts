@@ -1,16 +1,10 @@
-import * as data from '../../data/kitas_berlin.json';
+import { Kita } from '../type';
 
-console.log(data);
-
-interface Kita {
-    name: string;
-    // add other properties here if needed
-}
+const kitas: Kita[] = require('../../data/kitas_berlin.json');
 
 function printKitaNames(): void {
-    const kitas: Kita[] = (data as any).einrichtungen;
     for (const kita of kitas) {
-        console.log(kita.name);
+        console.log(kita);
     }
 }
 
