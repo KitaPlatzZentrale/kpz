@@ -40,11 +40,11 @@ export async function kitaList(req: any, res: any) {
             return facilityObj;
           });
           logger.info(`Retrieved ${facilities.length} kitas.`);
-          res.status(200).send(facilities);
+          return res.status(200).send(facilities);
     }
     catch(err: any){
         logger.error(err.message);
-        res.status(500).json({"error": "Something went wrong"});
+        return res.status(500).json({"error": "Something went wrong"});
     }
     
 }
