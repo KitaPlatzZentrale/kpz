@@ -9,7 +9,7 @@ type AddressLookupProps = {
   className?: string;
 };
 
-const AddressLookup: React.FC<AddressLookupProps> = ({}) => {
+const AddressLookup: React.FC<AddressLookupProps> = ({ className }) => {
   const [input, setInput] = React.useState("");
   const [suggestions, setSuggestions] = React.useState([]);
   const [selectedAddress, setSelectedAddress] = React.useState<string | null>(
@@ -105,7 +105,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({}) => {
   return (
     <FormAutocomplete
       label="Wo wohnen Sie?"
-      className="w-2/4"
+      className={className}
       placeholder="Ihr Wohnort"
       options={suggestions}
       inputProps={{

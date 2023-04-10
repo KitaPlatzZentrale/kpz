@@ -3,6 +3,7 @@ import { Button } from "@mui/joy";
 import React from "react";
 import EmailSubmitModal from "../../components/EmailSubmitModal";
 import FormAutocomplete from "../../components/FormAutocomplete";
+import ServiceSignupModal from "../../components/ServiceSignupModal/ServiceSignupModal";
 import { Kita } from "../../types";
 import Layout from "../layout";
 import AddressLookup from "./components/AddressLookup";
@@ -14,7 +15,7 @@ type FinderPageProps = {};
 const fetchResults = async (lat: number, lng: number): Promise<Kita[]> => {
   //return generateKitasAndDetails(10).kitas;
 
-  const results = await fetch(`http://3.70.176.52:3000/kitas/${lat}/${lng}`);
+  const results = await fetch(`http://localhost:3000/kitas/${lat}/${lng}`);
 
   return results.json();
 };
@@ -30,7 +31,7 @@ const FinderPage: React.FC<FinderPageProps> = () => {
 
   return (
     <Layout>
-      <EmailSubmitModal open={true} />
+      <ServiceSignupModal open={true} />
       <div className="flex h-full w-full flex-col">
         <ServiceBanner />
         <div className="w-full bg-sunny-light px-24 pb-8 pt-10">
