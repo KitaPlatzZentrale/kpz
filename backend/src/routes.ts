@@ -5,6 +5,7 @@ import serviceAnmeldungHandler from './anmeldungen/service';
 import { kitaList, kitaDetail } from './controller';
 import logger from './logger';
 import { locationService } from './location-service';
+import { locationValidator } from './location-service/validator';
 
 const router = express.Router();
 const axios = require('axios');
@@ -46,7 +47,7 @@ router.get('/kita/:uuid', async (req, res) => {
   }
 });
 
-router.get('/location-service', locationService);
+router.get('/location-service', locationValidator, locationService);
 
 router.post('/anmeldungen/service', serviceAnmeldungHandler);
 router.post('/anmeldungen/einzel', einzelBenachrichtigungHandler);
