@@ -1,12 +1,19 @@
+import axios from "axios";
 import { KitaDetail } from "../type";
+import logger from "../logger";
 
 /**
- * Transforms and translates the kita-navigator API response of a specific kita center
- * @param input ID if the kita center 
- * @returns transformed and translated json object
+ * Returns details for a specific kita center
+ * @param {string} uuid - The uuid of the kita center
+ * @returns {KitaDetail} - The details of the kita center in JSON format
  */
-export function kitaDetail(input: any): KitaDetail {
-    const facility = input
+export async function kitaDetail(req: any, res: any) {
+    try {
+    let kita = await axios.get(
+      `https://kita-navigator.berlin.de/api/v1/kitas/${req.params.uuid}`
+    );
+    logger.info(`Retrieved details for Kita with uuid ${req.params.uuid}.`);
+    const facility = kita.data
   
     const availability: { [key: string]: boolean } = {};
     facility.einrichtungsauszug.freiplatzstatus.forEach((status: any) => {
@@ -71,6 +78,10 @@ export function kitaDetail(input: any): KitaDetail {
       foundingDate: facility.oeffnungsdatum,
       closingDate: facility.schliessdatum
     }
-    return facilityObj;
+    return res.status(200).send(facilityObj);
+  }catch(err: any){
+    logger.error(err.message);
+    return res.status(500).json({"error": "Something went wrong"});
+    }
   }
   
