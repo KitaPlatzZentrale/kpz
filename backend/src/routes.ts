@@ -1,12 +1,14 @@
-import express = require("express");
-import einzelBenachrichtigungHandler from "./anmeldungen/einzel";
-import arealBenachrichtigungHandler from "./anmeldungen/areal";
-import serviceAnmeldungHandler from "./anmeldungen/service";
-import { kitaList, kitaDetail } from "./controller";
+import express = require('express');
+import einzelBenachrichtigungHandler from './anmeldungen/einzel';
+import arealBenachrichtigungHandler from './anmeldungen/areal';
+import serviceAnmeldungHandler from './anmeldungen/service';
+import { kitaList, kitaDetail } from './controller';
 import logger from './logger';
+import { locationService } from './location-service';
+import { locationValidator } from './location-service/validator';
 
 const router = express.Router();
-const axios = require("axios");
+const axios = require('axios');
 
 /**
  * Finds nearby kita centers based on latitude and longitude
@@ -14,7 +16,7 @@ const axios = require("axios");
  * @param {number} lon - The longitude coordinate
  * @returns {Kita[]} - A list of kita centers in JSON format
  */
-router.get("/kitas/:lat/:lon", async (req, res) => {
+router.get('/kitas/:lat/:lon', async (req, res) => {
   try {
     let kitas = await axios.get(
       `https://kita-navigator.berlin.de/api/v1/kitas/umkreissuche?entfernung=500&lat=${req.params.lat}&lon=${req.params.lon}&seite=0&max=4000`
@@ -32,7 +34,7 @@ router.get("/kitas/:lat/:lon", async (req, res) => {
  * @param {string} uuid - The uuid of the kita center
  * @returns {KitaDetail} - The details of the kita center in JSON format
  */
-router.get("/kita/:uuid", async (req, res) => {
+router.get('/kita/:uuid', async (req, res) => {
   try {
     let kita = await axios.get(
       `https://kita-navigator.berlin.de/api/v1/kitas/${req.params.uuid}`
@@ -45,8 +47,10 @@ router.get("/kita/:uuid", async (req, res) => {
   }
 });
 
-router.post("/anmeldungen/service", serviceAnmeldungHandler);
-router.post("/anmeldungen/einzel", einzelBenachrichtigungHandler);
-router.post("/anmeldungen/areal", arealBenachrichtigungHandler);
+router.get('/location-service', locationValidator, locationService);
+
+router.post('/anmeldungen/service', serviceAnmeldungHandler);
+router.post('/anmeldungen/einzel', einzelBenachrichtigungHandler);
+router.post('/anmeldungen/areal', arealBenachrichtigungHandler);
 
 export = router;
