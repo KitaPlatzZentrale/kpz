@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -8,7 +9,7 @@
     "sourceMap": true,
     "outDir": "dist",
     "target": "es6",
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
   "compileOnSave": true,
   "include": ["src"]

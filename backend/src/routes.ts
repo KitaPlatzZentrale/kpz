@@ -46,10 +46,7 @@ router.get('/kita/:uuid', async (req, res) => {
   }
 });
 
-router.get('/location', locationService);
-router.get('/some', (req, res) => {
-  res.send('some');
-});
+router.get('/location-service', locationService);
 
 router.post('/anmeldungen/service', serviceAnmeldungHandler);
 router.post('/anmeldungen/einzel', einzelBenachrichtigungHandler);
