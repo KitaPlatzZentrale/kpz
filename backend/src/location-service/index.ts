@@ -14,7 +14,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
     let kitasInRadius: Kita[] = []
     kitaList.data.map((kita: Kita) => {
       const distance = haversine({lat, lon}, {lat: kita.coordinates.lat, lon: kita.coordinates.lng}) / 1000
-      if(distance < radius) {
+      if(distance <= radius) {
         kita.coordinates.dist = distance
         kitasInRadius.push(kita)
       }
