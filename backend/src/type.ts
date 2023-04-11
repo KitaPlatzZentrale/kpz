@@ -9,7 +9,6 @@ interface KitaResponse {
   }>;
 }
 
-
 type Weekday =
   | "monday"
   | "tuesday"
@@ -26,7 +25,7 @@ type Kita = {
   coordinates: {
     lat: number;
     lng: number;
-    dist: number;
+    dist: number | null;
   };
   address: {
     street: string;
@@ -54,8 +53,8 @@ interface KitaDetail extends Kita {
   openingHours: {
     [key: string]: {
       from: string;
-      to: string
-    }
+      to: string;
+    };
   };
   approach: {
     pedagogicalConcepts: string[];

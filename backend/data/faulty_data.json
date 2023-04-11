@@ -1,0 +1,79 @@
+{
+  "einrichtungsauszug": {
+    "id": 1158229,
+    "name": "Kita Marmaraweg",
+    "nummer": "07132280",
+    "geokoordinate": {
+      "lon": 13.40101008359306,
+      "lat": 52.443143452123095,
+      "entfernung": null
+    },
+    "vorschaubild": {
+      "url": "/fallback_einrichtung_vorschau.jpg"
+    },
+    "adresse": {
+      "strasse": "Marmaraweg",
+      "hausnummer": "20",
+      "plz": "12109",
+      "ort": "Berlin"
+    },
+    "freiplatzstatus": [
+      {
+        "gueltigAb": "2023-04-01",
+        "plaetzeVerfuegbar": false
+      },
+      {
+        "gueltigAb": "2023-05-01",
+        "plaetzeVerfuegbar": false
+      },
+      {
+        "gueltigAb": "2023-06-01",
+        "plaetzeVerfuegbar": false
+      },
+      {
+        "gueltigAb": "2023-07-01",
+        "plaetzeVerfuegbar": false
+      },
+      {
+        "gueltigAb": "2023-08-01",
+        "plaetzeVerfuegbar": true
+      },
+      {
+        "gueltigAb": "2023-09-01",
+        "plaetzeVerfuegbar": true
+      },
+      {
+        "gueltigAb": "2023-10-01",
+        "plaetzeVerfuegbar": true
+      },
+      {
+        "gueltigAb": "2023-11-01",
+        "plaetzeVerfuegbar": true
+      },
+      {
+        "gueltigAb": "2023-12-01",
+        "plaetzeVerfuegbar": true
+      }
+    ]
+  },
+  "kontaktdaten": {
+    "emailadresse": "123kleinemenschen@posteo.de",
+    "telefonnummer": "+49-8793933",
+    "webadresse": "http://www.123kleinemenschen.de"
+  },
+  "betreuung": {
+    "aufnahmealter": 12,
+    "anzahlKinder": 20,
+    "anzahlKinderUnter3": 0,
+    "paedagogischerAnsatz": [],
+    "thematischeSchwerpunkte": [],
+    "mehrsprachigkeit": [],
+    "altersmischung": []
+  },
+  "bild": {
+    "url": "/fallback_einrichtung.jpg"
+  },
+  "oeffnungszeiten": [],
+  "oeffnungsdatum": "2022-11-29T23:00:00",
+  "schliessdatum": null
+}
