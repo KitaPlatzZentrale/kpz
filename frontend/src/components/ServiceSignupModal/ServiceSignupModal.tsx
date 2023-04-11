@@ -5,20 +5,31 @@ import WizardContextProvider, { WizardContext } from "./WizardContext";
 import ServiceSignupFormView from "./views/ServiceSignupFormView";
 import ServiceSignupFormContextProvider from "./ServiceSignupFormContext";
 import { useServiceSignupModal } from "./ServiceSignupModalContext";
-import WizardSteps from "./WizardSteps";
 import Wizard from "./Wizard";
 
-const submitEmailAction = async (email: string) => {
-  const res = await fetch("http://localhost:3000/anmeldungen/einzel", {
+type ServiceSignupActionPayload = {
+  email: string;
+  fullAddress: string;
+  desiredStartMonth: string;
+  expectedBirthDate: string;
+};
+
+const submitServiceSignupAction = async ({
+  email,
+  fullAddress,
+  desiredStartMonth,
+  expectedBirthDate,
+}: ServiceSignupActionPayload) => {
+  const res = await fetch("http://localhost:3000/anmeldungen/service", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      name: "Hanno Grimm",
       email,
-      kitaName: "Kita 1",
-      interneKitaId: "1",
+      fullAddress,
+      desiredStartMonth,
+      expectedBirthDate,
     }),
   });
 
@@ -57,7 +68,14 @@ const ServiceSignupModal: React.FC<ServiceSignupModalProps> = ({
         }}
         className="w-full max-w-xl"
       >
-        <ServiceSignupFormContextProvider>
+        <ServiceSignupFormContextProvider
+          onSubmit={async (data) => {
+            const success = await submitServiceSignupAction(
+              data as ServiceSignupActionPayload
+            );
+            return success;
+          }}
+        >
           <WizardContextProvider>
             <div className="mb-4 flex flex-row-reverse">
               <ModalClose

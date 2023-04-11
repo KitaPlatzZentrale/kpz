@@ -14,14 +14,15 @@ import {
 import * as Yup from "yup";
 
 type FormFields = {
-  fullAddress: string;
-  desiredStartMonth: string;
-  expectedBirthDate: string;
+  fullAddress: string | null;
+  desiredStartMonth: string | null;
+  expectedBirthDate: string | null;
   email: string;
 };
 type FormFieldsReference = Path<FormFields>;
 
 export type UseRegisterReturn = UseFormRegisterReturn & {
+  defaultValue: string | null;
   inputRef: RefCallBack;
   helperText?: string;
   error?: boolean;
@@ -53,7 +54,7 @@ type ServiceSignupFormContext = {
   watch: UseFormWatch<FormFields>;
   validate: (name?: FormFieldsReference) => Promise<boolean>;
   setValue: UseFormSetValue<FormFields>;
-  handleSubmit: () => void;
+  handleSubmit: () => Promise<boolean>;
   isValid: boolean;
   isLoading: boolean;
 };
@@ -62,11 +63,13 @@ const ServiceSignupFormContext = React.createContext<ServiceSignupFormContext>(
   {} as ServiceSignupFormContext
 );
 
-type ServiceSignupFormContextProviderProps = React.PropsWithChildren<{}>;
+type ServiceSignupFormContextProviderProps = React.PropsWithChildren<{
+  onSubmit?: (data: FormFields) => Promise<boolean>;
+}>;
 
 const ServiceSignupFormContextProvider: React.FC<
   ServiceSignupFormContextProviderProps
-> = ({ children }) => {
+> = ({ children, onSubmit: onSubmitProp }) => {
   const [attemptedSubmit, setAttemptedSubmit] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -80,7 +83,6 @@ const ServiceSignupFormContextProvider: React.FC<
     trigger,
     setValue,
   } = useForm<FormFields>({
-    shouldFocusError: true,
     mode: "onChange",
     reValidateMode: "onChange",
 
@@ -92,9 +94,12 @@ const ServiceSignupFormContextProvider: React.FC<
 
     const { ref, ...rest } = _register(fieldName);
 
+    const value = watch(fieldName);
+
     return {
       ...rest,
       ref,
+      defaultValue: value,
       inputRef: ref,
       helperText: error?.message,
       error: invalid,
@@ -114,19 +119,31 @@ const ServiceSignupFormContextProvider: React.FC<
 
   const isValid = React.useMemo(() => {
     if (!attemptedSubmit) return true;
-    console.log(formState.isValid);
     return formState.isValid;
   }, [attemptedSubmit, formState.isValid]);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     setAttemptedSubmit(true);
-    console.log("submit");
+    return await onSubmitProp?.(data);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true);
-    _handleSubmit(onSubmit, onSubmit);
-    setIsLoading(false);
+
+    return _handleSubmit(
+      async (data) => await onSubmit(data),
+      (errors) => {
+        console.log(errors);
+      }
+    )()
+      .then(() => {
+        setIsLoading(false);
+        return true;
+      })
+      .catch(() => {
+        setIsLoading(false);
+        return false;
+      });
   };
 
   return (

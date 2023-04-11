@@ -13,8 +13,9 @@ type SearchContext = {
     lat: number | null;
     lng: number | null;
   }) => void;
-  desiredStartingMonth: string | undefined;
-  setDesiredStartingMonth: (desiredStartingMonth: string | undefined) => void;
+  desiredStartingMonth: string | null;
+  setDesiredStartingMonth: (desiredStartingMonth: string | null) => void;
+  coordinatesAreValid: boolean;
 };
 
 const SearchContext = React.createContext<SearchContext>({} as SearchContext);
@@ -31,8 +32,12 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   });
 
   const [desiredStartingMonth, setDesiredStartingMonth] = React.useState<
-    string | undefined
-  >();
+    string | null
+  >("August 2023");
+
+  const coordinatesAreValid = React.useMemo(() => {
+    return coordinates.lat !== null && coordinates.lng !== null;
+  }, [coordinates]);
 
   return (
     <SearchContext.Provider
@@ -43,6 +48,7 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
         setCoordinates,
         desiredStartingMonth,
         setDesiredStartingMonth,
+        coordinatesAreValid,
       }}
     >
       {children}

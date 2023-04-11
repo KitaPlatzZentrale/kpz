@@ -4,7 +4,7 @@ import React from "react";
 export type WizardStep = {
   beforeNext?: () => Promise<boolean>;
   beforePrevious?: () => Promise<boolean>;
-  onNext?: () => void;
+  onNext?: () => Promise<boolean>;
   onPrevious?: () => void;
   valid: boolean;
   view: React.ReactNode;
@@ -59,6 +59,9 @@ const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
     if (currentStep.beforeNext) {
       const canGoNext = await currentStep.beforeNext();
       if (canGoNext) {
+        const success = await steps[activeStepIndex].onNext?.();
+        if (!success) return;
+
         if (activeStepIndex === steps.length - 1) {
           setIsLoading(true);
           await onComplete?.();

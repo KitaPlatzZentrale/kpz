@@ -4,6 +4,7 @@ import React from "react";
 import FormAutocomplete from "../../../components/FormAutocomplete";
 import { useSearchContext } from "../../../components/SearchContext";
 import AddressLookup from "./AddressLookup";
+import { useKitaListContext } from "./KitaListContext";
 
 type SearchProps = {};
 
@@ -15,7 +16,10 @@ const Search: React.FC<SearchProps> = ({}) => {
     address,
     desiredStartingMonth,
     setDesiredStartingMonth,
+    coordinatesAreValid,
   } = useSearchContext();
+
+  const { fetchKitas, isFetching } = useKitaListContext();
 
   return (
     <div className="w-full bg-sunny-light px-24 pb-8 pt-10">
@@ -25,17 +29,20 @@ const Search: React.FC<SearchProps> = ({}) => {
             setAddress(address);
           }}
           onCoordinatesSuccessfullyRetrieved={(coordinates) => {
+            console.log(coordinates);
             setCoordinates(coordinates);
           }}
         />
         <FormAutocomplete
-          className="w-1/4"
+          formControlProps={{
+            className: "w-1/4",
+          }}
           label="Gewünschter Beginn"
           placeholder="z.B. Mai 2023"
           inputProps={{
             startDecorator: <DateRange />,
-            value: desiredStartingMonth,
           }}
+          value={desiredStartingMonth}
           options={[
             "Mai 2023",
             "Juni 2023",
@@ -63,11 +70,25 @@ const Search: React.FC<SearchProps> = ({}) => {
             "April 2025",
           ]}
           defaultValue={desiredStartingMonth}
-          onChange={(event) => {
-            setDesiredStartingMonth(event.target.value);
+          onChange={(event, value) => {
+            setDesiredStartingMonth(value);
           }}
         />
-        <Button className="w-1/6" color="primary" size="lg" variant="solid">
+        <Button
+          color="primary"
+          size="lg"
+          variant="solid"
+          loading={isFetching}
+          loadingPosition="start"
+          disabled={!coordinatesAreValid || !desiredStartingMonth}
+          onClick={async () => {
+            coordinatesAreValid &&
+              (await fetchKitas({
+                lat: coordinates.lat as number,
+                lng: coordinates.lng as number,
+              }));
+          }}
+        >
           Kitas finden
         </Button>
       </div>

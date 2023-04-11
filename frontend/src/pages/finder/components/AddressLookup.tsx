@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler } from "react";
 
 import { Home } from "@mui/icons-material";
-import { CircularProgress } from "@mui/joy";
+import { AutocompleteProps, CircularProgress } from "@mui/joy";
 
 import FormAutocomplete from "../../../components/FormAutocomplete";
 
@@ -16,7 +16,7 @@ type AddressLookupProps = {
   }) => void;
   helperText?: string;
   error?: boolean;
-};
+} & AutocompleteProps<any, false, false, false>;
 
 const AddressLookup: React.FC<AddressLookupProps> = ({
   className,
@@ -24,6 +24,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   onCoordinatesSuccessfullyRetrieved,
   helperText,
   error,
+  ...autoCompleteProps
 }) => {
   const [input, setInput] = React.useState("");
   const [suggestions, setSuggestions] = React.useState([]);
@@ -75,7 +76,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
       const responseJson = await response.json();
 
       const coordinates = responseJson.items?.[0]?.position ?? {};
-
+      console.log("coordinates", coordinates);
       setCoordinates(coordinates);
     } catch (error) {
       console.error("Error fetching coordinates:", error);
@@ -83,8 +84,10 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   };
 
   const handleInputChange = (e) => {
-    const { value } = e.target;
-    setInput(value);
+    if (!e) return;
+
+    const value = e?.target.value;
+    value && setInput(value);
 
     if (timer) {
       clearTimeout(timer);
@@ -103,17 +106,13 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     );
   };
 
-  const handleAddressSelection = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-
+  const handleAddressSelection = (value: string | null) => {
     setSelectedAddress(value);
     onAddressSelected?.(value);
   };
 
   React.useEffect(() => {
-    if (selectedAddress) {
-      fetchCoordinates(selectedAddress);
-    }
+    selectedAddress && fetchCoordinates(selectedAddress);
   }, [selectedAddress]);
 
   React.useEffect(() => {
@@ -122,26 +121,28 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
   return (
     <FormAutocomplete
+      formControlProps={{
+        error,
+        className,
+      }}
       label="Wo wohnen Sie?"
-      className={className}
       placeholder="Ihr Wohnort"
       options={suggestions}
+      onChange={(e, value) => handleAddressSelection(value)}
+      onInputChange={handleInputChange}
+      loading={isLoading}
+      loadingText={
+        <span className="flex flex-row items-center gap-3">
+          <CircularProgress color="neutral" size="sm" />
+          <span className="ml-2">Lade Adressen...</span>
+        </span>
+      }
+      value={selectedAddress || undefined}
+      startDecorator={<Home />}
       inputProps={{
-        freeSolo: true,
-        onInputChange: handleInputChange,
-        onChange: handleAddressSelection,
-        startDecorator: <Home />,
-        loading: isLoading,
-        loadingText: (
-          <span className="flex flex-row items-center gap-3">
-            <CircularProgress color="neutral" size="sm" />
-            <span className="ml-2">Lade Adressen...</span>
-          </span>
-        ),
-        value: selectedAddress || undefined,
         helperText,
       }}
-      error={error}
+      {...autoCompleteProps}
     />
   );
 };

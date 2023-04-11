@@ -1,5 +1,6 @@
 import React from "react";
 import { useServiceSignupFormContext } from "./ServiceSignupFormContext";
+import ServiceSignupFormSuccessView from "./views/ServiceSignupFormSuccessView";
 import ServiceSignupFormView from "./views/ServiceSignupFormView";
 import ServiceSignupIntroView from "./views/ServiceSignupIntroView";
 import { useWizardContext } from "./WizardContext";
@@ -27,8 +28,12 @@ const Wizard: React.FC = () => {
           return valid;
         },
         onNext: async () => {
-          await handleServiceFormSubmit();
+          return await handleServiceFormSubmit();
         },
+      },
+      {
+        view: <ServiceSignupFormSuccessView />,
+        valid: true,
       },
     ]);
   }, []);

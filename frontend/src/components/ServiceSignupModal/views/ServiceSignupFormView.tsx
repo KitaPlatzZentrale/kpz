@@ -19,7 +19,29 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
     isLoading,
     control,
     isValid: isFormValid,
+    setValue,
   } = useServiceSignupFormContext();
+
+  const {
+    helperText: fullAddressHelperText,
+    error: fullAddressError,
+    defaultValue: fullAddressDefaultValue,
+    ...fullAddressRest
+  } = register("fullAddress");
+
+  const {
+    helperText: desiredStartMonthHelperText,
+    error: desiredStartMonthError,
+    defaultValue: desiredStartMonthDefaultValue,
+    ...desiredStartMonthRest
+  } = register("desiredStartMonth");
+
+  const {
+    helperText: expectedBirthDateHelperText,
+    error: expectedBirthDateError,
+    defaultValue: expectedBirthDateDefaultValue,
+    ...expectedBirthDateRest
+  } = register("expectedBirthDate");
 
   return (
     <>
@@ -31,17 +53,53 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
         </p>
       </div>
       <DevTool control={control} />
-      <AddressLookup className="mb-6 w-full" />
+      <AddressLookup
+        onAddressSelected={(address) => {
+          setValue("fullAddress", address || null, {
+            shouldValidate: true,
+          });
+        }}
+        className="mb-6 w-full"
+        error={fullAddressError}
+        helperText={fullAddressHelperText}
+        defaultValue={fullAddressDefaultValue}
+        slotProps={{
+          listbox: {
+            sx: { zIndex: 9999 },
+          },
+          input: {
+            ...fullAddressRest,
+          },
+        }}
+      />
       <div className="mb-6 flex flex-row flex-wrap items-start gap-6">
         <FormAutocomplete
-          className="w-1/3 flex-auto"
+          formControlProps={{
+            className: "w-1/3 flex-auto",
+            error: desiredStartMonthError,
+          }}
           label="Gewünschter Beginn"
           placeholder="z.B. Mai 2023"
-          inputProps={{
-            startDecorator: <DateRange />,
-            ...register("desiredStartMonth"),
-            disabled: isLoading,
+          slotProps={{
+            listbox: {
+              sx: { zIndex: 9999 },
+              style: { zIndex: 9999 },
+            },
+            input: {
+              ...desiredStartMonthRest,
+            },
           }}
+          inputProps={{
+            helperText: desiredStartMonthHelperText,
+          }}
+          defaultValue={desiredStartMonthDefaultValue}
+          onChange={(e, value) =>
+            setValue("desiredStartMonth", value, {
+              shouldValidate: true,
+            })
+          }
+          startDecorator={<DateRange />}
+          disabled={isLoading}
           options={[
             "Mai 2023",
             "Juni 2023",
@@ -70,14 +128,30 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
           ]}
         />
         <FormAutocomplete
-          className="w-1/3 flex-auto"
+          formControlProps={{
+            className: "w-1/3 flex-auto z-50",
+            error: expectedBirthDateError,
+          }}
           label="Geburtsmonats des Kindes"
           placeholder="z.B. Juni 2022"
-          inputProps={{
-            startDecorator: <Cake />,
-            ...register("expectedBirthDate"),
-            disabled: isLoading,
+          slotProps={{
+            listbox: {
+              sx: { zIndex: 9999 },
+              style: { zIndex: 9999 },
+            },
+            input: {
+              ...expectedBirthDateRest,
+            },
           }}
+          inputProps={{
+            helperText: expectedBirthDateHelperText,
+          }}
+          defaultValue={expectedBirthDateDefaultValue}
+          onChange={(e, value) =>
+            setValue("expectedBirthDate", value, { shouldValidate: true })
+          }
+          startDecorator={<Cake />}
+          disabled={isLoading}
           options={[
             "Januar 2020",
             "Februar 2020",

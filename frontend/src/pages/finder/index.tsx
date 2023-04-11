@@ -16,23 +16,7 @@ import ServiceBanner from "./components/ServiceBanner";
 
 type FinderPageProps = {};
 
-const fetchResults = async (lat: number, lng: number): Promise<Kita[]> => {
-  //return generateKitasAndDetails(10).kitas;
-
-  const results = await fetch(`http://localhost:3000/kitas/${lat}/${lng}`);
-
-  return results.json();
-};
-
 const FinderPage: React.FC<FinderPageProps> = () => {
-  const [results, setResults] = React.useState<Kita[]>([]);
-
-  React.useEffect(() => {
-    fetchResults(52.520008, 13.404954).then((results) => {
-      setResults(results);
-    });
-  }, []);
-
   return (
     <Layout>
       <KitaListContextProvider>

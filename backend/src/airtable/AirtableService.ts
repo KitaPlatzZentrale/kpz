@@ -5,8 +5,8 @@ type AirtableEinzelbenachrichtigungen = {
   Name: string;
   Email: string;
   "Kita Name": string;
-  "Interne Kita ID": string;
-  "Erstellt am": string;
+  "Internal Kita ID": string;
+  "Created at": string;
 };
 
 type AirtableArealbenachrichtigungen = {
@@ -14,14 +14,15 @@ type AirtableArealbenachrichtigungen = {
   Name: string;
   Region: string;
   Email: string;
-  "Erstellt am": string;
+  "Created at": string;
 };
 
 type AirtableServiceAnmeldung = {
   Email: string; // unique
-  Vorname: string;
-  Nachname: string;
-  "Erstellt am": string;
+  "Full Address": string;
+  "Desired Start Month": string;
+  "Expected Birth Month": string;
+  "Created at": string;
 };
 
 export interface CreateEinzelbenachrichtigungPayload {
@@ -39,8 +40,9 @@ export interface CreateArealbenachrichtigungPayload {
 
 export interface CreateServiceAnmeldungPayload {
   email: string;
-  vorname: string;
-  nachname: string;
+  fullAddress: string;
+  desiredStartMonth: string;
+  expectedBirthDate: string;
 }
 
 interface IAirtableAPIService {
@@ -79,7 +81,7 @@ class AirtableAPIService implements IAirtableAPIService {
           Name: payload.name,
           Email: payload.email,
           "Kita Name": payload.kitaName,
-          "Interne Kita ID": payload.interneKitaId,
+          "Internal Kita ID": payload.interneKitaId,
         } as AirtableEinzelbenachrichtigungen,
       },
     ]);
@@ -116,8 +118,9 @@ class AirtableAPIService implements IAirtableAPIService {
       {
         fields: {
           Email: payload.email,
-          Vorname: payload.vorname,
-          Nachname: payload.nachname,
+          "Full Address": payload.fullAddress,
+          "Desired Start Month": payload.desiredStartMonth,
+          "Expected Birth Month": payload.expectedBirthDate,
         } as AirtableServiceAnmeldung,
       },
     ]);
