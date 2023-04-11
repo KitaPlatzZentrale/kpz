@@ -51,10 +51,10 @@ type ServiceSignupFormContext = {
   control: Control<FormFields>;
   formState: FormState<FormFields>;
   watch: UseFormWatch<FormFields>;
-  validate: (name: FormFieldsReference & "") => Promise<boolean>;
+  validate: (name?: FormFieldsReference) => Promise<boolean>;
   setValue: UseFormSetValue<FormFields>;
   handleSubmit: () => void;
-  isValid: () => boolean;
+  isValid: boolean;
   isLoading: boolean;
 };
 
@@ -80,9 +80,10 @@ const ServiceSignupFormContextProvider: React.FC<
     trigger,
     setValue,
   } = useForm<FormFields>({
-    defaultValues: {},
+    shouldFocusError: true,
     mode: "onChange",
     reValidateMode: "onChange",
+
     resolver: yupResolver(validation),
   });
 
@@ -100,30 +101,32 @@ const ServiceSignupFormContextProvider: React.FC<
     };
   };
 
-  const validate = async (fieldName: FormFieldsReference & "") => {
+  const validate = async (fieldName?: FormFieldsReference) => {
     const valid = await trigger(fieldName);
 
     // if global form validation has been triggered, set attemptedSubmit to true
-    if (!fieldName || fieldName === "") {
+    if (!fieldName) {
       setAttemptedSubmit(true);
     }
 
     return valid;
   };
 
-  const isValid = () => {
+  const isValid = React.useMemo(() => {
     if (!attemptedSubmit) return true;
+    console.log(formState.isValid);
     return formState.isValid;
-  };
+  }, [attemptedSubmit, formState.isValid]);
 
   const onSubmit = (data: any) => {
     setAttemptedSubmit(true);
+    console.log("submit");
   };
 
   const handleSubmit = () => {
-    setIsLoading(false);
-    _handleSubmit(onSubmit);
     setIsLoading(true);
+    _handleSubmit(onSubmit, onSubmit);
+    setIsLoading(false);
   };
 
   return (

@@ -1,7 +1,7 @@
 import { ButtonProps } from "@mui/material";
 import React from "react";
 
-type WizardStep = {
+export type WizardStep = {
   beforeNext?: () => Promise<boolean>;
   beforePrevious?: () => Promise<boolean>;
   onNext?: () => void;
@@ -13,7 +13,7 @@ type WizardStep = {
 type WizardContext = {
   activeStepIndex: number;
   steps: WizardStep[];
-  setSteps: (steps: any) => void;
+  setSteps: (steps: WizardStep[]) => void;
   goToNext: () => Promise<void>;
   goToPrevious: () => void;
   isErrorful: boolean;
@@ -26,7 +26,7 @@ export const WizardContext = React.createContext<WizardContext>(
 );
 
 type WizardContextProviderProps = React.PropsWithChildren<{
-  steps: WizardStep[];
+  steps?: WizardStep[];
   activeStepIndex?: number;
   onComplete?: () => Promise<any>;
 }>;
@@ -52,7 +52,7 @@ const WizardContextProvider: React.FC<WizardContextProviderProps> = ({
     [activeStepIndex, steps]
   );
 
-  React.useEffect(() => setSteps(stepsProps), [stepsProps]);
+  React.useEffect(() => stepsProps && setSteps(stepsProps || []), [stepsProps]);
 
   const goToNext = async () => {
     const currentStep = steps[activeStepIndex];

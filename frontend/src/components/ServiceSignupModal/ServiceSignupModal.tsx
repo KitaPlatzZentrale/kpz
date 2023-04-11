@@ -5,6 +5,8 @@ import WizardContextProvider, { WizardContext } from "./WizardContext";
 import ServiceSignupFormView from "./views/ServiceSignupFormView";
 import ServiceSignupFormContextProvider from "./ServiceSignupFormContext";
 import { useServiceSignupModal } from "./ServiceSignupModalContext";
+import WizardSteps from "./WizardSteps";
+import Wizard from "./Wizard";
 
 const submitEmailAction = async (email: string) => {
   const res = await fetch("http://localhost:3000/anmeldungen/einzel", {
@@ -56,29 +58,14 @@ const ServiceSignupModal: React.FC<ServiceSignupModalProps> = ({
         className="w-full max-w-xl"
       >
         <ServiceSignupFormContextProvider>
-          <WizardContextProvider
-            activeStepIndex={0}
-            steps={[
-              {
-                view: <ServiceSignupIntroView />,
-                valid: true,
-              },
-              {
-                view: <ServiceSignupFormView />,
-              },
-            ]}
-          >
+          <WizardContextProvider>
             <div className="mb-4 flex flex-row-reverse">
               <ModalClose
                 sx={{ position: "relative", top: 0, right: "-16px" }}
                 onClick={handleClose}
               />
             </div>
-            <WizardContext.Consumer>
-              {({ activeStepIndex, steps }) =>
-                steps[activeStepIndex]?.view || null
-              }
-            </WizardContext.Consumer>
+            <Wizard />
           </WizardContextProvider>
         </ServiceSignupFormContextProvider>
       </ModalDialog>
