@@ -7,14 +7,22 @@ import logger from "../logger";
  * @param {string} uuid - The uuid of the kita center
  * @returns {KitaDetail} - The details of the kita center in JSON format
  */
-export async function kitaDetail(req: any, res: any) {
+export async function getKitaDetailsExternal(req: any, res: any) {
     try {
     let kita = await axios.get(
       `https://kita-navigator.berlin.de/api/v1/kitas/${req.params.uuid}`
     );
     logger.info(`Retrieved details for Kita with uuid ${req.params.uuid}.`);
-    const facility = kita.data
+    const facilityObj = transformExternalKitaDetailsToKitaDetails(kita.data)
+    return res.status(200).send(facilityObj);
+  }catch(err: any){
+    logger.error(err.message);
+    return res.status(500).json({"error": "Something went wrong"});
+    }
+  }
   
+
+  function transformExternalKitaDetailsToKitaDetails(facility: any) {
     const availability: { [key: string]: boolean } = {};
     facility.einrichtungsauszug.freiplatzstatus.forEach((status: any) => {
       availability[status.gueltigAb] = status.plaetzeVerfuegbar;
@@ -78,10 +86,5 @@ export async function kitaDetail(req: any, res: any) {
       foundingDate: facility.oeffnungsdatum,
       closingDate: facility.schliessdatum
     }
-    return res.status(200).send(facilityObj);
-  }catch(err: any){
-    logger.error(err.message);
-    return res.status(500).json({"error": "Something went wrong"});
-    }
+    return facilityObj
   }
-  

@@ -4,13 +4,13 @@ import arealBenachrichtigungHandler from './anmeldungen/areal';
 import serviceAnmeldungHandler from './anmeldungen/service';
 import { locationService } from './location-service';
 import { locationValidator } from './location-service/validator';
-import { kitaList } from './kitas/kitaList';
-import { kitaDetail } from './kitas/kitaDetail';
+import { getKitaList } from './kitas/getKitaList';
+import { getKitaDetailsExternal } from './kitas/getKitaDetails';
 
 const router = express.Router();
 
-router.get('/kitas/:lat/:lon', kitaList);
-router.get('/kita/:uuid', kitaDetail);
+router.get('/kitas/:lat/:lon', getKitaList);
+router.get('/kita/:uuid', getKitaDetailsExternal);
 
 router.get('/location-service', locationValidator, locationService);
 
