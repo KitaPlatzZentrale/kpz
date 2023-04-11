@@ -22,7 +22,7 @@ export async function getKitaDetailsExternal(req: any, res: any) {
   }
   
 
-  function transformExternalKitaDetailsToKitaDetails(facility: any) {
+export function transformExternalKitaDetailsToKitaDetails(facility: any) {
     const availability: { [key: string]: boolean } = {};
     facility.einrichtungsauszug.freiplatzstatus.forEach((status: any) => {
       availability[status.gueltigAb] = status.plaetzeVerfuegbar;

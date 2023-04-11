@@ -9,12 +9,8 @@
     "sourceMap": true,
     "outDir": "dist",
     "target": "es6",
-<<<<<<< main
     "esModuleInterop": true,
-=======
-    "resolveJsonModule": true,
-    "esModuleInterop": true
->>>>>>> Updated ReamMe + GitIgnore, replaced consoleLog with logger + scripts v1
+    "resolveJsonModule": true
   },
   "compileOnSave": true,
   "include": ["src"]
