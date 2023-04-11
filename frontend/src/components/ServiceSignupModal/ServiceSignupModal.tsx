@@ -4,6 +4,7 @@ import ServiceSignupIntroView from "./views/ServiceSignupIntroView";
 import WizardContextProvider, { WizardContext } from "./WizardContext";
 import ServiceSignupFormView from "./views/ServiceSignupFormView";
 import ServiceSignupFormContextProvider from "./ServiceSignupFormContext";
+import { useServiceSignupModal } from "./ServiceSignupModalContext";
 
 const submitEmailAction = async (email: string) => {
   const res = await fetch("http://localhost:3000/anmeldungen/einzel", {
@@ -23,27 +24,27 @@ const submitEmailAction = async (email: string) => {
 };
 
 type ServiceSignupModalProps = {
-  open: boolean;
+  open?: boolean;
   onClose?: () => void;
 };
 
 const ServiceSignupModal: React.FC<ServiceSignupModalProps> = ({
-  open = false,
+  open,
   onClose,
 }) => {
-  const [isOpen, setIsOpen] = React.useState(open);
+  const { modalIsOpen, setModalIsOpen } = useServiceSignupModal();
 
   const handleClose = () => {
-    setIsOpen(false);
+    setModalIsOpen(false);
     onClose?.();
   };
 
   React.useEffect(() => {
-    setIsOpen(open);
+    open !== undefined && setModalIsOpen(open);
   }, [open]);
 
   return (
-    <Modal open={isOpen} onClose={handleClose}>
+    <Modal open={modalIsOpen} onClose={handleClose}>
       <ModalDialog
         sx={{
           paddingBottom: "24px",
@@ -70,7 +71,7 @@ const ServiceSignupModal: React.FC<ServiceSignupModalProps> = ({
             <div className="mb-4 flex flex-row-reverse">
               <ModalClose
                 sx={{ position: "relative", top: 0, right: "-16px" }}
-                onClick={() => setIsOpen(false)}
+                onClick={handleClose}
               />
             </div>
             <WizardContext.Consumer>

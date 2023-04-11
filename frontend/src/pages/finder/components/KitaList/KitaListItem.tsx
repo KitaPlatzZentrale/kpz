@@ -131,7 +131,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
           })}
           endDecorator={<OpenInNew />}
         >
-          View details
+          Details ansehen
         </Button>
       </div>
     </div>
