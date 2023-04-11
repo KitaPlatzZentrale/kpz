@@ -45,8 +45,8 @@ function transformExternalKitaListToKitaList(kitas: any) {
         zip: facility.adresse.plz,
         city: facility.adresse.ort,
       },
-      availability,
-      imageUrl: 'https://kita-navigator.berlin.de' + facility.vorschaubild.url,
+      availability: Object.keys(availability).length > 0 ? availability : {},
+      imageUrl: "https://kita-navigator.berlin.de" + facility.vorschaubild.url,
     };
     return facilityObj;
   });
