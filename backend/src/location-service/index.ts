@@ -20,7 +20,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
       }
     })
     // 3. Send the Kita List with the distance
-    res.send(kitasInRadius)
+    return res.send(kitasInRadius)
   } catch (err: any) {
     console.log(err)
     return res.status(500).json({ error: "Something went wrong" });
