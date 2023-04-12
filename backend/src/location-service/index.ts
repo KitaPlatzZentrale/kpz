@@ -1,7 +1,8 @@
-require("dotenv").config();
-import { NextFunction } from "express";
 import haversine from "haversine-distance";
+import logger from "../services/logger";
 import { Kita } from "../types";
+import { NextFunction } from "express";
+require("dotenv").config();
 
 const axios = require("axios");
 
@@ -27,7 +28,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
     });
     return res.send(kitasInRadius);
   } catch (err: any) {
-    console.log(err);
+    logger.error(err);
     return res.status(500).json({ error: "Something went wrong" });
   }
 }

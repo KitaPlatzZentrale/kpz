@@ -1,5 +1,6 @@
-require("dotenv").config();
+import logger from "./logger";
 import mongoose, { ConnectOptions } from "mongoose";
+require("dotenv").config();
 
 export async function connectToDatabase() {
   try {
@@ -12,10 +13,10 @@ export async function connectToDatabase() {
         useUnifiedTopology: true,
         useNewUrlParser: true,
       } as ConnectOptions)
-      .then(() => console.log("MongoDB connected!"))
-      .catch((err: any) => console.log(`MongoDB connection error: ${err}`));
+      .then(() => logger.info("MongoDB connected!"))
+      .catch((err: any) => logger.error(`MongoDB connection error: ${err}`));
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }
 
@@ -24,12 +25,12 @@ export async function closeDatabaseConnection() {
     await mongoose.connection
       .close()
       .then(() => {
-        console.log("MongoDB connection closed");
+        logger.info("MongoDB connection closed");
       })
       .catch((error: any) => {
-        console.log("Error while closing MongoDB connection:", error);
+        logger.error("Error while closing MongoDB connection:", error);
       });
   } catch (err) {
-    console.log(err);
+    logger.error(err);
   }
 }

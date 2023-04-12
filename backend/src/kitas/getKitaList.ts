@@ -1,6 +1,6 @@
 import axios from "axios";
+import logger from "../services/logger";
 import { Kita } from "../types";
-import logger from "../logger";
 
 /**
  * Finds nearby kita centers based on latitude and longitude

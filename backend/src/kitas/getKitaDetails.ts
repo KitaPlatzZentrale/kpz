@@ -1,6 +1,6 @@
 import axios from "axios";
+import logger from "../services/logger";
 import { KitaDetail } from "../types";
-import logger from "../logger";
 
 /**
  * Returns details for a specific kita center

@@ -1,9 +1,13 @@
+import axios from "axios";
+import logger from "../services/logger";
 import { Kita } from "../types";
 import { KitaDetailModel } from "../models";
-import axios from "axios";
+import {
+  closeDatabaseConnection,
+  connectToDatabase,
+} from "../services/database";
 import { transformExternalKitaDetailsToKitaDetails } from "../kitas/getKitaDetails";
-import logger from "../logger";
-import { closeDatabaseConnection, connectToDatabase } from "../database";
+
 const kitas: Kita[] = require("../../data/kitas_berlin.json");
 
 async function fetchKitaWithRetry(uuid: string, retries = 6): Promise<any> {
@@ -14,7 +18,7 @@ async function fetchKitaWithRetry(uuid: string, retries = 6): Promise<any> {
     return response;
   } catch (error) {
     if (retries > 0 && error.code === "ECONNRESET") {
-      console.log(
+      logger.error(
         `Error with uuid ${uuid}: ${error.message}. Retrying in 10 seconds...`
       );
       await new Promise((resolve) => setTimeout(resolve, 10000));
@@ -33,7 +37,7 @@ async function saveKitaDetailsToDB(): Promise<void> {
       const kitaDetail = transformExternalKitaDetailsToKitaDetails(
         kitaRes.data
       );
-      logger.info(kitaDetail);
+      logger.info(JSON.stringify(kitaDetail));
       await KitaDetailModel.findOneAndUpdate(
         { uuid: kitaDetail.uuid },
         kitaDetail,

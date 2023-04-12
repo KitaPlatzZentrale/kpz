@@ -1,4 +1,5 @@
 import { IsDecimal, IsLatitude, IsLongitude, validate } from 'class-validator';
+import logger from "../services/logger";
 
 export class Location {
     @IsLatitude()
@@ -21,11 +22,11 @@ export async function locationValidator(req: any, res:any, next: any) {
     
     const errors = await validate(newLocation)
     if (errors.length) {
-      return res.status(400).json({ error: errors})
+      return res.status(400).json({ error: errors });
     }
     next()
   }catch(err: any) {
-    console.log(err)
+    logger.error(err);
     return res.status(500).json({ error: "Something went wrong" });
   }
 }
