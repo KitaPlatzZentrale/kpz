@@ -1,5 +1,5 @@
 import axios from "axios";
-import { KitaDetail } from "../type";
+import { KitaDetail } from "../types";
 import logger from "../logger";
 
 /**
