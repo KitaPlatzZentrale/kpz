@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx tsc --watch & nodemon --exec ts-node src/index.ts",
     "build": "tsc -p .",
-    "fetch-kita-data": "ts-node scripts/fetchKitasData.ts",
+    "fetch-kita-details": "npx ts-node src/scripts/iterateOverKitas.ts",
     "print-kita-names": "ts-node ./iterateOverKits.ts"
   },
   "author": "",
