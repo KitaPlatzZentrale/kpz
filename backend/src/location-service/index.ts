@@ -12,9 +12,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
     if (!S3_BUCKET) {
       throw "\n\n\nYOU NEED TO ADD THE S3_BUCKET STRING TO YOUR .env FILE IN THE ROOT FOLDER\n\n\n";
     }
-    // 1. Get the Kita List
     let kitaList = await axios.get(S3_BUCKET);
-    // 2. Calculate the distance
     let kitasInRadius: Kita[] = [];
     kitaList.data.map((kita: Kita) => {
       const distance =
@@ -27,7 +25,6 @@ export async function locationService(req: any, res: any, next: NextFunction) {
         kitasInRadius.push(kita);
       }
     });
-    // 3. Send the Kita List with the distance
     return res.send(kitasInRadius);
   } catch (err: any) {
     console.log(err);
