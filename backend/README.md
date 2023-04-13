@@ -49,3 +49,22 @@ nodemon dist/index.js
 ```bash
 ssh -i "~/.ssh/kpz-node-express-ec2-key.pem" ec2-user@ec2-3-70-176-52.eu-central-1.compute.amazonaws.com
 ````
+
+### Upload files to EC2 Instance
+
+```bash
+scp -i "~/.ssh/kpz-node-express-ec2-key.pem" -r ./dist
+```
+
+### PM2
+
+```bash
+pm2 start dist/index.js --name "kpz-node-express"
+```
+
+### Install Docker
+
+```bash
+sudo yum update -y
+sudo yum install docker
+````
