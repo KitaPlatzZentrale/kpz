@@ -6,17 +6,20 @@ on:
       - main
 
 jobs:
-  deploy:
+  deploy:  
     runs-on: ubuntu-latest
     steps:
+    
     - name: Checkout Code
       uses: actions/checkout@v2
 
     - name: Build Docker Image Dev
-      run: docker build -f backend/Dockerfile.dev -t goodbuy/kpz:dev .
+      working-directory: ./backend
+      run: docker build -f Dockerfile.dev -t goodbuy/kpz:dev .
       
     - name: Build Docker Image Prod
-      run: docker build -f backend/Dockerfile.prod -t goodbuy/kpz:prod .
+      working-directory: ./backend
+      run: docker build -f Dockerfile.prod -t goodbuy/kpz:prod .
 
     - name: Push Docker Image
       run: |
@@ -35,5 +38,4 @@ jobs:
           git pull
           docker-compose down
           docker-compose up -d
-          docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-          
+          docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d          
