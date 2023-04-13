@@ -7,4 +7,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
+    expose:
+      - '3001'
+    ports:
+      - '3001:3000'
     command: node dist/index.js

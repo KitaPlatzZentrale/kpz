@@ -7,11 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node dist/index.js",
     "build": "tsc -p .",
-    "build-docker": "docker build . -t express-typescript-docker",
-    "run-docker": "docker run -p 3000:3000 -d express-typescript-docker:latest",
-    "up-dev": "docker-compose up -d",
-    "up-prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up",
-    "down": "docker-compose down"
+    "docker-dev": "docker-compose up -d",
+    "docker-prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
+    "docker-down": "docker-compose down"
   },
   "author": "",
   "license": "ISC",
