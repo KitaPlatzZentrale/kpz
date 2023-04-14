@@ -5,6 +5,8 @@ services:
     image: goodbuy/kpz:dev
     environment:
       - NODE_ENV=development
+      - S3_BUCKET=${S3_BUCKET}
+      - MONGO_DB_CONNECTION=${MONGO_DB_CONNECTION}
     volumes:
       - ./:/usr/src/app
     container_name: express-typescript-docker-dev
