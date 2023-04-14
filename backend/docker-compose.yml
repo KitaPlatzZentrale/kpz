@@ -12,4 +12,4 @@ services:
       - "3000"
     ports:
       - "3000:3000"
-    command: npm run dev
+    command: node dist/index.js
