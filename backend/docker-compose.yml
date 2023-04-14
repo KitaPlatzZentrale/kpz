@@ -9,7 +9,7 @@ services:
       - ./:/usr/src/app
     container_name: express-typescript-docker-dev
     expose:
-      - "3000"
+      - "3002"
     ports:
-      - "3000:3000"
-    command: node dist/index.js
+      - "3002:3000"
+    command: sh -c 'npm run build && node dist/index.js'
