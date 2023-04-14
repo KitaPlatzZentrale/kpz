@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   express-typescript-docker-dev:
@@ -7,9 +7,9 @@ services:
       - NODE_ENV=development
     volumes:
       - ./:/usr/src/app
-    container_name: express-typescript-docker
+    container_name: express-typescript-docker-dev
     expose:
-      - '3000'
+      - "3000"
     ports:
-      - '3000:3000'
+      - "3000:3000"
     command: npm run dev
