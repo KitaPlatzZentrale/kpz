@@ -64,9 +64,6 @@ jobs:
     
     steps:  
       - name: Clone or Pull KPZ Repo
-        env:
-            VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
-            VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
         uses: appleboy/ssh-action@master
         with:
           host: 3.70.176.52
@@ -89,7 +86,7 @@ jobs:
 
       - name: Build Docker Image Frontend
         working-directory: ./frontend
-        run: docker build -t goodbuy/kpz-frontend:dev .
+        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-frontend:dev .
 
       - name: Push Docker Image
         run: |
