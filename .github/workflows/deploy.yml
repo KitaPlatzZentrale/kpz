@@ -6,7 +6,7 @@ on:
       - pipeline-frontend
 
 jobs:
-  git:
+  backend:
     runs-on: ubuntu-latest
     steps:
       - name: Clone or Pull KPZ Repo
@@ -28,9 +28,6 @@ jobs:
             fi
       - name: Checkout Code
         uses: actions/checkout@v2
-  backend:
-    runs-on: ubuntu-latest
-    steps:
       - name: Build Docker Image Dev
         working-directory: ./backend
         run: docker build -f Dockerfile.dev -t goodbuy/kpz:dev .
@@ -60,6 +57,25 @@ jobs:
   frontend:
     runs-on: ubuntu-latest
     steps:
+      - name: Clone or Pull KPZ Repo
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.70.176.52
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            if [ ! -d "kpz" ]; then
+              echo "Cloning repository: KitaPlatzZentrale/kpz"
+              git clone git@github.com:KitaPlatzZentrale/kpz.git
+              cd kpz
+            else
+              cd kpz
+              echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
+              git pull
+            fi
+      - name: Checkout Code
+        uses: actions/checkout@v2
       - name: Build Docker Image Frontend
         working-directory: ./frontend
         run: docker build -t goodbuy/kpz-frontend:dev .
