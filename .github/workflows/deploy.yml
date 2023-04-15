@@ -28,6 +28,7 @@ jobs:
             fi
       - name: Checkout Code
         uses: actions/checkout@v2
+      
       - name: Build Docker Image Dev
         working-directory: ./backend
         run: docker build -f Dockerfile.dev -t goodbuy/kpz:dev .
@@ -57,10 +58,15 @@ jobs:
             docker rm express-typescript-docker-prod
             docker-compose up -d
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+  
   frontend:
     runs-on: ubuntu-latest
-    steps:
+    
+    steps:  
       - name: Clone or Pull KPZ Repo
+        env:
+            VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
+            VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
         uses: appleboy/ssh-action@master
         with:
           host: 3.70.176.52
@@ -77,8 +83,10 @@ jobs:
               echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
               git pull
             fi
+      
       - name: Checkout Code
         uses: actions/checkout@v2
+
       - name: Build Docker Image Frontend
         working-directory: ./frontend
         run: docker build -t goodbuy/kpz-frontend:dev .
