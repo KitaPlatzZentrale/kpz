@@ -9,7 +9,7 @@ services:
       - MONGO_DB_CONNECTION=${MONGO_DB_CONNECTION}
     container_name: express-typescript-docker-prod
     expose:
-      - "3001"
+      - "3000"
     ports:
-      - "3001:3000"
+      - "3000:3000"
     command: node dist/index.js
