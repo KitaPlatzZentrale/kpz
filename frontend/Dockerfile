@@ -1,6 +1,10 @@
 # Use Node.js LTS (14.x) as the base image
 FROM node:14-alpine AS builder
 
+# ENV
+ENV VITE_BACKEND_URL=${VITE_BACKEND_URL}
+ENV VITE_PUBLIC_HERE_API_KEY=${VITE_PUBLIC_HERE_API_KEY}
+
 # Set the working directory inside the container
 WORKDIR /app
 
