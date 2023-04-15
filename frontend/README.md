@@ -5,7 +5,7 @@
 ### Build
 
 ```bash
-docker build -t kpz-frontend .
+docker build -t goodbuy/kpz-frontend:dev .
 ```
 
 ### Run locally
