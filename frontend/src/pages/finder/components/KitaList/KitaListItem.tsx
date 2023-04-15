@@ -12,6 +12,15 @@ import EmailSubmitModal from "../../../../components/EmailSubmitModal";
 import { useSearchContext } from "../../../../components/SearchContext";
 import { Kita } from "../../../../types";
 
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "../../../../../tailwind.config";
+
+const screenIsBiggerOrEqualToMd = () => {
+  const { theme } = resolveConfig(tailwindConfig);
+  const screens = theme.extend ? theme.extend.screens : { md: "768px" };
+  return window.innerWidth >= screens.md;
+};
+
 // e.g. turn "August 2023" into "2023-08-01", day is always 01
 // ist nicht schön aber wat soll's
 const transformMonthIntoISODate = (month: string | null) => {
@@ -67,23 +76,20 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
   return (
     <div
       key={"kita" + kita.uuid}
-      className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6"
+      className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6"
     >
       <EmailSubmitModal open={openModal} onClose={() => setOpenModal(false)} />
-      <div className="flex flex-col" style={{ maxHeight: 100, width: 100 }}>
+      <div className="flex flex-col">
         <img
           src={kita.imageUrl}
           style={{
             objectFit: "cover",
-            height: 100,
-            maxWidth: 100,
-            minWidth: 100,
           }}
           alt="Kita Logo"
-          className="rounded-lg"
+          className="rounded-lg lg:h-24 lg:w-24"
         />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         <Link
           href={`/finder/${kita.uuid}`}
           sx={(theme) => ({
@@ -161,11 +167,11 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
           </>
         )}
       </div>
-      <div className="ml-auto flex flex-col">
+      <div className="flex flex-col md:ml-auto">
         <Button
           color="info"
           variant="outlined"
-          size="sm"
+          size={screenIsBiggerOrEqualToMd() ? "sm" : "md"}
           href={`/finder/${kita.uuid}`}
           sx={(theme) => ({
             paddingTop: 1,
@@ -188,8 +194,10 @@ export const KitaListItemSkeleton: React.FC<{ index?: number }> = ({
 }) => {
   return (
     <div
-      className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6 animate-in fade-in-0 fade-out-100 duration-500 fill-mode-forwards"
-      style={{ animationDelay: `${index * 200}ms` }}
+      className="animate flex w-full flex-row gap-6 rounded-2xl bg-white p-6 opacity-0 animate-in fade-in-100 zoom-in duration-500 fill-mode-forwards direction-normal"
+      style={{
+        animationDelay: `${index * 200}ms`,
+      }}
     >
       <div
         className="flex animate-pulse flex-col"

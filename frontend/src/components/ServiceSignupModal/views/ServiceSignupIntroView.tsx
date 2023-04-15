@@ -67,7 +67,7 @@ const ServiceSignupIntroView: React.FC<ServiceSignupIntroViewProps> = () => {
         <span className="w-full text-center text-sm text-gray-400">
           There is no commitment or credit card required. A Kitaplatz is not
           guaranteed. <br />
-          <Link className="text-sm font-bold" href="">
+          <Link className="text-sm font-bold" fontSize={"0.875rem"} href="">
             Learn more
           </Link>{" "}
           about KitaPlatzZentrale.

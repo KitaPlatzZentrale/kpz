@@ -1,9 +1,15 @@
 @import "./tailwind.css";
+@import "./placement.css";
 
 html,
 body {
   min-height: 100vh;
   background-color: #f8f8f8;
+}
+
+/* Older browsers */
+html {
+  font-size: 16px;
 }
 
 #root {

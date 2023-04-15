@@ -73,6 +73,7 @@ const theme = extendTheme({
             fontSize: "16px",
             "--Button-paddingInline": "1rem",
           }),
+          whiteSpace: "nowrap",
         }),
       },
     },
