@@ -52,7 +52,7 @@ jobs:
           script: |
             cd kpz/backend
             docker-compose down --remove-orphans
-            docker-compose up -d
+            docker-compose up --pull -d
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
   frontend:
     runs-on: ubuntu-latest
@@ -95,4 +95,4 @@ jobs:
           script: |
             cd kpz/frontend
             docker-compose down --remove-orphans
-            docker-compose up -d
+            docker-compose up --pull -d
