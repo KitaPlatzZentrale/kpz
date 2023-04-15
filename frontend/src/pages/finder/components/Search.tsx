@@ -23,7 +23,7 @@ const Search: React.FC<SearchProps> = ({}) => {
   const { fetchKitas, isFetching } = useKitaListContext();
 
   return (
-    <div className="w-full pb-4 pt-10">
+    <div className="w-full bg-white pb-10 pt-10">
       <CentricContent>
         <h3 className="mb-4 text-2xl font-extrabold">Kitas suchen</h3>
         <div className="flex w-full max-w-7xl flex-col items-stretch gap-6 lg:flex-row lg:items-start">

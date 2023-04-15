@@ -55,7 +55,7 @@ const EmailSubmitModal: React.FC<EmailSubmitModalProps> = ({
     formState,
   } = useForm<FormFields>({
     defaultValues: {
-      email: "hannogrimm@gmail.com",
+      email: "",
     },
     mode: "onChange",
     reValidateMode: "onChange",
