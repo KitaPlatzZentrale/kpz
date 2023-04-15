@@ -38,8 +38,6 @@ const Wizard: React.FC = () => {
     ]);
   }, []);
 
-  React.useEffect(() => console.log(steps), [steps]);
-
   return <>{steps[activeStepIndex]?.view ?? <div></div>}</>;
 };
 

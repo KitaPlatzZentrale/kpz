@@ -70,7 +70,6 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
     if (!desiredStartingMonth) return;
     if (desiredStartingMonth.length === 0) return;
     setValidStartingMonth(desiredStartingMonth);
-    console.log(desiredStartingMonth);
   }, [desiredStartingMonth]);
 
   return (

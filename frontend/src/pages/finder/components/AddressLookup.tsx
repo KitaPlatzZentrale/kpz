@@ -99,8 +99,6 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
       const responseJson = await response.json();
 
-      console.log(responseJson);
-
       const address = responseJson.items?.[0]?.title ?? "";
 
       if (!responseJson.items) {
@@ -135,8 +133,6 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
       );
 
       const responseJson = await response.json();
-
-      console.log(responseJson);
 
       if (!responseJson.items) {
         setHasFetchingError(true);

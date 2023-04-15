@@ -14,8 +14,6 @@ export async function locationService(req: any, res: any, next: NextFunction) {
 
     const S3_BUCKET = process.env.S3_BUCKET;
 
-    console.log(S3_BUCKET);
-
     if (!S3_BUCKET) {
       throw "\n\n\nYOU NEED TO ADD THE S3_BUCKET STRING TO YOUR .env FILE IN THE ROOT FOLDER\n\n\n";
     }
