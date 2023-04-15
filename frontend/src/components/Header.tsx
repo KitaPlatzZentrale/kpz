@@ -4,7 +4,7 @@ type HeaderProps = {};
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <header className="w-full bg-white px-20 py-16">
+    <header className="page-padding w-full bg-white py-12">
       <nav className="flex flex-row items-center justify-between">
         <div id="logo-container">
           <h1 className="text-3xl font-black">KitaPlatzZentrale</h1>

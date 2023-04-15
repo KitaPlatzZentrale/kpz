@@ -8,7 +8,6 @@ import FormField from "../../FormField";
 import { useServiceSignupFormContext } from "../ServiceSignupFormContext";
 
 import { useWizardContext } from "../WizardContext";
-import { DevTool } from "@hookform/devtools";
 
 type ServiceSignupFormViewProps = {};
 
@@ -52,7 +51,6 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
           ab. Diese Daten verlassen dabei niemals unsere Server.
         </p>
       </div>
-      <DevTool control={control} />
       <AddressLookup
         onAddressSelected={(address) => {
           setValue("fullAddress", address || null, {
