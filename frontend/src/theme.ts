@@ -79,8 +79,15 @@ const theme = extendTheme({
     JoyInput: {
       styleOverrides: {
         root: ({ ownerState, theme }) => ({
+          ...(ownerState.size === "sm" && {
+            padding: "11px 16px",
+          }),
+
+          padding: "15px 16px",
           fontSize: "16px",
-          padding: "11px 16px",
+          ...(ownerState.size === "lg" && {
+            padding: "15px 16px",
+          }),
         }),
         input: ({ ownerState, theme }) => ({
           "&::placeholder": {
