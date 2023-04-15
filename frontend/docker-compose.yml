@@ -2,6 +2,9 @@ version: "3"
 
 services:
   web:
+    environment:
+      - VITE_BACKEND_URL=${VITE_BACKEND_URL}
+      - VITE_PUBLIC_HERE_API_KEY=${VITE_PUBLIC_HERE_API_KEY}
     image: goodbuy/kpz-frontend:dev
     ports:
       - "80:80"
