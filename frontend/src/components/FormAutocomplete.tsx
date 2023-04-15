@@ -1,7 +1,9 @@
 import {
   Autocomplete,
+  AutocompleteProps,
   FormControl,
   FormControlProps,
+  FormHelperText,
   FormLabel,
   InputProps,
 } from "@mui/joy";
@@ -11,27 +13,36 @@ type FormAutocompleteProps = {
   label: string;
   options: string[];
   placeholder?: string;
-  onChange?: (event: React.ChangeEvent<{}>, value: string | null) => void;
-  inputProps?: InputProps;
-} & FormControlProps;
+  inputProps?: InputProps & { helperText?: string };
+  formControlProps?: FormControlProps;
+} & AutocompleteProps<string, false, false, false>;
 
 const FormAutocomplete: React.FC<FormAutocompleteProps> = ({
   label,
   options,
   placeholder,
-  onChange,
   inputProps,
-  ...formControlProps
+  formControlProps,
+  ...autoCompleteProps
 }) => {
+  const { error, helperText, ...rest } = inputProps || {};
+
   return (
-    <FormControl {...formControlProps}>
+    <FormControl error={error} {...formControlProps}>
       <FormLabel>{label}</FormLabel>
       <Autocomplete
         options={options}
-        onChange={onChange}
         placeholder={placeholder}
-        {...inputProps}
+        slotProps={{
+          input: {
+            ...rest,
+          },
+        }}
+        {...autoCompleteProps}
       />
+      {helperText && (
+        <FormHelperText color="primary">{helperText}</FormHelperText>
+      )}
     </FormControl>
   );
 };

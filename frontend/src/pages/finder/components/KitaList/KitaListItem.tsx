@@ -1,26 +1,68 @@
 import {
+  Check,
   Close,
-  CloseOutlined,
   DirectionsWalk,
   NotificationsOutlined,
   OpenInNew,
 } from "@mui/icons-material";
-import { Button, Chip, Link, Typography } from "@mui/joy";
+import { Button, Chip, Link } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
 import EmailSubmitModal from "../../../../components/EmailSubmitModal";
+import { useSearchContext } from "../../../../components/SearchContext";
 import { Kita } from "../../../../types";
+
+// e.g. turn "August 2023" into "2023-08-01", day is always 01
+// ist nicht schön aber wat soll's
+const transformMonthIntoISODate = (month: string | null) => {
+  if (!month || month.length === 0) return null;
+
+  const monthToNumber = {
+    Januar: "01",
+    Februar: "02",
+    März: "03",
+    April: "04",
+    Mai: "05",
+    Juni: "06",
+    Juli: "07",
+    August: "08",
+    September: "09",
+    Oktober: "10",
+    November: "11",
+    Dezember: "12",
+  };
+
+  const [monthName, year] = month.split(" ");
+  const monthNumber = monthToNumber[monthName];
+
+  return `${year}-${monthNumber}-01`;
+};
 
 type KitaListItemProps = {
   kita: Kita;
 };
 
 const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
-  const month = "Mai 2024";
+  const { desiredStartingMonth } = useSearchContext();
 
-  const hasSlotsFreeInSelectedMonth = !!kita.availability[month];
+  const [validStartingMonth, setValidStartingMonth] =
+    React.useState(desiredStartingMonth);
+
+  const desiredStartingMonthISODate =
+    transformMonthIntoISODate(validStartingMonth);
+
+  const hasSlotsFreeInSelectedMonth = desiredStartingMonthISODate
+    ? kita.availability[desiredStartingMonthISODate]
+    : false;
 
   const [openModal, setOpenModal] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!desiredStartingMonth) return;
+    if (desiredStartingMonth.length === 0) return;
+    setValidStartingMonth(desiredStartingMonth);
+    console.log(desiredStartingMonth);
+  }, [desiredStartingMonth]);
 
   return (
     <div
@@ -66,7 +108,10 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
             variant="soft"
             size="sm"
           >
-            <span className="px-2 font-bold">{`${kita.coordinates.dist}km`}</span>
+            <span className="px-2 font-bold">{`${
+              /** Round coordinates.dist to 2 floating points */
+              Math.round(kita.coordinates.dist * 100) / 100
+            }km`}</span>
           </Chip>
         </div>
         <div className="flex flex-row items-center text-sm">
@@ -76,13 +121,13 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
               hasSlotsFreeInSelectedMonth ? "text-gray-500" : "text-gray-500"
             )}
           >
-            {month}:
+            {validStartingMonth}:
           </span>
           <div className="ml-1 ">
             {hasSlotsFreeInSelectedMonth ? (
-              <div className="flex flex-row gap-1 text-green-600">
-                <span>Available</span>
-                <span>Check</span>
+              <div className="flex flex-row items-center  gap-1 text-sm font-bold text-green-600">
+                Plätze frei
+                <Check />
               </div>
             ) : (
               <div
@@ -131,8 +176,49 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
           })}
           endDecorator={<OpenInNew />}
         >
-          View details
+          Details ansehen
         </Button>
+      </div>
+    </div>
+  );
+};
+
+export const KitaListItemSkeleton: React.FC<{ index?: number }> = ({
+  index = 0,
+}) => {
+  return (
+    <div
+      className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6 animate-in fade-in-0 fade-out-100 duration-500 fill-mode-forwards"
+      style={{ animationDelay: `${index * 200}ms` }}
+    >
+      <div
+        className="flex animate-pulse flex-col"
+        style={{ maxHeight: 100, width: 100 }}
+      >
+        <div
+          style={{
+            objectFit: "cover",
+            height: 100,
+            maxWidth: 100,
+            minWidth: 100,
+          }}
+          className="rounded-lg bg-gray-200"
+        />
+      </div>
+      <div className="flex animate-pulse flex-col gap-1">
+        <div className="h-6 w-64 rounded-lg bg-gray-200 text-xl font-extrabold underline-offset-4" />
+        <div className="mb-4 flex flex-row items-center gap-3">
+          <div className="text-bl h-6 w-64 rounded-lg bg-gray-200 text-sm font-bold text-deep-blue" />
+        </div>
+        <div className="flex flex-row items-center text-sm">
+          <div className="h-6 w-32 rounded-lg bg-gray-200 font-bold" />
+          <div className="ml-1 ">
+            <div className="flex h-6 w-32  flex-row items-center gap-1 rounded-lg bg-gray-200 text-sm font-bold text-green-600" />
+          </div>
+        </div>
+      </div>
+      <div className="ml-auto flex animate-pulse flex-col">
+        <div className="h-6 w-32 rounded-lg bg-gray-200" />
       </div>
     </div>
   );
