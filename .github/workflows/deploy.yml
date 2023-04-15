@@ -7,79 +7,76 @@ on:
 
 jobs:
   git:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Clone or Pull KPZ Repo
-          uses: appleboy/ssh-action@master
-          with:
-            host: 3.70.176.52
-            username: ${{ secrets.SSH_USER }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: 22
-            script: |
-              if [ ! -d "kpz" ]; then
-                echo "Cloning repository: KitaPlatzZentrale/kpz"
-                git clone git@github.com:KitaPlatzZentrale/kpz.git
-                cd kpz
-              else
-                cd kpz
-                echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
-                git pull
-              fi
-        - name: Checkout Code
-          uses: actions/checkout@v2
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone or Pull KPZ Repo
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.70.176.52
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            if [ ! -d "kpz" ]; then
+              echo "Cloning repository: KitaPlatzZentrale/kpz"
+              git clone git@github.com:KitaPlatzZentrale/kpz.git
+              cd kpz
+            else
+              cd kpz
+              echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
+              git pull
+            fi
+      - name: Checkout Code
+        uses: actions/checkout@v2
   backend:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Build Docker Image Dev
-          working-directory: ./backend
-          run: docker build -f Dockerfile.dev -t goodbuy/kpz:dev .
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Docker Image Dev
+        working-directory: ./backend
+        run: docker build -f Dockerfile.dev -t goodbuy/kpz:dev .
 
-        - name: Build Docker Image Prod
-          working-directory: ./backend
-          run: docker build -f Dockerfile.prod -t goodbuy/kpz:prod .
+      - name: Build Docker Image Prod
+        working-directory: ./backend
+        run: docker build -f Dockerfile.prod -t goodbuy/kpz:prod .
 
-        - name: Push Docker Image
-          run: |
-            echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-            docker push goodbuy/kpz:dev
-            docker push goodbuy/kpz:prod
+      - name: Push Docker Image
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker push goodbuy/kpz:dev
+          docker push goodbuy/kpz:prod
 
-        - name: Deploy Docker Image
-          uses: appleboy/ssh-action@master
-          with:
-            host: 3.70.176.52
-            username: ${{ secrets.SSH_USER }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: 22
-            script: |
-              cd kpz/backend
-              docker-compose down
-              docker-compose up -d
-              docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+      - name: Deploy Docker Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.70.176.52
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd kpz/backend
+            docker-compose down
+            docker-compose up -d
+            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
   frontend:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Build Docker Image Frontend
-          working-directory: ./frontend
-          run: docker build -t goodbuy/kpz-frontend:dev .
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Docker Image Frontend
+        working-directory: ./frontend
+        run: docker build -t goodbuy/kpz-frontend:dev .
 
-        - name: Push Docker Image
-          run: |
-            echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-            docker push goodbuy/kpz-frontend:dev
+      - name: Push Docker Image
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker push goodbuy/kpz-frontend:dev
 
-        - name: Deploy Docker Image
-          uses: appleboy/ssh-action@master
-          with:
-            host: 3.70.176.52
-            username: ${{ secrets.SSH_USER }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            port: 22
-            script: |
-              cd kpz/frontend
-              docker-compose down
-              docker-compose up -d
+      - name: Deploy Docker Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.70.176.52
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd kpz/frontend
+            docker-compose down
+            docker-compose up -d
