@@ -28,7 +28,10 @@ const KitaList: React.FC<KitaListProps> = () => {
         )
       ) : (
         Array.from({ length: 15 }).map((_, index) => (
-          <KitaListItemSkeleton key={"kitaitemskeleton" + index} />
+          <KitaListItemSkeleton
+            index={index}
+            key={"kitaitemskeleton" + index}
+          />
         ))
       )}
     </div>
