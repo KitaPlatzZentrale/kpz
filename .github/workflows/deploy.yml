@@ -93,6 +93,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd kpz/frontend
+            cd kpz
             docker-compose down
             docker-compose up -d
