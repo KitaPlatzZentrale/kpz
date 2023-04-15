@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  express-typescript-docker-prod:
+    image: goodbuy/kpz:prod
+    environment:
+      - NODE_ENV=production
+      - S3_BUCKET=${S3_BUCKET}
+      - MONGO_DB_CONNECTION=${MONGO_DB_CONNECTION}
+    container_name: express-typescript-docker-prod
+    expose:
+      - "3001"
+    ports:
+      - "3001:3000"
+    command: node dist/index.js

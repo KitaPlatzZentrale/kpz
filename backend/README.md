@@ -13,6 +13,9 @@
 - [ ] Connect to the instance via SSH
 - [ ] Install Git
 - [ ] Install Node
+- [ ] Install Docker
+- [ ] Install Docker Compose
+- [ ] Start Docker Deamon
 
 ### Problems
 
@@ -30,8 +33,58 @@ Watch for changes
 npx tsc --watch
 ```
 
+Run dev server locally
+
+```bash
+nodemon dist/index.js
+```
+
 ## Deployment
 
 ### Requirements
 
 - [ ] Install PM2 on the server (used [this tutorial](https://medium.com/monstar-lab-bangladesh-engineering/deploying-node-js-apps-in-amazon-linux-with-pm2-7fc3ef5897bb))
+
+## AWS
+
+### SSH to EC2 Instance
+
+```bash
+ssh -i "~/.ssh/kpz-node-express-ec2-key.pem" ec2-user@ec2-3-70-176-52.eu-central-1.compute.amazonaws.com
+````
+
+### Upload files to EC2 Instance
+
+```bash
+scp -i "~/.ssh/kpz-node-express-ec2-key.pem" -r ./dist
+```
+
+### PM2
+
+```bash
+pm2 start dist/index.js --name "kpz-node-express"
+```
+
+### Install Docker
+
+```bash
+sudo yum update -y
+sudo yum install docker
+````
+
+### Start Docker Deamon
+
+```bash
+sudo systemctl start docker
+```
+
+### Install Docker Compose
+
+1. ```sudo yum update -y```
+2. ```sudo yum install python3-pip -y```
+3. ```sudo pip3 install docker-compose```
+
+<!-- If 3 errors because can't uninstall request contuniue with 4 and 5 and then try again 3 -->
+
+4. ```sudo yum remove python3-requests -y```
+5. ```sudo pip3 install requests```
