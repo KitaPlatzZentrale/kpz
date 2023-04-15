@@ -86,7 +86,7 @@ jobs:
 
       - name: Build Docker Image Frontend
         working-directory: ./frontend
-        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-frontend:dev .
+        run: docker build --build-arg AIRTABLE_BASE=${{ secrets.AIRTABLE_BASE }} --build-arg AIRTABLE_API_KEY=${{ secrets.AIRTABLE_API_KEY }} --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-frontend:dev .
 
       - name: Push Docker Image
         run: |
