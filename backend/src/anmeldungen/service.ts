@@ -12,14 +12,16 @@ const handler: RequestHandler<any, any, CreateServiceAnmeldungPayload> = async (
   }
 
   try {
-    const { email, vorname, nachname } = req.body;
+    const { email, fullAddress, desiredStartMonth, expectedBirthDate } =
+      req.body;
 
     const airtableApi = new AirtableAPIService();
 
     const anmeldung = await airtableApi.createServiceAnmeldung({
       email,
-      vorname,
-      nachname,
+      fullAddress,
+      desiredStartMonth,
+      expectedBirthDate,
     });
 
     return !!anmeldung
