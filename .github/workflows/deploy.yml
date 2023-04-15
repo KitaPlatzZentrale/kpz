@@ -51,7 +51,7 @@ jobs:
           port: 22
           script: |
             cd kpz/backend
-            docker-compose down
+            docker-compose down --remove-orphans
             docker-compose up -d
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
   frontend:
@@ -94,5 +94,5 @@ jobs:
           port: 22
           script: |
             cd kpz/frontend
-            docker-compose down
+            docker-compose down --remove-orphans
             docker-compose up -d
