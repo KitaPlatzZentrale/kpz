@@ -1,14 +1,32 @@
-FROM node:lts-alpine
+# Use Node.js LTS (14.x) as the base image
+FROM node:14-alpine AS builder
 
-WORKDIR /app 
+# Set the working directory inside the container
+WORKDIR /app
 
-COPY package.json . 
+# Copy the package.json and yarn.lock files to the container
+COPY package.json yarn.lock ./
 
-RUN yarn 
+# Install dependencies
+RUN yarn
 
+# Copy the entire app to the container
 COPY . .
 
-EXPOSE 5173 
+# Build the app
+RUN yarn build
 
-CMD ["yarn", "run", "dev"]
+# Use Nginx as the base image for the final image
+FROM nginx:alpine
 
+# Copy the build files from the previous image to the Nginx image
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Copy the Nginx configuration file to the container
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
