@@ -1,6 +1,6 @@
+import express = require("express");
 import arealBenachrichtigungHandler from "./anmeldungen/areal";
 import einzelBenachrichtigungHandler from "./anmeldungen/einzel";
-import express = require("express");
 import serviceAnmeldungHandler from "./anmeldungen/service";
 import { getKitaDetailsExternal } from "./kitas/getKitaDetails";
 import { getKitaList } from "./kitas/getKitaList";
