@@ -52,6 +52,8 @@ jobs:
           script: |
             cd kpz/backend
             docker-compose down --remove-orphans
+            docker rmi goodbuy/kpz:dev
+            docker rmi goodbuy/kpz:prod
             docker-compose up --pull -d
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
   frontend:
@@ -95,4 +97,5 @@ jobs:
           script: |
             cd kpz/frontend
             docker-compose down --remove-orphans
+            docker rmi goodbuy/kpz-frontend:dev
             docker-compose up --pull -d
