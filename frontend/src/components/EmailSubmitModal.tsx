@@ -36,7 +36,7 @@ const submitEmailAction = async (email: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: "Hanno Grimm",
+        name: "Kein Name bekannt",
         email,
         kitaName: "Kita 1",
         interneKitaId: "1",
