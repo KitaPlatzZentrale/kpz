@@ -54,6 +54,7 @@ jobs:
             docker-compose down --remove-orphans
             docker rmi goodbuy/kpz:dev
             docker rmi goodbuy/kpz:prod
+            docker rm express-typescript-docker-prod
             docker-compose up -d
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
   frontend:
@@ -98,4 +99,5 @@ jobs:
             cd kpz/frontend
             docker-compose down --remove-orphans
             docker rmi goodbuy/kpz-frontend:dev
+            docker rm kpz_frontend_dev
             docker-compose up -d

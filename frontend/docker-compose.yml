@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  web:
+  kpz_frontend_dev:
     environment:
       - VITE_BACKEND_URL=${VITE_BACKEND_URL}
       - VITE_PUBLIC_HERE_API_KEY=${VITE_PUBLIC_HERE_API_KEY}
