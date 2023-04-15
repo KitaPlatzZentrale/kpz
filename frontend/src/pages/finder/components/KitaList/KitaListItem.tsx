@@ -90,7 +90,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
       </div>
       <div className="flex flex-col gap-2">
         <Link
-          href={`/finder/${kita.uuid}`}
+          href={`https://kita-navigator.berlin.de/einrichtungen/${kita.uuid}`}
           sx={(theme) => ({
             color: theme.palette.neutral[900],
             textDecorationColor: theme.palette.neutral[200],
