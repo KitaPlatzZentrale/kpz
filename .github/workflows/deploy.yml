@@ -96,5 +96,6 @@ jobs:
             pwd
             ls
             cd kpz/frontend
+            ls
             docker-compose down
             docker-compose up -d
