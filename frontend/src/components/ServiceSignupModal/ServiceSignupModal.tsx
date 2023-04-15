@@ -20,18 +20,21 @@ const submitServiceSignupAction = async ({
   desiredStartMonth,
   expectedBirthDate,
 }: ServiceSignupActionPayload) => {
-  const res = await fetch("http://localhost:3000/anmeldungen/service", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email,
-      fullAddress,
-      desiredStartMonth,
-      expectedBirthDate,
-    }),
-  });
+  const res = await fetch(
+    `${import.meta.env.VITE_BACKEND_URL}/anmeldungen/service`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        fullAddress,
+        desiredStartMonth,
+        expectedBirthDate,
+      }),
+    }
+  );
 
   return res.ok;
 };

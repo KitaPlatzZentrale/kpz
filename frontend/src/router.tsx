@@ -1,12 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import FinderPage from "./pages/finder";
 
-import IndexPage from "./pages/index";
-
 const router = createBrowserRouter([
   {
-    path: "",
-    element: <IndexPage />,
+    path: "/",
+    element: <FinderPage />,
   },
   {
     path: "/finder",
