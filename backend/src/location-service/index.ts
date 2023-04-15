@@ -8,7 +8,9 @@ const axios = require("axios");
 
 export async function locationService(req: any, res: any, next: NextFunction) {
   try {
-    const { lat, lon, radius } = req.body;
+    const { lat, lon } = req.params;
+    const radius = req.params.radius || 2.5;
+
     const S3_BUCKET = process.env.S3_BUCKET;
     if (!S3_BUCKET) {
       throw "\n\n\nYOU NEED TO ADD THE S3_BUCKET STRING TO YOUR .env FILE IN THE ROOT FOLDER\n\n\n";
@@ -26,6 +28,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
         kitasInRadius.push(kita);
       }
     });
+    // 3. Send the Kita List with the distance
     return res.send(kitasInRadius);
   } catch (err: any) {
     logger.error(err);

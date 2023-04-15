@@ -1,4 +1,4 @@
-import { IsDecimal, IsLatitude, IsLongitude, validate } from 'class-validator';
+import { IsDecimal, IsLatitude, IsLongitude, validate } from "class-validator";
 import logger from "../services/logger";
 
 export class Location {
@@ -25,7 +25,7 @@ export async function locationValidator(req: any, res: any, next: any) {
     }
     next();
   } catch (err: any) {
-    console.log(err);
+    logger.error(err);
     return res.status(500).json({ error: "Something went wrong" });
   }
 }

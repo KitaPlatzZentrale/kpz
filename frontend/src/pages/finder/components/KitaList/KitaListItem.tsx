@@ -183,9 +183,14 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
   );
 };
 
-export const KitaListItemSkeleton = () => {
+export const KitaListItemSkeleton: React.FC<{ index?: number }> = ({
+  index = 0,
+}) => {
   return (
-    <div className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6">
+    <div
+      className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6 animate-in fade-in-0 fade-out-100 duration-500 fill-mode-forwards"
+      style={{ animationDelay: `${index * 200}ms` }}
+    >
       <div
         className="flex animate-pulse flex-col"
         style={{ maxHeight: 100, width: 100 }}
