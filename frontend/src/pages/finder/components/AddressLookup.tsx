@@ -64,7 +64,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
       const responseJson = await response.json();
 
-      if (responseJson.status !== 200) {
+      if (!responseJson.items) {
         setHasFetchingError(true);
         return;
       }
@@ -99,9 +99,11 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
       const responseJson = await response.json();
 
-      const address = responseJson.items?.[0]?.address?.label ?? "";
+      console.log(responseJson);
 
-      if (responseJson.status !== 200) {
+      const address = responseJson.items?.[0]?.title ?? "";
+
+      if (!responseJson.items) {
         setInput("Momentane Adresse");
         setIsLoadingUserLocation(false);
         return;
@@ -134,13 +136,14 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
       const responseJson = await response.json();
 
-      if (responseJson.status !== 200) {
+      console.log(responseJson);
+
+      if (!responseJson.items) {
         setHasFetchingError(true);
         return;
       }
 
       const coordinates = responseJson.items?.[0]?.position ?? {};
-      console.log("coordinates", coordinates);
       setCoordinates(coordinates);
     } catch (error) {
       setHasFetchingError(true);
@@ -172,6 +175,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   };
 
   const handleAddressSelection = (value: string | null) => {
+    setInput(value || "");
     setSelectedAddress(value);
     onAddressSelected?.(value);
   };
@@ -205,7 +209,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
       const { latitude, longitude } = currentUserPosition;
       fetchAddressByLatLng(latitude, longitude);
     }
-  }, [currentUserPosition]);
+  }, [currentUserPosition.latitude, currentUserPosition.longitude]);
 
   return (
     <div className={clsx("flex flex-col", className)}>

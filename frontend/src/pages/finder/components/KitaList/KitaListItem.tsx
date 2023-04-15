@@ -172,7 +172,14 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
           color="info"
           variant="outlined"
           size={screenIsBiggerOrEqualToMd() ? "sm" : "md"}
-          href={`/finder/${kita.uuid}`}
+          href={`https://kita-navigator.berlin.de/einrichtungen/${kita.uuid}`}
+          onClick={() => {
+            window.open(
+              `https://kita-navigator.berlin.de/einrichtungen/${kita.uuid}`,
+              "_blank"
+            );
+          }}
+          target="_blank"
           sx={(theme) => ({
             paddingTop: 1,
             paddingBottom: 1,

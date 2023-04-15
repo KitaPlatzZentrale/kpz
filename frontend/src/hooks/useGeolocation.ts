@@ -29,11 +29,11 @@ export const useGeolocation = () => {
       return;
     }
 
-    const watcher = geo.watchPosition(onChange, onError);
-    return () => geo.clearWatch(watcher);
+    geo.getCurrentPosition(onChange, onError);
   };
 
   const requestPermission = () => {
+    if (permissionGranted) return;
     const req = new Promise((resolve, reject) => {
       const permissionResult = window.navigator.permissions.query({
         name: "geolocation",
@@ -43,13 +43,19 @@ export const useGeolocation = () => {
         if (result.state === "granted") {
           resolve("granted");
         } else if (result.state === "prompt") {
-          resolve("prompt");
+          reject("prompt");
         } else if (result.state === "denied") {
           reject("denied");
         }
 
         result.onchange = () => {
-          resolve(result.state);
+          if (result.state === "granted") {
+            resolve("granted");
+          } else if (result.state === "prompt") {
+            reject("prompt");
+          } else if (result.state === "denied") {
+            reject("denied");
+          }
         };
       });
     });
