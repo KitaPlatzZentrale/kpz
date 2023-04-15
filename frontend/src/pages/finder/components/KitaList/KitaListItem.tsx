@@ -194,7 +194,7 @@ export const KitaListItemSkeleton: React.FC<{ index?: number }> = ({
 }) => {
   return (
     <div
-      className="animate flex w-full flex-row gap-6 rounded-2xl bg-white p-6 opacity-0 animate-in fade-in-100 zoom-in duration-500 fill-mode-forwards direction-normal"
+      className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6"
       style={{
         animationDelay: `${index * 200}ms`,
       }}
