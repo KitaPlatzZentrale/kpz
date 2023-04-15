@@ -25,7 +25,7 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
   const [isFetching, setIsFetching] = React.useState(false);
   const _fetchKitas = async (latlng: { lat: number; lng: number }) => {
     const response = await fetch(
-      `http://localhost:3000/location-service/${latlng.lat}/${latlng.lng}/2.5`,
+      `${process.env.VITE_BACKEND_URL}/location-service/${latlng.lat}/${latlng.lng}/2.5`,
       {
         method: "GET",
       }
