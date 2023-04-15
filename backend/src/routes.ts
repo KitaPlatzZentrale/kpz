@@ -12,7 +12,11 @@ const router = express.Router();
 router.get("/kitas/:lat/:lon", getKitaList);
 router.get("/kita/:uuid", getKitaDetailsExternal);
 
-router.get("/location-service", locationValidator, locationService);
+router.get(
+  "/location-service/:lat/:lon/:radius",
+  locationValidator,
+  locationService
+);
 
 router.post("/anmeldungen/service", serviceAnmeldungHandler);
 router.post("/anmeldungen/einzel", einzelBenachrichtigungHandler);
