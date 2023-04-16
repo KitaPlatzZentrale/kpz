@@ -7,6 +7,8 @@ services:
       - NODE_ENV=development
       - S3_BUCKET=${S3_BUCKET}
       - MONGO_DB_CONNECTION=${MONGO_DB_CONNECTION}
+      - AIRTABLE_BASE=${AIRTABLE_BASE}
+      - AIRTABLE_API_KEY=${AIRTABLE_API_KEY}
     volumes:
       - ./:/usr/src/app
     container_name: express-typescript-docker-dev

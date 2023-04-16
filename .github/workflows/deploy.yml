@@ -28,7 +28,7 @@ jobs:
             fi
       - name: Checkout Code
         uses: actions/checkout@v2
-      
+
       - name: Build Docker Image Dev
         working-directory: ./backend
         run: docker build -f Dockerfile.dev -t goodbuy/kpz:dev .
@@ -58,11 +58,11 @@ jobs:
             docker rm express-typescript-docker-prod
             docker-compose up -d
             docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-  
+
   frontend:
     runs-on: ubuntu-latest
-    
-    steps:  
+
+    steps:
       - name: Clone or Pull KPZ Repo
         uses: appleboy/ssh-action@master
         with:
@@ -80,13 +80,13 @@ jobs:
               echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
               git pull
             fi
-      
+
       - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Build Docker Image Frontend
         working-directory: ./frontend
-        run: docker build --build-arg AIRTABLE_BASE=${{ secrets.AIRTABLE_BASE }} --build-arg AIRTABLE_API_KEY=${{ secrets.AIRTABLE_API_KEY }} --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-frontend:dev .
+        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-frontend:dev .
 
       - name: Push Docker Image
         run: |
