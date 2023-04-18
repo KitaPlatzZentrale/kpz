@@ -31,7 +31,11 @@ export async function locationService(req: any, res: any, next: NextFunction) {
       }
     });
     const sortedKitaList = sortKitaListByDistance(kitaList)
-    const linkToNextPage = `https://kitaplatz-zentrale.de:3000/location-service/${lat}/${lon}/${radius}/${page+1}/${size}`
+    const BACKEND_URL = process.env.VITE_BACKEND_URL
+    if (!BACKEND_URL) {
+      throw "\n\n\nYOU NEED TO ADD THE BACKEND_URL STRING TO YOUR .env FILE IN THE ROOT FOLDER\n\n\n";
+    }
+    const linkToNextPage = `${BACKEND_URL}/location-service/${lat}/${lon}/${radius}/${page+1}/${size}`
 
     const paginatedKitas = pagination(sortedKitaList, page, size, linkToNextPage)
     return res.send(paginatedKitas);
