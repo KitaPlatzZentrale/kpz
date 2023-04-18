@@ -12,6 +12,8 @@ import EmailSubmitModal from "../../../../components/EmailSubmitModal";
 import { useSearchContext } from "../../../../components/SearchContext";
 import { Kita } from "../../../../types";
 
+import Balancer from "react-wrap-balancer";
+
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../../../../tailwind.config";
 
@@ -85,7 +87,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
             objectFit: "cover",
           }}
           alt="Kita Logo"
-          className="rounded-lg lg:h-24 lg:w-24"
+          className="min-w-full rounded-lg md:w-24 lg:h-24"
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -103,7 +105,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
           fontSize={20}
           underline="always"
         >
-          {kita.name}
+          <Balancer>{kita.name}</Balancer>
         </Link>
         <div className="mb-4 flex flex-row items-center gap-3">
           <span className="text-bl text-sm font-bold text-deep-blue">{`${kita.address.street} ${kita.address.houseNumber}, ${kita.address.zip}`}</span>
