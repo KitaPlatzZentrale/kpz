@@ -10,7 +10,7 @@ services:
       - AIRTABLE_BASE=${AIRTABLE_BASE}
       - AIRTABLE_API_KEY=${AIRTABLE_API_KEY}
     volumes:
-      - ./:/usr/src/app
+      - ~/logs/dev:/usr/src/app/logs
     container_name: express-typescript-docker-dev
     expose:
       - "3001"

@@ -9,9 +9,12 @@ services:
       - MONGO_DB_CONNECTION=${MONGO_DB_CONNECTION}
       - AIRTABLE_BASE=${AIRTABLE_BASE}
       - AIRTABLE_API_KEY=${AIRTABLE_API_KEY}
+    volumes:
+      - ~/logs/prod:/usr/src/app/logs
     container_name: express-typescript-docker-prod
     expose:
       - "3000"
     ports:
       - "3000:3000"
     command: node dist/index.js
+
