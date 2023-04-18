@@ -13,3 +13,4 @@ services:
     ports:
       - "3000:3000"
     command: node dist/index.js
+
