@@ -13,7 +13,7 @@ router.get("/kitas/:lat/:lon", getKitaList);
 router.get("/kita/:uuid", getKitaDetailsExternal);
 
 router.get(
-  "/location-service/:lat/:lon/:radius",
+  "/location-service/:lat/:lon/:radius/:page/:size",
   locationValidator,
   locationService
 );
