@@ -9,9 +9,10 @@ const axios = require("axios");
 
 export async function locationService(req: any, res: any, next: NextFunction) {
   try {
-    const { lat, lon, page, size} = req.params;
+    const { lat, lon} = req.params;
     const radius = req.params.radius || 2.5;
-
+    let page = parseInt(req.params.page)
+    let size = parseInt(req.params.size)
     const S3_BUCKET = process.env.S3_BUCKET;
 
     if (!S3_BUCKET) {
@@ -30,7 +31,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
         kitasInRadius.push(kita);
       }
     });
-    const sortedKitaList = sortKitaListByDistance(kitaList)
+    const sortedKitaList = sortKitaListByDistance(kitaList.data)
     const BACKEND_URL = process.env.VITE_BACKEND_URL
     if (!BACKEND_URL) {
       throw "\n\n\nYOU NEED TO ADD THE BACKEND_URL STRING TO YOUR .env FILE IN THE ROOT FOLDER\n\n\n";
@@ -57,10 +58,12 @@ function pagination(sortedKitaList: Kita[], page: number, size: number, linkToNe
   const endIndex = (page * size) + size
   let kitasInPage;
   if(endIndex > sortedKitaList.length) {
-    kitasInPage = sortedKitaList.slice(startIndex, endIndex)
+    kitasInPage = sortedKitaList.slice(startIndex)
+
   }
   else {
-    kitasInPage = sortedKitaList.slice(startIndex)
+    kitasInPage = sortedKitaList.slice(startIndex, endIndex)
+
   }
   const maxNumOfPages = Math.round(sortedKitaList.length / size)
   let pagesLeft = maxNumOfPages - page
