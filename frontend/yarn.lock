@@ -1279,6 +1279,11 @@ react-hook-form@^7.43.9:
   resolved "https://registry.npmjs.org/react-hook-form/-/react-hook-form-7.43.9.tgz"
   integrity sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==
 
+react-hook-geolocation@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-hook-geolocation/-/react-hook-geolocation-1.1.0.tgz#922015f3cafd0ea4a7a209052a942a17cf50efb1"
+  integrity sha512-YlqFIOtozFPgcTDPDhRITIMSgIr1Op3070SCmKOTM9LD0mpZLsw7D+miwve9vD+B92Ht7f43Hn+hUMS3tHifAg==
+
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"

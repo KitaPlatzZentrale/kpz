@@ -5,7 +5,7 @@ import { AutocompleteProps, CircularProgress, Link } from "@mui/joy";
 
 import FormAutocomplete from "../../../components/FormAutocomplete";
 import clsx from "clsx";
-import { useGeolocation } from "../../../hooks/useGeolocation";
+import useGeolocation from "react-hook-geolocation";
 
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
 
@@ -30,17 +30,36 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   hideCurrentLocationOption,
   ...autoCompleteProps
 }) => {
-  const { requestPermission, currentUserPosition } = useGeolocation();
+  const [allowUserCoordinatesRequest, setAllowUserCoordinatesRequest] =
+    React.useState<boolean | null>(null);
+
+  const [currentUserPosition, setCurrentUserPosition] = React.useState<{
+    latitude: number | null;
+    longitude: number | null;
+  }>({
+    latitude: null,
+    longitude: null,
+  });
 
   const [input, setInput] = React.useState("");
   const [suggestions, setSuggestions] = React.useState([]);
   const [selectedAddress, setSelectedAddress] = React.useState<string | null>(
     ""
   );
-  const [coordinates, setCoordinates] = React.useState({
+  const [coordinates, setCoordinates] = React.useState<{
+    lat: number | null;
+    lng: number | null;
+  }>({
     lat: null,
     lng: null,
   });
+
+  const currentCoordinatesAreUserCoordinates =
+    currentUserPosition &&
+    currentUserPosition.latitude &&
+    currentUserPosition.longitude &&
+    coordinates.lat === currentUserPosition.latitude &&
+    coordinates.lng === currentUserPosition.longitude;
 
   const [hasFetchingError, setHasFetchingError] = React.useState(false);
   const [isLoadingUserLocation, setIsLoadingUserLocation] =
@@ -81,11 +100,6 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
   const fetchAddressByLatLng = async (lat: number, lng: number) => {
     setHasFetchingError(false);
-    setCoordinates({
-      lat,
-      lng,
-    });
-    setIsLoadingUserLocation(true);
 
     try {
       const response = await fetch(
@@ -99,24 +113,16 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
       const responseJson = await response.json();
 
+      if (!responseJson.items) {
+        throw Error("No property items found on response");
+      }
+
       const address = responseJson.items?.[0]?.title ?? "";
 
-      if (!responseJson.items) {
-        setInput("Momentane Adresse");
-        setIsLoadingUserLocation(false);
-        return;
-      }
-
-      if (address.length > 0) {
-        setInput(address);
-        setSelectedAddress(address);
-      } else {
-        setInput("Momentane Adresse");
-      }
-      setIsLoadingUserLocation(false);
+      return address;
     } catch (error) {
-      setIsLoadingUserLocation(false);
       console.error("Error fetching address:", error);
+      setHasFetchingError(true);
     }
   };
 
@@ -176,6 +182,52 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     onAddressSelected?.(value);
   };
 
+  const handleUserLocationChange = async (
+    geolocation: GeolocationCoordinates
+  ) => {
+    if (!allowUserCoordinatesRequest) return;
+    if (currentCoordinatesAreUserCoordinates) return;
+
+    const { latitude, longitude, accuracy: accuracyInMeters } = geolocation;
+
+    //TODO: Give user visual feedback that an accurate position wasn't accessible in the current network settings.
+    // if accuracyInMeters is bigger than 50 meters.
+    // Tested this on home wifi, got accuracy of 5000 meters (???), with hotspot wifi from phone with GPS the accuracy was 14 meters.
+
+    setIsLoadingUserLocation(true);
+
+    setCoordinates({
+      lat: latitude,
+      lng: longitude,
+    });
+    setCurrentUserPosition({
+      latitude,
+      longitude,
+    });
+
+    const addressDescription = await fetchAddressByLatLng(latitude, longitude);
+
+    if (addressDescription.length > 0) {
+      setInput(addressDescription);
+      setSelectedAddress(addressDescription);
+    } else {
+      setInput("Momentane Adresse");
+    }
+    setIsLoadingUserLocation(false);
+
+    setAllowUserCoordinatesRequest(false);
+  };
+
+  const { latitude, longitude } = useGeolocation(
+    {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    },
+    handleUserLocationChange,
+    !!allowUserCoordinatesRequest
+  );
+
   React.useEffect(() => {
     if (!selectedAddress) {
       setCoordinates({ lat: null, lng: null });
@@ -186,26 +238,6 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   React.useEffect(() => {
     onCoordinatesSuccessfullyRetrieved?.(coordinates);
   }, [coordinates]);
-
-  const currentCoordinatesAreUserCoordinates =
-    currentUserPosition &&
-    currentUserPosition.latitude &&
-    currentUserPosition.longitude &&
-    coordinates.lat === currentUserPosition.latitude &&
-    coordinates.lng === currentUserPosition.longitude;
-
-  React.useEffect(() => {
-    if (
-      currentUserPosition &&
-      currentUserPosition.latitude &&
-      currentUserPosition.longitude
-    ) {
-      if (currentCoordinatesAreUserCoordinates) return;
-
-      const { latitude, longitude } = currentUserPosition;
-      fetchAddressByLatLng(latitude, longitude);
-    }
-  }, [currentUserPosition.latitude, currentUserPosition.longitude]);
 
   return (
     <div className={clsx("flex flex-col", className)}>
@@ -242,7 +274,10 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
           fontWeight={"bold"}
           fontSize="sm"
           underline="always"
-          disabled={currentCoordinatesAreUserCoordinates}
+          disabled={
+            currentCoordinatesAreUserCoordinates &&
+            allowUserCoordinatesRequest === false
+          }
           startDecorator={
             isLoadingUserLocation ? (
               <CircularProgress color="info" size="sm" />
@@ -250,7 +285,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
               <LocationOn />
             )
           }
-          onClick={() => requestPermission()}
+          onClick={() => setAllowUserCoordinatesRequest(true)}
         >
           Momentane Position nutzen
         </Link>
