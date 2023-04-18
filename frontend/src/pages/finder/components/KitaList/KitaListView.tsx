@@ -22,9 +22,9 @@ const KitaListView: React.FC<KitaListViewProps> = ({ children }) => {
   return (
     <div className="gap flex flex-col gap-2">
       <>
-        <div className="mb-1 flex flex-row gap-5">
-          <span className="text-base font-bold text-gray-800">
-            {currentKitas?.length || 0} Ergebnisse
+        <div className="mb-4 flex flex-col gap-1">
+          <span className="text-xl font-extrabold text-gray-800">
+            {currentKitas?.length || 0} Einrichtungen in der Nähe
           </span>
           <span className="text-gray-500">
             Informationen und Verfügbarkeiten nach{" "}
@@ -36,38 +36,6 @@ const KitaListView: React.FC<KitaListViewProps> = ({ children }) => {
               berlin.de
             </a>
           </span>
-        </div>
-        <div className="mb-3 flex flex-row gap-4">
-          <Chip
-            startDecorator={<ListOutlined />}
-            color="info"
-            variant="soft"
-            size="md"
-            sx={{ cursor: "pointer" }}
-          >
-            Liste
-          </Chip>
-          <Chip
-            startDecorator={<Map />}
-            endDecorator={
-              <Chip
-                color="neutral"
-                size="sm"
-                color="neutral"
-                variant="plain"
-                disabled
-              >
-                Bald verfügbar
-              </Chip>
-            }
-            color="neutral"
-            variant="outlined"
-            disabled
-            size="md"
-            sx={{ cursor: "not-allowed" }}
-          >
-            Karte
-          </Chip>
         </div>
       </>
 

@@ -1,12 +1,25 @@
+import clsx from "clsx";
 import React from "react";
 import Header from "../components/Header";
 
-type LayoutProps = React.PropsWithChildren<{}>;
+type LayoutProps = React.PropsWithChildren<{
+  lockAtScreenHeight?: boolean;
+  headerRef?: React.RefObject<HTMLDivElement>;
+}>;
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: React.FC<LayoutProps> = ({
+  children,
+  lockAtScreenHeight = false,
+  headerRef,
+}) => {
   return (
-    <div className="flex h-full flex-col">
-      <Header />
+    <div
+      className={clsx(
+        "flex flex-col",
+        lockAtScreenHeight ? "max-h-screen overflow-hidden" : "h-full"
+      )}
+    >
+      <Header headerRef={headerRef} />
       {children}
     </div>
   );

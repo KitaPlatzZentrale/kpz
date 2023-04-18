@@ -44,9 +44,9 @@ const ServiceBanner: React.FC<ServiceBannerProps> = ({ open, className }) => {
               <Balancer className="text-center lg:text-start">
                 Unser PlatzFinder Service nimmt den Stress aus Ihrem
                 Elternalltag. Ganz unverbindlich —{" "}
-                <strong className="font-extrabold">
+                <Balancer className="font-extrabold">
                   Sie bezahlen nur bei Erfolg.
-                </strong>
+                </Balancer>
               </Balancer>
             </p>
           </div>

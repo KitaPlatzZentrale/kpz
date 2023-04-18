@@ -1,6 +1,5 @@
 import React from "react";
 import { Kita } from "../../../../types";
-import { useKitaListContext } from "../KitaListContext";
 import ServiceBanner from "../ServiceBanner";
 import KitaListItem, { KitaListItemSkeleton } from "./KitaListItem";
 

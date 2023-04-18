@@ -49,6 +49,12 @@ const transformMonthIntoISODate = (month: string | null) => {
   return `${year}-${monthNumber}-01`;
 };
 
+// distance is a double in km (e.g. 0.04km)
+const getDistanceDescription = (distance: number) => {
+  if (distance < 1) return (distance * 1000).toFixed(0) + "m";
+  else return distance.toFixed(1) + "km";
+};
+
 type KitaListItemProps = {
   kita: Kita;
 };
@@ -115,10 +121,9 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
             variant="soft"
             size="sm"
           >
-            <span className="px-2 font-bold">{`${
-              /** Round coordinates.dist to 2 floating points */
-              Math.round(kita.coordinates.dist * 100) / 100
-            }km`}</span>
+            <span className="pl-1 pr-2 font-bold">
+              {getDistanceDescription(kita.coordinates.dist)}
+            </span>
           </Chip>
         </div>
         <div className="flex flex-row items-center text-sm">

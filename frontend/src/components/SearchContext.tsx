@@ -1,8 +1,13 @@
 import React from "react";
 
-type LatLng = {
+export type LatLng = {
   lat: number | null;
   lng: number | null;
+};
+
+export const DEFAULT_BERLIN_CENTER: LatLng = {
+  lat: 52.520008,
+  lng: 13.404954,
 };
 
 type SearchContext = {
@@ -26,10 +31,9 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   children,
 }) => {
   const [address, setAddress] = React.useState<string | null>(null);
-  const [coordinates, setCoordinates] = React.useState<LatLng>({
-    lat: null,
-    lng: null,
-  });
+  const [coordinates, setCoordinates] = React.useState<LatLng>(
+    DEFAULT_BERLIN_CENTER
+  );
 
   const [desiredStartingMonth, setDesiredStartingMonth] = React.useState<
     string | null
