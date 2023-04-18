@@ -9,7 +9,7 @@ const axios = require("axios");
 
 export async function locationService(req: any, res: any, next: NextFunction) {
   try {
-    const { lat, lon } = req.params;
+    const { lat, lon, page, size} = req.params;
     const radius = req.params.radius || 2.5;
 
     const S3_BUCKET = process.env.S3_BUCKET;
@@ -30,10 +30,44 @@ export async function locationService(req: any, res: any, next: NextFunction) {
         kitasInRadius.push(kita);
       }
     });
-    // 3. Send the Kita List with the distance
-    return res.send(kitasInRadius);
+    const sortedKitaList = sortKitaListByDistance(kitaList)
+    const linkToNextPage = `https://kitaplatz-zentrale.de:3000/location-service/${lat}/${lon}/${radius}/${page+1}/${size}`
+
+    const paginatedKitas = pagination(sortedKitaList, page, size, linkToNextPage)
+    return res.send(paginatedKitas);
   } catch (err: any) {
     logger.error(err);
     return res.status(500).json({ error: "Something went wrong" });
+  }
+}
+
+function sortKitaListByDistance(kitaList: Kita[]) {
+  kitaList.sort((a, b) => {
+    return a.coordinates.dist - b.coordinates.dist;
+  });
+  return kitaList
+}
+
+function pagination(sortedKitaList: Kita[], page: number, size: number, linkToNextPage: string) {
+  const startIndex = page * size
+  const endIndex = (page * size) + size
+  let kitasInPage;
+  if(endIndex > sortedKitaList.length) {
+    kitasInPage = sortedKitaList.slice(startIndex, endIndex)
+  }
+  else {
+    kitasInPage = sortedKitaList.slice(startIndex)
+  }
+  const maxNumOfPages = Math.round(sortedKitaList.length / size)
+  let pagesLeft = maxNumOfPages - page
+  return {
+    metadata: {
+      currentPage: page,
+      totalKitas: sortedKitaList.length,
+      returnedKitas: kitasInPage.length,
+      pagesLeft: pagesLeft,
+      linkToNextPage: linkToNextPage
+    },
+    kitas: kitasInPage,
   }
 }
