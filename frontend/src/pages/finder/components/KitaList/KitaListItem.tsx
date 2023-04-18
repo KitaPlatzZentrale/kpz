@@ -202,39 +202,24 @@ export const KitaListItemSkeleton: React.FC<{ index?: number }> = ({
 }) => {
   return (
     <div
-      className="flex w-full flex-row gap-6 rounded-2xl bg-white p-6"
-      style={{
-        animationDelay: `${index * 200}ms`,
-      }}
+      key={"kitaskeleton" + index}
+      className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6"
     >
-      <div
-        className="flex animate-pulse flex-col"
-        style={{ maxHeight: 100, width: 100 }}
-      >
-        <div
-          style={{
-            objectFit: "cover",
-            height: 100,
-            maxWidth: 100,
-            minWidth: 100,
-          }}
-          className="rounded-lg bg-gray-200"
-        />
+      <div className="flex flex-col">
+        <div className="min-w-full animate-pulse rounded-lg bg-gray-100 md:w-24 lg:h-24" />
       </div>
-      <div className="flex animate-pulse flex-col gap-1">
-        <div className="h-6 w-64 rounded-lg bg-gray-200 text-xl font-extrabold underline-offset-4" />
+      <div className="flex flex-col gap-2">
+        <div className="h-6 w-64 animate-pulse bg-gray-100 text-xl font-extrabold underline-offset-4" />
         <div className="mb-4 flex flex-row items-center gap-3">
-          <div className="text-bl h-6 w-64 rounded-lg bg-gray-200 text-sm font-bold text-deep-blue" />
+          <div className="text-bl h-6 w-64 animate-pulse bg-gray-100 text-sm font-bold text-deep-blue" />
         </div>
         <div className="flex flex-row items-center text-sm">
-          <div className="h-6 w-32 rounded-lg bg-gray-200 font-bold" />
-          <div className="ml-1 ">
-            <div className="flex h-6 w-32  flex-row items-center gap-1 rounded-lg bg-gray-200 text-sm font-bold text-green-600" />
-          </div>
+          <div className="h-6 w-32 animate-pulse bg-gray-100 font-bold" />
+          <div className="ml-1 h-6 w-32 animate-pulse bg-gray-100" />
         </div>
       </div>
-      <div className="ml-auto flex animate-pulse flex-col">
-        <div className="h-6 w-32 rounded-lg bg-gray-200" />
+      <div className="flex flex-col md:ml-auto">
+        <div className="h-6 w-32 animate-pulse bg-gray-100" />
       </div>
     </div>
   );
