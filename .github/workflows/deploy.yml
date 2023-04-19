@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
 
 jobs:
   backend:
     runs-on: ubuntu-latest
+    if: "contains(toJSON(github.event.commits.*.modified), 'backend/')"
     steps:
       - name: Clone or Pull KPZ Repo
         uses: appleboy/ssh-action@master
@@ -61,7 +65,7 @@ jobs:
 
   frontend:
     runs-on: ubuntu-latest
-
+    if: "contains(toJSON(github.event.commits.*.modified), 'frontend/')"
     steps:
       - name: Clone or Pull KPZ Repo
         uses: appleboy/ssh-action@master
