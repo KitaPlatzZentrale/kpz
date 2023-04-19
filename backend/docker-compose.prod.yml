@@ -1,8 +1,8 @@
 version: "3"
 
 services:
-  express-typescript-docker-prod:
-    image: goodbuy/kpz:prod
+  kpz-prod-backend:
+    image: goodbuy/kpz-prod-backend
     environment:
       - NODE_ENV=production
       - S3_BUCKET=${S3_BUCKET}
@@ -11,9 +11,7 @@ services:
       - AIRTABLE_API_KEY=${AIRTABLE_API_KEY}
     volumes:
       - ~/logs/prod:/usr/src/app/logs
-    container_name: express-typescript-docker-prod
-    expose:
-      - "3000"
+    container_name: kpz-prod-backend-container
     ports:
       - "3000:3000"
     command: node dist/index.js

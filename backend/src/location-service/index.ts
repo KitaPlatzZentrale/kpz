@@ -42,7 +42,9 @@ export async function locationService(req: any, res: any, next: NextFunction) {
     if(paginatedKitas.metadata.pagesLeft === 0) {
       paginatedKitas.metadata.nextUrl = false
     }
+    logger.info(`Found ${kitasInRadius.length} Kitas in radius of ${radius}km`);
     return res.send(paginatedKitas);
+
   } catch (err: any) {
     logger.error(err);
     return res.status(500).json({ error: "Something went wrong" });

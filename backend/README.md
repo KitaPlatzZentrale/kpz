@@ -14,10 +14,8 @@
 - [ ] Install Git
 - [ ] Install Node
 - [ ] Install Docker
-- [ ] Install Docker Compose
+- [ ] Install Docker-Compose
 - [ ] Start Docker Deamon
-
-### Problems
 
 ## Typescript
 
@@ -39,12 +37,6 @@ Run dev server locally
 nodemon dist/index.js
 ```
 
-## Deployment
-
-### Requirements
-
-- [ ] Install PM2 on the server (used [this tutorial](https://medium.com/monstar-lab-bangladesh-engineering/deploying-node-js-apps-in-amazon-linux-with-pm2-7fc3ef5897bb))
-
 ## AWS
 
 ### SSH to EC2 Instance
@@ -57,12 +49,6 @@ ssh -i "~/.ssh/kpz-node-express-ec2-key.pem" ec2-user@ec2-3-70-176-52.eu-central
 
 ```bash
 scp -i "~/.ssh/kpz-node-express-ec2-key.pem" -r ./dist
-```
-
-### PM2
-
-```bash
-pm2 start dist/index.js --name "kpz-node-express"
 ```
 
 ### Install Docker
@@ -83,8 +69,9 @@ sudo systemctl start docker
 1. ```sudo yum update -y```
 2. ```sudo yum install python3-pip -y```
 3. ```sudo pip3 install docker-compose```
+4. Read Section problems before running this command ```sudo yum remove python3-requests -y```
+5. Read Section problems before running this command ```sudo pip3 install requests```
 
-<!-- If 3 errors because can't uninstall request contuniue with 4 and 5 and then try again 3 -->
+### Problems
 
-4. ```sudo yum remove python3-requests -y```
-5. ```sudo pip3 install requests```
+If 3 errors because can't uninstall request package, contuniue with 4 and 5 and then try again 3
