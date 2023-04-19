@@ -11,8 +11,8 @@ export async function locationService(req: any, res: any, next: NextFunction) {
   try {
     const { lat, lon} = req.params;
     const radius = req.params.radius || 2.5;
-    let page = parseInt(req.params.page)
-    let size = parseInt(req.params.size)
+    const page = parseInt(req.params.page)
+    const size = parseInt(req.params.size)
     const S3_BUCKET = process.env.S3_BUCKET;
 
     if (!S3_BUCKET) {
@@ -36,9 +36,12 @@ export async function locationService(req: any, res: any, next: NextFunction) {
     if (!BACKEND_URL) {
       throw "\n\n\nYOU NEED TO ADD THE BACKEND_URL STRING TO YOUR .env FILE IN THE ROOT FOLDER\n\n\n";
     }
-    const linkToNextPage = `${BACKEND_URL}/location-service/${lat}/${lon}/${radius}/${page+1}/${size}`
+    const linkToNextPage  = `${BACKEND_URL}/location-service/${lat}/${lon}/${radius}/${page+1}/${size}`
 
     const paginatedKitas = pagination(sortedKitaList, page, size, linkToNextPage)
+    if(paginatedKitas.metadata.pagesLeft === 0) {
+      paginatedKitas.metadata.nextUrl = false
+    }
     return res.send(paginatedKitas);
   } catch (err: any) {
     logger.error(err);
@@ -53,28 +56,30 @@ function sortKitaListByDistance(kitaList: Kita[]) {
   return kitaList
 }
 
-function pagination(sortedKitaList: Kita[], page: number, size: number, linkToNextPage: string) {
+function pagination(sortedList: any[], page: number, size: number, linkToNextPage: string) {
   const startIndex = page * size
   const endIndex = (page * size) + size
-  let kitasInPage;
-  if(endIndex > sortedKitaList.length) {
-    kitasInPage = sortedKitaList.slice(startIndex)
+  let itemsInPage;
+  if(endIndex > sortedList.length) {
+    itemsInPage = sortedList.slice(startIndex)
 
   }
   else {
-    kitasInPage = sortedKitaList.slice(startIndex, endIndex)
+    itemsInPage = sortedList.slice(startIndex, endIndex)
 
   }
-  const maxNumOfPages = Math.round(sortedKitaList.length / size)
-  let pagesLeft = maxNumOfPages - page
+  const maxNumOfPages = Math.ceil(sortedList.length / size)
+  const pagesLeft = maxNumOfPages - page 
   return {
     metadata: {
-      currentPage: page,
-      totalKitas: sortedKitaList.length,
-      returnedKitas: kitasInPage.length,
-      pagesLeft: pagesLeft,
-      linkToNextPage: linkToNextPage
+      page: page, 
+      amountOfItems: sortedList.length,
+      totalPages: maxNumOfPages -1,
+      itemsPerPage: size,
+      returnedItems: itemsInPage.length,
+      pagesLeft: pagesLeft -1,
+      nextUrl: <string | boolean>linkToNextPage 
     },
-    kitas: kitasInPage,
-  }
+    items: itemsInPage,
+  } 
 }
