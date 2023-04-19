@@ -31,6 +31,7 @@ export async function locationService(req: any, res: any, next: NextFunction) {
       }
     });
     // 3. Send the Kita List with the distance
+    logger.info(`Found ${kitasInRadius.length} Kitas in radius of ${radius}km`);
     return res.send(kitasInRadius);
   } catch (err: any) {
     logger.error(err);
