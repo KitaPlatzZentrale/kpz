@@ -1,4 +1,4 @@
-name: Deploy Prod Backend to EC2
+name: Deploy Dev Backend to EC2
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - 'backend/**'
 
 jobs:
-  deploy-prod-backend:
+  deploy-dev-backend:
     runs-on: ubuntu-latest
     steps:
       - name: Clone or Pull KPZ Repo
@@ -52,5 +52,4 @@ jobs:
             docker-compose down --remove-orphans
             docker rmi goodbuy/kpz-dev-backend
             docker rm kpz-dev-backend-container
-            docker-compose up -d
-            docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+            docker-compose -f docker-compose.dev.yml up -d

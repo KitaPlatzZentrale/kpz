@@ -52,5 +52,4 @@ jobs:
             docker-compose down --remove-orphans
             docker rmi goodbuy/kpz-prod-backend
             docker rm kpz-prod-backend-container
-            docker-compose up -d
-            docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+            docker-compose -f docker-compose.prod.yml up -d
