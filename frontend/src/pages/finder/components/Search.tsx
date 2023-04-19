@@ -6,7 +6,7 @@ import CentricContent from "../../../components/CentricContent";
 import FormAutocomplete from "../../../components/FormAutocomplete";
 import { useSearchContext } from "../../../components/SearchContext";
 import AddressLookup from "./AddressLookup";
-import { useKitaListContext } from "./KitaListContext";
+import { useKitaListContext } from "./KitaList/KitaListContext";
 import ServiceBanner from "./ServiceBanner";
 
 type SearchProps = {
@@ -44,11 +44,15 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
         <div className="flex w-full max-w-5xl flex-col items-stretch gap-6 lg:flex-row lg:items-start">
           <AddressLookup
             className="lg:w-full"
-            onAddressSelected={(address) => {
+            onAddressSelected={async (address) => {
               setAddress(address);
             }}
-            onCoordinatesSuccessfullyRetrieved={(coordinates) => {
+            onCoordinatesSuccessfullyRetrieved={async (coordinates) => {
               setCoordinates(coordinates);
+
+              if (coordinates.lat && coordinates.lng) {
+                await fetchKitas(coordinates);
+              }
             }}
           />
           <FormAutocomplete

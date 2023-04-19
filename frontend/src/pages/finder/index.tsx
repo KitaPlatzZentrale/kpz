@@ -4,9 +4,10 @@ import ServiceSignupModal from "../../components/ServiceSignupModal/ServiceSignu
 import ServiceSignupModalContextProvider from "../../components/ServiceSignupModal/ServiceSignupModalContext";
 import Layout from "../layout";
 import KitaListView from "./components/KitaList/KitaListView";
-import KitaListContextProvider from "./components/KitaListContext";
+import KitaListContextProvider from "./components/KitaList/KitaListContext";
 import HereMap from "./components/Map/HereMap";
 import Search from "./components/Search";
+import KitaListScrollContextProvider from "./components/KitaList/KitaListScrollContext";
 
 type FinderPageProps = {};
 
@@ -27,32 +28,32 @@ const FinderPage: React.FC<FinderPageProps> = () => {
 
   return (
     <Layout headerRef={headerRef} lockAtScreenHeight>
-      <KitaListContextProvider>
-        <SearchContextProvider>
-          <ServiceSignupModalContextProvider>
-            <ServiceSignupModal />
-            <div className="flex h-full w-full flex-col pb-10">
-              <Search rootRef={searchRef} id="kita-searchbar" />
+      <KitaListScrollContextProvider>
+        <KitaListContextProvider>
+          <SearchContextProvider>
+            <ServiceSignupModalContextProvider>
+              <ServiceSignupModal />
+              <div className="flex h-full w-full flex-col pb-10">
+                <Search rootRef={searchRef} id="kita-searchbar" />
 
-              <div
-                id="content"
-                style={{ height: contentHeight }}
-                className="page-padding flex w-full flex-row gap-4 pr-0"
-              >
                 <div
-                  id="results-list"
-                  className="flex w-1/2 flex-col overflow-y-scroll py-8 pr-6"
+                  id="content"
+                  style={{ height: contentHeight }}
+                  className="xl:page-padding flex w-full flex-col-reverse gap-4 xl:flex-row xl:pr-0"
                 >
                   <KitaListView />
-                </div>
-                <div id="finder-map" className="flex w-full flex-grow">
-                  <HereMap />
+                  <div
+                    id="finder-map"
+                    className="flex min-h-[500px] w-full flex-grow xl:h-full xl:min-h-full"
+                  >
+                    <HereMap />
+                  </div>
                 </div>
               </div>
-            </div>
-          </ServiceSignupModalContextProvider>
-        </SearchContextProvider>
-      </KitaListContextProvider>
+            </ServiceSignupModalContextProvider>
+          </SearchContextProvider>
+        </KitaListContextProvider>
+      </KitaListScrollContextProvider>
     </Layout>
   );
 };

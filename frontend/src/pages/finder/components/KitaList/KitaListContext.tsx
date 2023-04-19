@@ -1,11 +1,12 @@
 import React from "react";
-import { Kita } from "../../../types";
+import { Kita } from "../../../../types";
 
 type KitaListContext = {
   kitas: Kita[] | null;
   setKitas: (kitas: Kita[]) => void;
   fetchKitas: (latlng: { lat: number; lng: number }) => Promise<void>;
   isFetching: boolean;
+  scrollTo: (anchorId: number) => void;
 };
 
 const KitaListContext = React.createContext<KitaListContext>(
