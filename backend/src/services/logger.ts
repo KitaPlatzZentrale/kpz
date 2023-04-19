@@ -1,7 +1,6 @@
 import * as winston from "winston";
 
 const consoleFormat = winston.format.combine(
-  winston.format.colorize(),
   winston.format.timestamp({
     format: "YYYY-MM-DD HH:mm:ss",
   }),
@@ -9,6 +8,7 @@ const consoleFormat = winston.format.combine(
     return `${timestamp} ${level}: ${message}`;
   })
 );
+
 
 const jsonFormat = winston.format.combine(
   winston.format.timestamp({
