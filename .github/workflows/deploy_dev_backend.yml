@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Docker Image Backend Dev
         working-directory: ./backend
-        run: docker build -f Dockerfile.dev -t goodbuy/kpz-dev-backend .
+        run: docker build -t goodbuy/kpz-dev-backend .
 
       - name: Push Docker Image
         run: |
