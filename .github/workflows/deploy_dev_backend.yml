@@ -33,7 +33,7 @@ jobs:
 
       - name: Build Docker Image Backend Dev
         working-directory: ./backend
-        run: docker build -f Dockerfile.dev -t goodbuy/kpz-dev-backend .
+        run: docker build -t goodbuy/kpz-dev-backend .
 
       - name: Push Docker Image
         run: |
@@ -50,6 +50,6 @@ jobs:
           script: |
             cd kpz/backend
             docker-compose down --remove-orphans
-            docker rmi goodbuy/kpz-dev-backend
             docker rm kpz-dev-backend-container
+            docker rmi goodbuy/kpz-dev-backend
             docker-compose -f docker-compose.dev.yml up -d

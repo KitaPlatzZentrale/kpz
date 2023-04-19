@@ -12,8 +12,6 @@ services:
     volumes:
       - ~/logs/prod:/usr/src/app/logs
     container_name: kpz-prod-backend-container
-    expose:
-      - "3000"
     ports:
       - "3000:3000"
     command: node dist/index.js

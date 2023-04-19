@@ -31,9 +31,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Build Docker Image Prod
+      - name: Build Docker Image Backend Prod
         working-directory: ./backend
-        run: docker build -f Dockerfile.prod -t goodbuy/kpz-prod-backend .
+        run: docker build -t goodbuy/kpz-prod-backend .
 
       - name: Push Docker Image
         run: |
@@ -50,6 +50,6 @@ jobs:
           script: |
             cd kpz/backend
             docker-compose down --remove-orphans
-            docker rmi goodbuy/kpz-prod-backend
             docker rm kpz-prod-backend-container
+            docker rmi goodbuy/kpz-prod-backend
             docker-compose -f docker-compose.prod.yml up -d

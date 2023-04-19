@@ -3,7 +3,7 @@ name: Deploy Prod Backend to EC2
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - 'frontend/**'
 
@@ -32,14 +32,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Build Docker Image Frontend Prod
+      - name: Build Docker Image Frontend Dev
         working-directory: ./frontend
-        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-prod-frontend .
+        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-dev-frontend .
 
       - name: Push Docker Image
         run: |
           echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
-          docker push goodbuy/kpz-prod-frontend
+          docker push goodbuy/kpz-dev-frontend
 
       - name: Deploy Docker Image
         uses: appleboy/ssh-action@master
@@ -51,6 +51,6 @@ jobs:
           script: |
             cd kpz/frontend
             docker-compose down --remove-orphans
-            docker rm kpz-prod-frontend-container
-            docker rmi goodbuy/kpz-prod-frontend
+            docker rm kpz-dev-frontend-container
+            docker rmi goodbuy/kpz-dev-frontend
             docker-compose up -d

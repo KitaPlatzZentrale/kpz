@@ -2,4 +2,6 @@ version: "3"
 
 services:
   kpz-local-backend:
+    env_file:
+      - .env
     command: sh -c 'npm run build && node dist/index.js'
