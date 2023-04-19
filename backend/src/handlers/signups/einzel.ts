@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import AirtableAPIService, {
   CreateEinzelbenachrichtigungPayload,
-} from "../airtable/AirtableService";
+} from "../../services/external/AirtableService";
 
 const handler: RequestHandler<
   any,
