@@ -2,7 +2,7 @@ version: "3"
 
 services:
   express-typescript-docker-dev:
-    image: goodbuy/kpz:dev
+    image: goodbuy/kpz-dev-backend
     environment:
       - NODE_ENV=development
       - S3_BUCKET=${S3_BUCKET}

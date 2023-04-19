@@ -2,7 +2,7 @@ version: "3"
 
 services:
   kpz-prod-backend:
-    image: goodbuy/kpz:prod
+    image: goodbuy/kpz-prod-backend
     environment:
       - NODE_ENV=production
       - S3_BUCKET=${S3_BUCKET}
