@@ -8,7 +8,7 @@ on:
       - 'frontend/**'
 
 jobs:
-  frontend:
+  deploy-prod-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Clone or Pull KPZ Repo
