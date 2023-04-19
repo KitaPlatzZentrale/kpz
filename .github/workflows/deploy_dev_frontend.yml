@@ -1,4 +1,4 @@
-name: Deploy Prod Backend to EC2
+name: Deploy Dev Backend to EC2
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - 'frontend/**'
 
 jobs:
-  deploy-prod-frontend:
+  deploy-dev-frontend:
     runs-on: ubuntu-latest
     steps:
       - name: Clone or Pull KPZ Repo
@@ -34,7 +34,7 @@ jobs:
 
       - name: Build Docker Image Frontend Dev
         working-directory: ./frontend
-        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-dev-frontend .
+        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.DEV_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-dev-frontend .
 
       - name: Push Docker Image
         run: |
