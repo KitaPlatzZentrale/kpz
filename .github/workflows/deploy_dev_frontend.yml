@@ -22,7 +22,6 @@ jobs:
             if [ ! -d "kpz_dev" ]; then
               echo "Cloning repository: KitaPlatzZentrale/kpz"
               git clone -b dev git@github.com:KitaPlatzZentrale/kpz.git kpz_dev
-              cd kpz_dev
             else
               cd kpz_dev
               echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"

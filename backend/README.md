@@ -76,7 +76,6 @@ sudo systemctl start docker
 
 If 3 errors because can't uninstall request package, contuniue with 4 and 5 and then try again 3
 
-
 ## Datadog
 
 ### Installing Agend on EC2 Instance
@@ -105,4 +104,3 @@ CloudFormation (Best for quickly getting started)
 To set up the AWS integration with CloudFormation, see the the [AWS getting started guide](https://docs.datadoghq.com/getting_started/integrations/aws/).
 
 Read: <https://docs.datadoghq.com/integrations/amazon_web_services/#installation>
-
