@@ -16,12 +16,17 @@ class KitaService {
 
     const kitaList = await KitaDetailModel.find();
 
-    const kitasInRadius = kitaList.filter((kita: Kita) => {
+    let kitasInRadius: Kita[] = [];
+
+    kitaList.map((kita: Kita) => {
       const distance = haversineDistance(
         { lat, lon },
         { lat: kita.coordinates.lat, lon: kita.coordinates.lng }
       );
-      return distance <= radius;
+      if (distance <= radius) {
+        kita.coordinates.dist = distance;
+        kitasInRadius.push(kita);
+      }
     });
 
     const sortedKitaList = this.sortKitaListByDistance(kitasInRadius);
