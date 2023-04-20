@@ -1,4 +1,4 @@
-name: Deploy Prod Backend to EC2
+name: Deploy Prod Frontend to EC2
 
 on:
   push:
