@@ -99,4 +99,4 @@ const KitaDetailSchema = new mongoose.Schema({
 
 const KitaDetailModel = mongoose.model("KitaDetail", KitaDetailSchema);
 
-export { KitaDetailModel };
+export default KitaDetailModel;

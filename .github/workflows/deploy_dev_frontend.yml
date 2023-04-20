@@ -1,0 +1,56 @@
+name: Deploy Prod Backend to EC2
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'frontend/**'
+
+jobs:
+  deploy-prod-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone or Pull KPZ Repo
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.70.176.52
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            if [ ! -d "kpz" ]; then
+              echo "Cloning repository: KitaPlatzZentrale/kpz"
+              git clone git@github.com:KitaPlatzZentrale/kpz.git
+              cd kpz
+            else
+              cd kpz
+              echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
+              git pull
+            fi
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build Docker Image Frontend Dev
+        working-directory: ./frontend
+        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-dev-frontend .
+
+      - name: Push Docker Image
+        run: |
+          echo ${{ secrets.DOCKER_HUB_PASSWORD }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+          docker push goodbuy/kpz-dev-frontend
+
+      - name: Deploy Docker Image
+        uses: appleboy/ssh-action@master
+        with:
+          host: 3.70.176.52
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd kpz/frontend
+            docker-compose down --remove-orphans
+            docker rm kpz-dev-frontend-container
+            docker rmi goodbuy/kpz-dev-frontend
+            docker-compose up -d

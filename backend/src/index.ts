@@ -1,7 +1,7 @@
 import express = require("express");
 import routes = require("./routes");
 import cors from "cors";
-import logger from "./services/logger";
+import logger from "./logger";
 
 const app = express();
 

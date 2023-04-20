@@ -1,20 +1,22 @@
-import axios from "axios";
-import logger from "../services/logger";
-import { Kita } from "../types";
-import { KitaDetailModel } from "../models";
-import {
-  closeDatabaseConnection,
-  connectToDatabase,
-} from "../services/database";
-import { transformExternalKitaDetailsToKitaDetails } from "../kitas/getKitaDetails";
+import logger from "../logger";
+import { Kita, KitaDetail } from "../types";
+import KitaDetailModel from "../models/Kita";
+import { closeDatabaseConnection, connectToDatabase } from "../database";
+import BerlinDEService from "../services/external/BerlinDEService";
 
 const kitas: Kita[] = require("../../data/kitas_berlin.json");
 
-async function fetchKitaWithRetry(uuid: string, retries = 6): Promise<any> {
+async function fetchKitaWithRetry(
+  uuid: string,
+  retries = 6
+): Promise<KitaDetail> {
   try {
-    const response = await axios.get(
-      `https://kita-navigator.berlin.de/api/v1/kitas/${uuid}`
-    );
+    const response = await BerlinDEService.getKitaDetails(uuid);
+
+    if (!response) {
+      throw new Error(`fetchKitaWithRetry: No response for uuid ${uuid}`);
+    }
+
     return response;
   } catch (error) {
     if (retries > 0 && error.code === "ECONNRESET") {
@@ -32,15 +34,14 @@ async function fetchKitaWithRetry(uuid: string, retries = 6): Promise<any> {
 async function saveKitaDetailsToDB(): Promise<void> {
   try {
     await connectToDatabase();
+
     for (const kita of kitas) {
-      let kitaRes = await fetchKitaWithRetry(kita.uuid);
-      const kitaDetail = transformExternalKitaDetailsToKitaDetails(
-        kitaRes.data
-      );
-      logger.info(JSON.stringify(kitaDetail));
+      let updatedKita = await fetchKitaWithRetry(kita.uuid);
+
+      logger.info(JSON.stringify(updatedKita));
       await KitaDetailModel.findOneAndUpdate(
-        { uuid: kitaDetail.uuid },
-        kitaDetail,
+        { uuid: updatedKita.uuid },
+        updatedKita,
         { upsert: true }
       );
     }
