@@ -1,4 +1,4 @@
-name: Deploy Dev Backend to EC2
+name: Deploy Dev Frontend to EC2
 
 on:
   push:
