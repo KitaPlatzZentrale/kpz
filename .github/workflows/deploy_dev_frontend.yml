@@ -53,4 +53,4 @@ jobs:
             docker-compose -f docker-compose.dev.yml down --remove-orphans
             docker rm kpz-dev-frontend-container
             docker rmi goodbuy/kpz-dev-frontend
-            docker-compose up -d
+            docker-compose -f docker-compose.dev.yml up -d
