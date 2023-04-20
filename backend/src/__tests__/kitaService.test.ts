@@ -1,15 +1,28 @@
 import KitaService from "../services/KitaService";
-import { connectToDatabase } from "../database";
 
-beforeAll(async () => {
-  await connectToDatabase();
-});
+// mock KitaModel.find() to return a list of kitas
+jest.mock("../models/Kita", () => ({
+  __esModule: true,
+  default: {
+    find: () => {
+      return Array.from({ length: 80 }).map((_, index) => {
+        return {
+          coordinates: {
+            lat: 52.51985,
+            lng: 13.38834,
+            dist: index * 100,
+          },
+        };
+      });
+    },
+  },
+}));
 
 describe("KitaService.getKitasInRadius", () => {
   it("should return a list of kitas within the radius", async () => {
     const lat = 52.51985;
     const lon = 13.38834;
-    const radius = 2;
+    const radius = 2500;
     const page = 1;
     const limit = 10;
     const kitas = await KitaService.getKitasInRadius(
@@ -37,5 +50,5 @@ describe("KitaService.getKitasInRadius", () => {
         kitas.items[i - 1].coordinates.dist
       );
     }
-  });
+  }, 10000);
 });

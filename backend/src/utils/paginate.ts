@@ -33,7 +33,7 @@ const paginate = <T = any>(
   return {
     meta: {
       page: page,
-      totalPages: maxNumOfPages,
+      totalPages: maxNumOfPages > 0 ? maxNumOfPages : 1,
       itemsPerPage: limit,
       totalItems: sortedList.length,
       amountOfItems: itemsInPage.length,

@@ -9,7 +9,7 @@ describe("paginate", () => {
     const expected: PaginatedResultsResponse<number> = {
       meta: {
         page: 2,
-        totalPages: 3,
+        totalPages: 4,
         itemsPerPage: 3,
         totalItems: 10,
         amountOfItems: 3,
@@ -31,7 +31,7 @@ describe("paginate", () => {
     const expected: PaginatedResultsResponse<number> = {
       meta: {
         page: 2,
-        totalPages: 1,
+        totalPages: 2,
         itemsPerPage: 3,
         totalItems: 5,
         amountOfItems: 2,
@@ -53,7 +53,7 @@ describe("paginate", () => {
     const expected: PaginatedResultsResponse<any> = {
       meta: {
         page: 1,
-        totalPages: 0,
+        totalPages: 1,
         itemsPerPage: 10,
         totalItems: 0,
         amountOfItems: 0,
