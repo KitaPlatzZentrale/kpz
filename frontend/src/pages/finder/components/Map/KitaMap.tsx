@@ -57,7 +57,6 @@ const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
   return (
     <MapProvider>
       <Map
-        id="finderMap"
         reuseMaps
         mapboxAccessToken="pk.eyJ1IjoiaGFubm9ncmltbSIsImEiOiJjbGdtamwyZHowNmxnM2VxbTd6eHZhMjExIn0.0wHQJStc2kgDh29Ewv_g-w"
         style={{ width: "100%", height: "100%" }}
@@ -73,9 +72,10 @@ const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
       >
         <NavigationControl showZoom position="top-right" />
         {kitaMarkers}
-        {centerCoordinates.lat && centerCoordinates.lng && (
-          <HomeMarker coordinates={centerCoordinates} />
-        )}
+        {typeof centerCoordinates.lat === "number" &&
+          typeof centerCoordinates.lng === "number" && (
+            <HomeMarker coordinates={centerCoordinates} />
+          )}
         {featuredKitaInPopup && (
           <KitaPopup
             kita={featuredKitaInPopup}
@@ -93,7 +93,7 @@ const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
 };
 
 type ProgrammaticMapControlProps = {
-  markers?: any[];
+  markers?: JSX.Element[];
   coordinates: LatLng;
 };
 
@@ -129,7 +129,12 @@ const ProgrammaticMapControl: React.FC<ProgrammaticMapControlProps> = ({
     const markersBounds = new mapboxgl.LngLatBounds();
 
     markers.forEach((marker) => {
-      markersBounds.extend([marker.props.longitude, marker.props.latitude]);
+      markersBounds.extend(
+        new LngLat(
+          marker.props.kita.coordinates.lng,
+          marker.props.kita.coordinates.lat
+        )
+      );
     });
 
     finderMap.fitBounds(markersBounds, {

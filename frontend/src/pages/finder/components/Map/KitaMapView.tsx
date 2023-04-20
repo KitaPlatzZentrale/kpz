@@ -9,14 +9,12 @@ const KitaMapView: React.FC<KitaMapViewProps> = ({}) => {
   const { kitas } = useKitaListContext();
   const { coordinates, coordinatesAreValid } = useSearchContext();
 
-  console.log(coordinates);
-
   return (
     <div
       id="finder-map"
       className="flex min-h-[500px] w-full flex-grow xl:h-full xl:min-h-full"
     >
-      <KitaMap kitas={kitas || []} centerCoordinates={DEFAULT_BERLIN_CENTER} />
+      <KitaMap kitas={kitas || []} centerCoordinates={coordinates} />
     </div>
   );
 };
