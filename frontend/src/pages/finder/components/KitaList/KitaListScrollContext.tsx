@@ -1,4 +1,5 @@
 import React from "react";
+import useSmoothScroll from "react-smooth-scroll-hook";
 
 type KitaListScrollContext = {
   listRef: React.RefObject<HTMLDivElement>;
@@ -23,6 +24,12 @@ const KitaListScrollContextProvider: React.FC<
 
   const listRef = React.useRef<HTMLDivElement>(null);
 
+  const { scrollTo: _scrollTo } = useSmoothScroll({
+    ref: listRef,
+    speed: 300,
+    direction: "y",
+  });
+
   const scrollTo = (anchorId: string) => {
     const list = listRef.current;
     const anchorElement = document.getElementById(anchorId);
@@ -36,17 +43,9 @@ const KitaListScrollContextProvider: React.FC<
 
     console.log("scrolling to", anchorId);
 
-    // scroll to anchor within list element
-    const offset = anchorElement.offsetTop - list.offsetTop;
-
-    setScrollPosition(offset);
-
     const gap = 8;
-
-    list.scrollTo({
-      top: offset - gap / 2,
-      behavior: "smooth",
-    });
+    //TODO: Somehow, all scroll events cause a great lag in the map interaction
+    //_scrollTo("#" + anchorId);
   };
 
   const generateElementScrollAnchor = (id: string) =>

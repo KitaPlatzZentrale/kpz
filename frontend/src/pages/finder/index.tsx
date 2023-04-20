@@ -1,13 +1,13 @@
 import React from "react";
-import SearchContextProvider from "../../components/SearchContext";
+import SearchContextProvider from "./components/SearchContext";
 import ServiceSignupModal from "../../components/ServiceSignupModal/ServiceSignupModal";
 import ServiceSignupModalContextProvider from "../../components/ServiceSignupModal/ServiceSignupModalContext";
 import Layout from "../layout";
 import KitaListView from "./components/KitaList/KitaListView";
 import KitaListContextProvider from "./components/KitaList/KitaListContext";
-import HereMap from "./components/Map/HereMap";
 import Search from "./components/Search";
 import KitaListScrollContextProvider from "./components/KitaList/KitaListScrollContext";
+import KitaMapView from "./components/Map/KitaMapView";
 
 type FinderPageProps = {};
 
@@ -42,12 +42,7 @@ const FinderPage: React.FC<FinderPageProps> = () => {
                   className="xl:page-padding flex w-full flex-col-reverse gap-4 xl:flex-row xl:pr-0"
                 >
                   <KitaListView />
-                  <div
-                    id="finder-map"
-                    className="flex min-h-[500px] w-full flex-grow xl:h-full xl:min-h-full"
-                  >
-                    <HereMap />
-                  </div>
+                  <KitaMapView />
                 </div>
               </div>
             </ServiceSignupModalContextProvider>

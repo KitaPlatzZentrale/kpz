@@ -4,10 +4,9 @@ import clsx from "clsx";
 import React from "react";
 import CentricContent from "../../../components/CentricContent";
 import FormAutocomplete from "../../../components/FormAutocomplete";
-import { useSearchContext } from "../../../components/SearchContext";
+import { useSearchContext } from "./SearchContext";
 import AddressLookup from "./AddressLookup";
 import { useKitaListContext } from "./KitaList/KitaListContext";
-import ServiceBanner from "./ServiceBanner";
 
 type SearchProps = {
   id?: string;
@@ -48,11 +47,10 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
               setAddress(address);
             }}
             onCoordinatesSuccessfullyRetrieved={async (coordinates) => {
-              setCoordinates(coordinates);
+              if (coordinates.lat == null || coordinates.lng == null) return;
 
-              if (coordinates.lat && coordinates.lng) {
-                await fetchKitas(coordinates);
-              }
+              setCoordinates(coordinates);
+              await fetchKitas(coordinates);
             }}
           />
           <FormAutocomplete

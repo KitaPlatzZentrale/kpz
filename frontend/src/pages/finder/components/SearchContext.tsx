@@ -1,8 +1,8 @@
 import React from "react";
 
 export type LatLng = {
-  lat: number | null;
-  lng: number | null;
+  lat: number;
+  lng: number;
 };
 
 export const DEFAULT_BERLIN_CENTER: LatLng = {
@@ -14,10 +14,7 @@ type SearchContext = {
   address: string | null;
   setAddress: (address: string | null) => void;
   coordinates: LatLng;
-  setCoordinates: (coordinates: {
-    lat: number | null;
-    lng: number | null;
-  }) => void;
+  setCoordinates: (coordinates: LatLng) => void;
   desiredStartingMonth: string | null;
   setDesiredStartingMonth: (desiredStartingMonth: string | null) => void;
   coordinatesAreValid: boolean;

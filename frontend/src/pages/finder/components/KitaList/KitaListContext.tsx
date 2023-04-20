@@ -6,7 +6,6 @@ type KitaListContext = {
   setKitas: (kitas: Kita[]) => void;
   fetchKitas: (latlng: { lat: number; lng: number }) => Promise<void>;
   isFetching: boolean;
-  scrollTo: (anchorId: number) => void;
 };
 
 const KitaListContext = React.createContext<KitaListContext>(
@@ -24,6 +23,7 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
   const [kitas, setKitas] = React.useState<Kita[] | null>(kitasProp);
 
   const [isFetching, setIsFetching] = React.useState(false);
+
   const _fetchKitas = async (latlng: { lat: number; lng: number }) => {
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/location-service/${latlng.lat}/${
@@ -45,7 +45,7 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
   const fetchKitas = async (latlng: { lat: number; lng: number }) => {
     setIsFetching(true);
     setKitas(null);
-    await _fetchKitas(latlng);
+    //await _fetchKitas(latlng);
     setIsFetching(false);
   };
 

@@ -13,8 +13,8 @@ type AddressLookupProps = {
   className?: string;
   onAddressSelected?: (address: string | null) => void;
   onCoordinatesSuccessfullyRetrieved?: (coordinates: {
-    lat: number | null;
-    lng: number | null;
+    lat: number;
+    lng: number;
   }) => void;
   helperText?: string;
   error?: boolean;
@@ -218,7 +218,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     setAllowUserCoordinatesRequest(false);
   };
 
-  const { latitude, longitude } = useGeolocation(
+  const userLocation = useGeolocation(
     {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -236,6 +236,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   }, [selectedAddress]);
 
   React.useEffect(() => {
+    if (!coordinates.lat || !coordinates.lng) return;
     onCoordinatesSuccessfullyRetrieved?.(coordinates);
   }, [coordinates]);
 

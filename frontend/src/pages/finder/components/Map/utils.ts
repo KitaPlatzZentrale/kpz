@@ -1,4 +1,43 @@
-import { LatLng } from "../../../../components/SearchContext";
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "../../../../../tailwind.config";
+
+export const screenIsBiggerOrEqualToMd = () => {
+  const { theme } = resolveConfig(tailwindConfig);
+  const screens = theme.extend ? theme.extend.screens : { md: "768px" };
+  return window.innerWidth >= screens.md;
+};
+
+// distance is a double in km (e.g. 0.04km)
+export const getDistanceDescription = (distance: number) => {
+  if (distance < 1) return (distance * 1000).toFixed(0) + "m";
+  else return distance.toFixed(1) + "km";
+};
+
+// e.g. turn "August 2023" into "2023-08-01", day is always 01
+// ist nicht schön aber wat soll's
+export const transformMonthIntoISODate = (month: string | null) => {
+  if (!month || month.length === 0) return null;
+
+  const monthToNumber = {
+    Januar: "01",
+    Februar: "02",
+    März: "03",
+    April: "04",
+    Mai: "05",
+    Juni: "06",
+    Juli: "07",
+    August: "08",
+    September: "09",
+    Oktober: "10",
+    November: "11",
+    Dezember: "12",
+  };
+
+  const [monthName, year] = month.split(" ");
+  const monthNumber = monthToNumber[monthName];
+
+  return `${year}-${monthNumber}-01`;
+};
 
 export const getAppropriateZoomLevel = (
   markers: any[],
