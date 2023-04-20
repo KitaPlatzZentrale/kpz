@@ -1,5 +1,5 @@
 import React from "react";
-import { Kita } from "../../../types";
+import { Kita, PaginatedResultsResponse } from "../../../types";
 
 type KitaListContext = {
   kitas: Kita[] | null;
@@ -23,22 +23,39 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
   const [kitas, setKitas] = React.useState<Kita[] | null>(kitasProp);
 
   const [isFetching, setIsFetching] = React.useState(false);
-  const _fetchKitas = async (latlng: { lat: number; lng: number }) => {
+  const _fetchKitas = async (
+    latlng: { lat: number; lng: number },
+    distanceInKm: number = 2500,
+    page: number = 1,
+    limit: number = 50
+  ) => {
     const response = await fetch(
       `${import.meta.env.VITE_BACKEND_URL}/location-service/${latlng.lat}/${
         latlng.lng
-      }/2.5`,
+      }/${distanceInKm}/${page}/${limit}`,
       {
         method: "GET",
       }
     );
-    const data = await response.json();
+    const data = (await response.json()) as PaginatedResultsResponse<Kita>;
 
-    const kitas = (data as Array<Kita>)
-      .sort((a, b) => a.coordinates.dist - b.coordinates.dist)
-      .slice(0, 30);
+    if (!data) {
+      //TODO: Error handling
+      return;
+    }
 
-    setKitas(kitas);
+    const paginationMeta = data.meta;
+
+    setKitas((prev) => {
+      if (page === 1) return data.items || null;
+      else return [...(prev || []), ...data.items];
+    });
+
+    // if paginationMeta.nextPage is null, we have reached the end of the list
+    // otherwise, paginationMeta.nextPage is the number of the next page
+    if (!!paginationMeta.nextPage) {
+      await _fetchKitas(latlng, distanceInKm, paginationMeta.nextPage, limit);
+    }
   };
 
   const fetchKitas = async (latlng: { lat: number; lng: number }) => {

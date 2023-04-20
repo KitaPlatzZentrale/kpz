@@ -1,6 +1,6 @@
 import logger from "../../logger";
 import {
-  IsDecimal,
+  IsInt,
   IsLatitude,
   IsLongitude,
   IsNumber,
@@ -12,27 +12,27 @@ import { RequestHandler } from "express";
 require("dotenv").config();
 
 interface IPaginatedKitasParams {
-  lat: number;
-  lng: number;
-  radius: number;
-  page?: number;
-  limit?: number;
+  lat: string;
+  lng: string;
+  radius: string;
+  page?: string;
+  limit?: string;
 }
 
-export class PaginatedKitasParams implements IPaginatedKitasParams {
+export class PaginatedKitasParams {
   @IsLatitude()
   lat: number;
 
   @IsLongitude()
   lng: number;
 
-  @IsDecimal()
+  @IsNumber()
   radius: number;
 
-  @IsNumber()
+  @IsInt()
   page?: number;
 
-  @IsNumber()
+  @IsInt()
   limit?: number;
 }
 
@@ -44,11 +44,11 @@ export const validator: RequestHandler<IPaginatedKitasParams> = async (
   try {
     const newLocation = new PaginatedKitasParams();
 
-    newLocation.lat = req.params.lat;
-    newLocation.lng = req.params.lng;
-    newLocation.radius = req.params.radius || 2.5;
-    newLocation.page = req.params.page || 1;
-    newLocation.limit = req.params.limit || 50;
+    newLocation.lat = Number(req.params.lat);
+    newLocation.lng = Number(req.params.lng);
+    newLocation.radius = Number(req.params.radius || 2500);
+    newLocation.page = Number(req.params.page || 1);
+    newLocation.limit = Number(req.params.limit || 50);
 
     const errors = await validate(newLocation);
 
@@ -63,10 +63,11 @@ export const validator: RequestHandler<IPaginatedKitasParams> = async (
 
 const handler: RequestHandler<IPaginatedKitasParams> = async (req, res) => {
   try {
-    const { lat, lng } = req.params;
-    const radius = req.params.radius || 2.5;
-    const page = req.params.page || 1;
-    const limit = req.params.limit || 50;
+    const lat = Number(req.params.lat);
+    const lng = Number(req.params.lng);
+    const radius = Number(req.params.radius || 2500);
+    const page = Number(req.params.page || 1);
+    const limit = Number(req.params.limit || 50);
 
     const paginatedKitas = await KitaService.getKitasInRadius(
       lat,

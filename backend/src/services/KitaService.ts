@@ -17,11 +17,10 @@ class KitaService {
     const kitaList = await KitaDetailModel.find();
 
     const kitasInRadius = kitaList.filter((kita: Kita) => {
-      const distance =
-        haversineDistance(
-          { lat, lon },
-          { lat: kita.coordinates.lat, lon: kita.coordinates.lng }
-        ) / 1000;
+      const distance = haversineDistance(
+        { lat, lon },
+        { lat: kita.coordinates.lat, lon: kita.coordinates.lng }
+      );
       return distance <= radius;
     });
 
