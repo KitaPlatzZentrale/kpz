@@ -33,6 +33,7 @@ npx tsc --watch
 
 Run dev server locally
 
+
 ```bash
 nodemon dist/index.js
 ```

@@ -46,4 +46,18 @@ interface KitaDetail extends Kita {
   closingDate?: string;
 }
 
+export type PaginatedResultsMetadata = {
+  page: number;
+  totalPages: number;
+  itemsPerPage: number;
+  totalItems: number;
+  amountOfItems: number;
+  nextPage: number | false;
+};
+
+export interface PaginatedResultsResponse<T> {
+  meta: PaginatedResultsMetadata;
+  items: T[];
+}
+
 export type { Kita, KitaDetail };
