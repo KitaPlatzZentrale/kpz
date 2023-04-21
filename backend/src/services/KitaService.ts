@@ -1,4 +1,3 @@
-import haversineDistance from "haversine-distance";
 import { connectToDatabase } from "../database";
 import KitaDetailModel from "../models/Kita";
 import { Kita } from "../types";
@@ -14,32 +13,22 @@ class KitaService {
   ): Promise<PaginatedResultsResponse<Kita>> => {
     await connectToDatabase();
 
-    const kitaList = await KitaDetailModel.find();
-
-    let kitasInRadius: Kita[] = [];
-
-    kitaList.map((kita: Kita) => {
-      const distance = haversineDistance(
-        { lat, lon },
-        { lat: kita.coordinates.lat, lon: kita.coordinates.lng }
-      );
-      if (distance <= radius) {
-        kita.coordinates.dist = distance;
-        kitasInRadius.push(kita);
-      }
+    const nearestSortedKitaList = await KitaDetailModel.find({
+      location: {
+        $nearSphere: {
+          $geometry: {
+            type: "Point",
+            coordinates: [lon, lat], // lon has to come first!
+          },
+          $maxDistance: radius, // in meter
+        },
+      },
     });
 
-    const sortedKitaList = this.sortKitaListByDistance(kitasInRadius);
-
-    const paginatedKitas = paginate(sortedKitaList, page, limit);
+    const paginatedKitas = paginate(nearestSortedKitaList, page, limit);
 
     return paginatedKitas;
   };
-
-  private static sortKitaListByDistance = (list: Kita[]) =>
-    list.sort((a, b) => {
-      return a.coordinates.dist - b.coordinates.dist;
-    });
 }
 
 export default KitaService;
