@@ -6,6 +6,7 @@ import { AutocompleteProps, CircularProgress, Link } from "@mui/joy";
 import FormAutocomplete from "../../../components/FormAutocomplete";
 import clsx from "clsx";
 import useGeolocation from "react-hook-geolocation";
+import { DEFAULT_BERLIN_CENTER } from "../../../components/SearchContext";
 
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
 
@@ -230,7 +231,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
   React.useEffect(() => {
     if (!selectedAddress) {
-      setCoordinates({ lat: null, lng: null });
+      setCoordinates(DEFAULT_BERLIN_CENTER);
     }
     selectedAddress && fetchCoordinates(selectedAddress);
   }, [selectedAddress]);

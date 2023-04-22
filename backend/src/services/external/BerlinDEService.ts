@@ -63,10 +63,12 @@ class BerlinDEService {
       uuid: kitaSummary.id.toString(),
       name: kitaSummary.name,
       number: kitaSummary.nummer,
-      coordinates: {
-        lat: kitaSummary.geokoordinate.lat,
-        lng: kitaSummary.geokoordinate.lon,
-        dist: kitaSummary.geokoordinate.entfernung,
+      location: {
+        type: "Point",
+        coordinates: [
+          kitaSummary.geokoordinate.lon, // long has to be first!
+          kitaSummary.geokoordinate.lat,
+        ],
       },
       address: {
         street: kitaSummary.adresse.strasse,
@@ -94,10 +96,12 @@ class BerlinDEService {
       uuid: kitaDetailed.einrichtungsauszug.id.toString(),
       name: kitaDetailed.einrichtungsauszug.name,
       number: kitaDetailed.einrichtungsauszug.nummer,
-      coordinates: {
-        lat: kitaDetailed.einrichtungsauszug.geokoordinate.lat,
-        lng: kitaDetailed.einrichtungsauszug.geokoordinate.lon,
-        dist: kitaDetailed.einrichtungsauszug.geokoordinate.entfernung,
+      location: {
+        type: "Point",
+        coordinates: [
+          kitaDetailed.einrichtungsauszug.geokoordinate.lon, // long has to be first!
+          kitaDetailed.einrichtungsauszug.geokoordinate.lat,
+        ],
       },
       address: {
         street: kitaDetailed.einrichtungsauszug.adresse.strasse,
