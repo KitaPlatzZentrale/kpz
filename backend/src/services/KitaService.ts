@@ -1,5 +1,5 @@
 import { connectToDatabase } from "../database";
-import KitaDetailModel from "../models/Kita";
+import KitaDetailModel from "../kitas/model";
 import { Kita } from "../types";
 import paginate, { PaginatedResultsResponse } from "../utils/paginate";
 

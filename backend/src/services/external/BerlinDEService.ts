@@ -3,7 +3,7 @@ import logger from "../../logger";
 import BerlinDEKitaModel, {
   BerlinDEKitaDetailedEntity,
   BerlinDEKitaSummaryEntity,
-} from "../../models/external/BerlinDEKita";
+} from "../../berlin.de/model";
 import { Kita, KitaDetail } from "../../types";
 
 class BerlinDEService {

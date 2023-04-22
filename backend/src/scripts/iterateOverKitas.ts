@@ -1,6 +1,6 @@
 import logger from "../logger";
 import { Kita, KitaDetail } from "../types";
-import KitaDetailModel from "../models/Kita";
+import KitaDetailModel from "../kitas/model";
 import { closeDatabaseConnection, connectToDatabase } from "../database";
 import BerlinDEService from "../services/external/BerlinDEService";
 
