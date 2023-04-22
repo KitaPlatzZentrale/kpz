@@ -1,4 +1,5 @@
 import React from "react";
+import { DEFAULT_BERLIN_CENTER } from "../../../components/SearchContext";
 import { Kita, PaginatedResultsResponse } from "../../../types";
 
 type KitaListContext = {
@@ -67,7 +68,7 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
 
   React.useEffect(() => {
     (async () => {
-      await _fetchKitas({ lat: 52.516, lng: 13.377 });
+      await _fetchKitas(DEFAULT_BERLIN_CENTER);
     })();
   }, []);
 

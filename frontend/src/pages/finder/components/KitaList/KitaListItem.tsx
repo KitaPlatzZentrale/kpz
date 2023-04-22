@@ -12,6 +12,8 @@ import EmailSubmitModal from "../../../../components/EmailSubmitModal";
 import { useSearchContext } from "../../../../components/SearchContext";
 import { Kita } from "../../../../types";
 
+import haversine from "haversine-distance";
+
 import Balancer from "react-wrap-balancer";
 
 import resolveConfig from "tailwindcss/resolveConfig";
@@ -49,12 +51,19 @@ const transformMonthIntoISODate = (month: string | null) => {
   return `${year}-${monthNumber}-01`;
 };
 
+//TODO: Upon merge with map branch, add this to utils
+const getKitaHaversineDistanceToSearchCoordinates = (
+  kitaCoordinates: { lat: number; lng: number },
+  searchCoordinates: { lat: number; lng: number }
+) => haversine(kitaCoordinates, searchCoordinates);
+
 type KitaListItemProps = {
   kita: Kita;
 };
 
 const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
-  const { desiredStartingMonth } = useSearchContext();
+  const { desiredStartingMonth, coordinates: currentSearchCoordinates } =
+    useSearchContext();
 
   const [validStartingMonth, setValidStartingMonth] =
     React.useState(desiredStartingMonth);
@@ -117,8 +126,17 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
           >
             <span className="px-2 font-bold">{`${
               /** Round coordinates.dist to 2 floating points */
-              Math.round(kita.coordinates.dist * 100) / 100
-            }km`}</span>
+              //Math.round(kita.location.coordinates.dist * 100) / 100
+              Math.round(
+                getKitaHaversineDistanceToSearchCoordinates(
+                  {
+                    lng: kita.location.coordinates[0],
+                    lat: kita.location.coordinates[1],
+                  },
+                  currentSearchCoordinates
+                )
+              )
+            }m`}</span>
           </Chip>
         </div>
         <div className="flex flex-row items-center text-sm">
