@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import logger from "../../logger";
-import BerlinDEService from "../../services/external/BerlinDEService";
+import BerlinDEService from "../service";
 
 interface IGetBerlinDEKitaList {
   uuid: string;
