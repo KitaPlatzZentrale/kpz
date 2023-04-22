@@ -7,10 +7,10 @@ export const screenIsBiggerOrEqualToMd = () => {
   return window.innerWidth >= screens.md;
 };
 
-// distance is a double in km (e.g. 0.04km)
+// distance is a double in m (e.g. 2000m)
 export const getDistanceDescription = (distance: number) => {
-  if (distance < 1) return (distance * 1000).toFixed(0) + "m";
-  else return distance.toFixed(1) + "km";
+  if (distance >= 1000) return (distance / 1000).toFixed(1) + "km";
+  else return distance.toFixed(0) + "m";
 };
 
 // e.g. turn "August 2023" into "2023-08-01", day is always 01
