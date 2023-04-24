@@ -10,7 +10,10 @@ import React from "react";
 import EmailSubmitModal from "../../../../../components/EmailSubmitModal";
 import { useSearchContext } from "../../SearchContext";
 import { Kita } from "../../../../../types";
-import { getDistanceDescription, transformMonthIntoISODate } from "../utils";
+import {
+  getDescribedHaversineDistanceBetweenCoordinates,
+  transformMonthIntoISODate,
+} from "../utils";
 import Balancer from "react-wrap-balancer";
 
 type KitaPopupInnerProps = {
@@ -22,7 +25,8 @@ export const KitaPopupInner: React.FC<KitaPopupInnerProps> = ({
   kita,
   onClose,
 }) => {
-  const { desiredStartingMonth } = useSearchContext();
+  const { desiredStartingMonth, coordinates: currentSearchCoordinates } =
+    useSearchContext();
 
   const [validStartingMonth, setValidStartingMonth] =
     React.useState(desiredStartingMonth);
@@ -112,7 +116,13 @@ export const KitaPopupInner: React.FC<KitaPopupInnerProps> = ({
             size="sm"
           >
             <span className="pl-0 pr-1 font-bold">
-              {getDistanceDescription(kita.coordinates.dist)}
+              {getDescribedHaversineDistanceBetweenCoordinates(
+                {
+                  lat: kita.location.coordinates[1],
+                  lng: kita.location.coordinates[0],
+                },
+                currentSearchCoordinates
+              )}
             </span>
           </Chip>
         </div>

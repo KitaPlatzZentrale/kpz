@@ -10,8 +10,8 @@ type KitaMarkerProps = {
 const KitaMarker: React.FC<KitaMarkerProps> = ({ kita, onClick }) => {
   return (
     <Marker
-      latitude={kita.coordinates.lat}
-      longitude={kita.coordinates.lng}
+      latitude={kita.location.coordinates[1]}
+      longitude={kita.location.coordinates[0]}
       anchor="center"
       onClick={(e) => {
         e.originalEvent.stopPropagation();

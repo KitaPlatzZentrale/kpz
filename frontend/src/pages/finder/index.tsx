@@ -23,8 +23,8 @@ const FinderPage: React.FC<FinderPageProps> = () => {
     const headerHeight = headerRef.current?.clientHeight ?? 125;
     const searchHeight = searchRef.current?.clientHeight ?? 250;
 
-    setContentHeight(window.innerHeight - headerHeight - searchHeight);
-  }, [headerRef, searchRef]);
+    setContentHeight(window.innerHeight - headerHeight);
+  }, [window.innerHeight, headerRef, searchRef]);
 
   return (
     <Layout headerRef={headerRef} lockAtScreenHeight>
@@ -33,13 +33,13 @@ const FinderPage: React.FC<FinderPageProps> = () => {
           <SearchContextProvider>
             <ServiceSignupModalContextProvider>
               <ServiceSignupModal />
-              <div className="flex h-full w-full flex-col pb-10">
-                <Search rootRef={searchRef} id="kita-searchbar" />
+              <div className="flex h-full w-full flex-col lg:pb-10">
+                {/*<Search rootRef={searchRef} id="kita-searchbar" />*/}
 
                 <div
                   id="content"
                   style={{ height: contentHeight }}
-                  className="xl:page-padding flex w-full flex-col-reverse gap-4 xl:flex-row xl:pr-0"
+                  className="xl:page-padding flex w-full flex-col-reverse lg:gap-4 xl:flex-row xl:pr-0"
                 >
                   <KitaListView />
                   <KitaMapView />

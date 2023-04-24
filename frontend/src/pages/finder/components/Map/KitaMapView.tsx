@@ -1,5 +1,5 @@
 import React from "react";
-import { DEFAULT_BERLIN_CENTER, useSearchContext } from "../SearchContext";
+import { useSearchContext } from "../SearchContext";
 import { useKitaListContext } from "../KitaList/KitaListContext";
 import KitaMap from "./KitaMap";
 
@@ -12,9 +12,9 @@ const KitaMapView: React.FC<KitaMapViewProps> = ({}) => {
   return (
     <div
       id="finder-map"
-      className="flex min-h-[500px] w-full flex-grow xl:h-full xl:min-h-full"
+      className="flex h-full w-full flex-grow lg:h-fit lg:min-h-[500px] xl:h-full xl:min-h-full"
     >
-      <KitaMap kitas={kitas || []} centerCoordinates={coordinates} />
+      <KitaMap kitas={[]} centerCoordinates={coordinates} />
     </div>
   );
 };

@@ -2,11 +2,7 @@ import React from "react";
 import Map, { MapProvider, NavigationControl, useMap } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import {
-  DEFAULT_BERLIN_CENTER,
-  LatLng,
-  useSearchContext,
-} from "../SearchContext";
+import { DEFAULT_BERLIN_CENTER, LatLng } from "../SearchContext";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import { useKitaListScrollContext } from "../KitaList/KitaListScrollContext";
 import { Kita } from "../../../../types";
@@ -17,12 +13,15 @@ import KitaPopup from "./KitaPopup/KitaPopup";
 type KitaMapProps = {
   kitas: Kita[];
   centerCoordinates: {
-    lat: number;
-    lng: number;
+    lat?: number;
+    lng?: number;
   };
 };
 
-const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
+const KitaMap: React.FC<KitaMapProps> = ({
+  kitas = [],
+  centerCoordinates = DEFAULT_BERLIN_CENTER,
+}) => {
   const [featuredKitaInPopup, setFeaturedKitaInPopup] =
     React.useState<Kita | null>(null);
 
@@ -52,8 +51,6 @@ const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
     if (kitas === null || kitas.length === 0) setFeaturedKitaInPopup(null);
   }, [kitas]);
 
-  console.log(centerCoordinates);
-
   return (
     <MapProvider>
       <Map
@@ -62,8 +59,8 @@ const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         initialViewState={{
-          latitude: centerCoordinates.lat || DEFAULT_BERLIN_CENTER.lat,
-          longitude: centerCoordinates.lng || DEFAULT_BERLIN_CENTER.lng,
+          latitude: centerCoordinates?.lat || DEFAULT_BERLIN_CENTER.lat,
+          longitude: centerCoordinates?.lng || DEFAULT_BERLIN_CENTER.lng,
           zoom: 12,
         }}
         interactive
@@ -71,15 +68,18 @@ const KitaMap: React.FC<KitaMapProps> = ({ kitas = [], centerCoordinates }) => {
         maxZoom={16}
       >
         <NavigationControl showZoom position="top-right" />
-        {kitaMarkers}
-        {typeof centerCoordinates.lat === "number" &&
+        {centerCoordinates &&
+          typeof centerCoordinates.lat === "number" &&
           typeof centerCoordinates.lng === "number" && (
             <HomeMarker coordinates={centerCoordinates} />
           )}
         {featuredKitaInPopup && (
           <KitaPopup
             kita={featuredKitaInPopup}
-            coordinates={featuredKitaInPopup.coordinates}
+            coordinates={{
+              lat: featuredKitaInPopup.location.coordinates[1],
+              lng: featuredKitaInPopup.location.coordinates[0],
+            }}
             onClose={() => setFeaturedKitaInPopup(null)}
           />
         )}
@@ -131,8 +131,8 @@ const ProgrammaticMapControl: React.FC<ProgrammaticMapControlProps> = ({
     markers.forEach((marker) => {
       markersBounds.extend(
         new LngLat(
-          marker.props.kita.coordinates.lng,
-          marker.props.kita.coordinates.lat
+          marker.props.kita.location.coordinates[0],
+          marker.props.kita.location.coordinates[1]
         )
       );
     });

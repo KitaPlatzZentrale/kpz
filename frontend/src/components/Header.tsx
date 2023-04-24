@@ -9,7 +9,7 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
     <header
       ref={headerRef}
       id="nav-header"
-      className="page-padding w-full bg-white py-8"
+      className="page-padding z-50 w-full bg-white py-8"
     >
       <nav className="flex flex-row items-center justify-between">
         <div id="logo-container">

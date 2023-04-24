@@ -23,9 +23,10 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
     desiredStartingMonth,
     setDesiredStartingMonth,
     coordinatesAreValid,
+    submit,
   } = useSearchContext();
 
-  const { fetchKitas, isFetching } = useKitaListContext();
+  const { isFetching } = useKitaListContext();
 
   return (
     <div
@@ -50,7 +51,6 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
               if (coordinates.lat == null || coordinates.lng == null) return;
 
               setCoordinates(coordinates);
-              await fetchKitas(coordinates);
             }}
           />
           <FormAutocomplete
@@ -104,11 +104,7 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
               loadingPosition="center"
               disabled={!coordinatesAreValid || !desiredStartingMonth}
               onClick={async () => {
-                coordinatesAreValid &&
-                  (await fetchKitas({
-                    lat: coordinates.lat as number,
-                    lng: coordinates.lng as number,
-                  }));
+                await submit();
               }}
             >
               Kitas finden

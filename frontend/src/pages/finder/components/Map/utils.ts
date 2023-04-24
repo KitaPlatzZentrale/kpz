@@ -1,3 +1,4 @@
+import haversineDistance from "haversine-distance";
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../../../../tailwind.config";
 
@@ -7,10 +8,22 @@ export const screenIsBiggerOrEqualToMd = () => {
   return window.innerWidth >= screens.md;
 };
 
-// distance is a double in m (e.g. 2000m)
-export const getDistanceDescription = (distance: number) => {
-  if (distance >= 1000) return (distance / 1000).toFixed(1) + "km";
-  else return distance.toFixed(0) + "m";
+/**
+ * Calculates the (airline) distance between two coordinates in meters or kilometers
+ * Utilizes the haversine formula
+ * @param coordinates1 LatLng Coordinates of Point 1
+ * @param coordinates2 LatLng Coordinates of Point 2
+ * @returns Distance in integer + "m" if under 1000m, otherwise double + "km" (rounded to 1 decimal)
+ */
+export const getDescribedHaversineDistanceBetweenCoordinates = (
+  coordinates1: { lat: number; lng: number },
+  coordinates2: { lat: number; lng: number }
+): string => {
+  const distance = haversineDistance(coordinates1, coordinates2);
+  if (distance < 1000) {
+    return `${Math.round(distance)}m`;
+  }
+  return `${Math.round(distance / 100) / 10}km`;
 };
 
 // e.g. turn "August 2023" into "2023-08-01", day is always 01
