@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import logger from "../../logger";
+import logger from "../../../logger";
 import BerlinDEService from "../service";
 
 interface IGetBerlinDEKitaListParams {
