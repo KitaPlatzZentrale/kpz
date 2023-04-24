@@ -10,6 +10,8 @@ export const DEFAULT_BERLIN_CENTER: LatLng = {
   lng: 13.404954,
 };
 
+export const DEFAULT_BERLIN_CENTER = { lat: 52.516, lng: 13.377 };
+
 type SearchContext = {
   address: string | null;
   setAddress: (address: string | null) => void;

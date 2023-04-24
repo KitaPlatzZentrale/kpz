@@ -1,4 +1,5 @@
 import React from "react";
+import { DEFAULT_BERLIN_CENTER } from "../../../components/SearchContext";
 import { Kita, PaginatedResultsResponse } from "../../../types";
 import { DEFAULT_BERLIN_CENTER } from "../SearchContext";
 

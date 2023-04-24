@@ -5,7 +5,7 @@ import {
   NotificationsOutlined,
   OpenInNew,
 } from "@mui/icons-material";
-import { Button, Chip, IconButton, Link, ModalClose } from "@mui/joy";
+import { Button, Chip, Link } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
 import EmailSubmitModal from "../../../../components/EmailSubmitModal";
@@ -14,10 +14,8 @@ import { Kita } from "../../../../types";
 
 import Balancer from "react-wrap-balancer";
 
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../../../tailwind.config";
 import {
-  getDistanceDescription,
+  getDescribedHaversineDistanceBetweenCoordinates,
   screenIsBiggerOrEqualToMd,
   transformMonthIntoISODate,
 } from "../Map/utils";
@@ -28,7 +26,8 @@ type KitaListItemProps = {
 };
 
 const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
-  const { desiredStartingMonth } = useSearchContext();
+  const { desiredStartingMonth, coordinates: currentSearchCoordinates } =
+    useSearchContext();
 
   const [validStartingMonth, setValidStartingMonth] =
     React.useState(desiredStartingMonth);
@@ -90,9 +89,17 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
             variant="soft"
             size="sm"
           >
-            <span className="pl-1 pr-2 font-bold">
-              {getDistanceDescription(kita.coordinates.dist)}
-            </span>
+            <span className="px-2 font-bold">{`${
+              /** Round coordinates.dist to 2 floating points */
+              //Math.round(kita.location.coordinates.dist * 100) / 100
+              getDescribedHaversineDistanceBetweenCoordinates(
+                {
+                  lng: kita.location.coordinates[0],
+                  lat: kita.location.coordinates[1],
+                },
+                currentSearchCoordinates
+              )
+            }`}</span>
           </Chip>
         </div>
         <div className="flex flex-row items-center text-sm">

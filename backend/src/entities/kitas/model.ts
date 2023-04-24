@@ -14,18 +14,15 @@ const KitaDetailSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  coordinates: {
-    lat: {
-      type: Number,
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
       required: true,
     },
-    lng: {
-      type: Number,
+    coordinates: {
+      type: [Number],
       required: true,
-    },
-    dist: {
-      type: Number || null,
-      required: false,
     },
   },
   address: {

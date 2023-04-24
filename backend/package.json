@@ -7,10 +7,14 @@
     "test": "jest --config jest.config.js --silent src/__tests__/",
     "local": "npx tsc --watch & nodemon dist/index.js",
     "build": "tsc -p .",
+    "docker-dev": "docker-compose -f docker-compose.dev.yml up -d",
+    "docker-down": "docker-compose down",
+    "docker-local": "docker-compose -f docker-compose.local.yml up -d",
+    "docker-local-new-build": "docker-compose -f docker-compose.local.yml up -d --build",
+    "docker-prod": "docker-compose -f docker-compose.prod.yml up -d",
     "fetch-kita-details": "ts-node src/scripts/iterateOverKitas.ts",
-    "docker-dev": "docker-compose up -d",
-    "docker-prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d",
-    "docker-down": "docker-compose down"
+    "local": "npx tsc --watch & nodemon dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",

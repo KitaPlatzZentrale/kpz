@@ -50,7 +50,7 @@ jobs:
           port: 22
           script: |
             cd kpz/frontend
-            docker-compose -f deploy_prod_frontend.yml down --remove-orphans
+            docker-compose -f docker-compose.yml down
             docker rm kpz-prod-frontend-container
             docker rmi goodbuy/kpz-prod-frontend
-            docker-compose -f deploy_prod_frontend.yml up -d
+            docker-compose -f docker-compose.yml up -d

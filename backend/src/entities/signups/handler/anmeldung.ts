@@ -1,7 +1,5 @@
 import { RequestHandler } from "express";
-import AirtableAPIService, {
-  CreateServiceAnmeldungPayload,
-} from "../../services/external/AirtableService";
+import AirtableAPIService, { CreateServiceAnmeldungPayload } from "../service";
 
 const handler: RequestHandler<any, any, CreateServiceAnmeldungPayload> = async (
   req,
