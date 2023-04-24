@@ -1,4 +1,4 @@
-import KitaService from "../services/KitaService";
+import KitaService from "../entities/kitas/service";
 import haversine from "haversine-distance";
 jest.mock("../models/Kita", () => ({
   __esModule: true,

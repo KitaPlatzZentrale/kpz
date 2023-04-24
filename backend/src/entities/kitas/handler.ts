@@ -6,7 +6,7 @@ import {
   IsNumber,
   validate,
 } from "class-validator";
-import KitaService from "../../services/KitaService";
+import KitaService from "./service";
 import { RequestHandler } from "express";
 
 require("dotenv").config();

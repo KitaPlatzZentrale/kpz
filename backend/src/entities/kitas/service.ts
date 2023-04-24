@@ -1,7 +1,7 @@
-import { connectToDatabase } from "../database";
-import KitaDetailModel from "../models/Kita";
-import { Kita } from "../types";
-import paginate, { PaginatedResultsResponse } from "../utils/paginate";
+import { connectToDatabase } from "../../database";
+import KitaDetailModel from "./model";
+import { Kita } from "../../types";
+import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
 
 class KitaService {
   public static getKitasInRadius = async (

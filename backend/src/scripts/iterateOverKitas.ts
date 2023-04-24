@@ -1,8 +1,8 @@
 import logger from "../logger";
 import { Kita, KitaDetail } from "../types";
-import KitaDetailModel from "../models/Kita";
+import KitaDetailModel from "../entities/kitas/model";
 import { closeDatabaseConnection, connectToDatabase } from "../database";
-import BerlinDEService from "../services/external/BerlinDEService";
+import BerlinDEService from "../entities/berlin.de/service";
 
 const kitas: Kita[] = require("../../data/kitas_berlin.json");
 
