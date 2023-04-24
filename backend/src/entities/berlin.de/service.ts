@@ -1,10 +1,10 @@
 import axios from "axios";
-import logger from "../logger";
+import logger from "../../logger";
 import BerlinDEKitaModel, {
   BerlinDEKitaDetailedEntity,
   BerlinDEKitaSummaryEntity,
 } from "./model";
-import { Kita, KitaDetail } from "../types";
+import { Kita, KitaDetail } from "../../types";
 
 class BerlinDEService {
   /**

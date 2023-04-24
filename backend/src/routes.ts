@@ -2,13 +2,13 @@ import express = require("express");
 
 import getPaginatedKitas, {
   validator as getPaginatedKitasValidator,
-} from "./kitas/handler";
+} from "./entities/kitas/handler";
 
-import serviceAnmeldungHandler from "./signups/handler/anmeldung";
-import einzelBenachrichtigungHandler from "./signups/handler/einzel";
-import arealBenachrichtigungHandler from "./signups/handler/areal";
-import getBerlinDEKitasAtLocation from "./berlin.de/handler/getBerlinDEKitasAtLocation";
-import getBerlinDEKitaDetails from "./berlin.de/handler/getBerlinDEKitaDetails";
+import serviceAnmeldungHandler from "./entities/signups/handler/anmeldung";
+import einzelBenachrichtigungHandler from "./entities/signups/handler/einzel";
+import arealBenachrichtigungHandler from "./entities/signups/handler/areal";
+import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
+import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
 const router = express.Router();
 
