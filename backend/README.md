@@ -105,4 +105,3 @@ CloudFormation (Best for quickly getting started)
 To set up the AWS integration with CloudFormation, see the the [AWS getting started guide](https://docs.datadoghq.com/getting_started/integrations/aws/).
 
 Read: <https://docs.datadoghq.com/integrations/amazon_web_services/#installation>
-
