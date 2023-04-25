@@ -22,6 +22,7 @@ jobs:
             if [ ! -d "kpz_dev" ]; then
               echo "Cloning repository: KitaPlatzZentrale/kpz"
               git clone -b dev git@github.com:KitaPlatzZentrale/kpz.git kpz_dev
+              cd kpz_dev
             else
               cd kpz_dev
               echo "Repository KitaPlatzZentrale/kpz already exists, pulling the latest changes"
@@ -48,7 +49,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd kpz/frontend
+            cd kpz_dev/frontend
             docker-compose -f docker-compose.dev.yml down
             docker rm kpz-dev-frontend-container
             docker rmi goodbuy/kpz-dev-frontend
