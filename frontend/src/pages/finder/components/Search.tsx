@@ -1,15 +1,20 @@
 import { DateRange } from "@mui/icons-material";
 import { Button, FormControl, FormLabel } from "@mui/joy";
+import clsx from "clsx";
 import React from "react";
 import CentricContent from "../../../components/CentricContent";
 import FormAutocomplete from "../../../components/FormAutocomplete";
-import { useSearchContext } from "../../../components/SearchContext";
+import { useSearchContext } from "./SearchContext";
 import AddressLookup from "./AddressLookup";
-import { useKitaListContext } from "./KitaListContext";
+import { useKitaListContext } from "./KitaList/KitaListContext";
 
-type SearchProps = {};
+type SearchProps = {
+  id?: string;
+  className?: string;
+  rootRef?: React.RefObject<HTMLDivElement>;
+};
 
-const Search: React.FC<SearchProps> = ({}) => {
+const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
   const {
     setCoordinates,
     setAddress,
@@ -18,21 +23,33 @@ const Search: React.FC<SearchProps> = ({}) => {
     desiredStartingMonth,
     setDesiredStartingMonth,
     coordinatesAreValid,
+    submit,
   } = useSearchContext();
 
-  const { fetchKitas, isFetching } = useKitaListContext();
+  const { isFetching } = useKitaListContext();
 
   return (
-    <div className="w-full bg-white pb-10 pt-10">
-      <CentricContent>
-        <h3 className="mb-4 text-2xl font-extrabold">Kitas suchen</h3>
-        <div className="flex w-full max-w-7xl flex-col items-stretch gap-6 lg:flex-row lg:items-start">
+    <div
+      ref={rootRef}
+      id={id}
+      className={clsx(
+        "page-padding flex w-full flex-row justify-between bg-white pb-6 pt-4 align-baseline",
+        className
+      )}
+    >
+      <div className="flex w-full flex-col">
+        <h3 className="mb-4 text-2xl font-extrabold">
+          Kitas in der Nähe finden
+        </h3>
+        <div className="flex w-full max-w-5xl flex-col items-stretch gap-6 lg:flex-row lg:items-start">
           <AddressLookup
             className="lg:w-full"
-            onAddressSelected={(address) => {
+            onAddressSelected={async (address) => {
               setAddress(address);
             }}
-            onCoordinatesSuccessfullyRetrieved={(coordinates) => {
+            onCoordinatesSuccessfullyRetrieved={async (coordinates) => {
+              if (coordinates.lat == null || coordinates.lng == null) return;
+
               setCoordinates(coordinates);
             }}
           />
@@ -78,7 +95,7 @@ const Search: React.FC<SearchProps> = ({}) => {
           <FormControl>
             <FormLabel style={{ opacity: 0 }}>Einreichen</FormLabel>
             <Button
-              style={{ padding: "20px 60px" }}
+              style={{ padding: "20px 40px" }}
               className="w-full lg:w-fit"
               color="info"
               size="lg"
@@ -87,18 +104,14 @@ const Search: React.FC<SearchProps> = ({}) => {
               loadingPosition="center"
               disabled={!coordinatesAreValid || !desiredStartingMonth}
               onClick={async () => {
-                coordinatesAreValid &&
-                  (await fetchKitas({
-                    lat: coordinates.lat as number,
-                    lng: coordinates.lng as number,
-                  }));
+                await submit();
               }}
             >
               Kitas finden
             </Button>
           </FormControl>
         </div>
-      </CentricContent>
+      </div>
     </div>
   );
 };

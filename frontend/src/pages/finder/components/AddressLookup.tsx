@@ -6,7 +6,7 @@ import { AutocompleteProps, CircularProgress, Link } from "@mui/joy";
 import FormAutocomplete from "../../../components/FormAutocomplete";
 import clsx from "clsx";
 import useGeolocation from "react-hook-geolocation";
-import { DEFAULT_BERLIN_CENTER } from "../../../components/SearchContext";
+import { DEFAULT_BERLIN_CENTER } from "../../finder/components/SearchContext";
 
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
 
@@ -14,13 +14,13 @@ type AddressLookupProps = {
   className?: string;
   onAddressSelected?: (address: string | null) => void;
   onCoordinatesSuccessfullyRetrieved?: (coordinates: {
-    lat: number | null;
-    lng: number | null;
+    lat: number;
+    lng: number;
   }) => void;
   helperText?: string;
   error?: boolean;
   hideCurrentLocationOption?: boolean;
-} & AutocompleteProps<any, false, false, false>;
+} & Omit<AutocompleteProps<any, false, false, false>, "options">;
 
 const AddressLookup: React.FC<AddressLookupProps> = ({
   className,
@@ -33,7 +33,6 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 }) => {
   const [allowUserCoordinatesRequest, setAllowUserCoordinatesRequest] =
     React.useState<boolean | null>(null);
-
   const [currentUserPosition, setCurrentUserPosition] = React.useState<{
     latitude: number | null;
     longitude: number | null;
@@ -219,7 +218,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     setAllowUserCoordinatesRequest(false);
   };
 
-  const { latitude, longitude } = useGeolocation(
+  const userLocation = useGeolocation(
     {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -230,13 +229,11 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   );
 
   React.useEffect(() => {
-    if (!selectedAddress) {
-      setCoordinates(DEFAULT_BERLIN_CENTER);
-    }
     selectedAddress && fetchCoordinates(selectedAddress);
   }, [selectedAddress]);
 
   React.useEffect(() => {
+    if (!coordinates || !coordinates.lat || !coordinates.lng) return;
     onCoordinatesSuccessfullyRetrieved?.(coordinates);
   }, [coordinates]);
 

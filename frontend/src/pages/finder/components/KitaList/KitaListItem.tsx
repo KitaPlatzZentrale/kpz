@@ -9,59 +9,23 @@ import { Button, Chip, Link } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
 import EmailSubmitModal from "../../../../components/EmailSubmitModal";
-import { useSearchContext } from "../../../../components/SearchContext";
+import { useSearchContext } from "../SearchContext";
 import { Kita } from "../../../../types";
-
-import haversine from "haversine-distance";
 
 import Balancer from "react-wrap-balancer";
 
-import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../../../tailwind.config";
-
-const screenIsBiggerOrEqualToMd = () => {
-  const { theme } = resolveConfig(tailwindConfig);
-  const screens = theme.extend ? theme.extend.screens : { md: "768px" };
-  return window.innerWidth >= screens.md;
-};
-
-// e.g. turn "August 2023" into "2023-08-01", day is always 01
-// ist nicht schön aber wat soll's
-const transformMonthIntoISODate = (month: string | null) => {
-  if (!month || month.length === 0) return null;
-
-  const monthToNumber = {
-    Januar: "01",
-    Februar: "02",
-    März: "03",
-    April: "04",
-    Mai: "05",
-    Juni: "06",
-    Juli: "07",
-    August: "08",
-    September: "09",
-    Oktober: "10",
-    November: "11",
-    Dezember: "12",
-  };
-
-  const [monthName, year] = month.split(" ");
-  const monthNumber = monthToNumber[monthName];
-
-  return `${year}-${monthNumber}-01`;
-};
-
-//TODO: Upon merge with map branch, add this to utils
-const getKitaHaversineDistanceToSearchCoordinates = (
-  kitaCoordinates: { lat: number; lng: number },
-  searchCoordinates: { lat: number; lng: number }
-) => haversine(kitaCoordinates, searchCoordinates);
+import {
+  getDescribedHaversineDistanceBetweenCoordinates,
+  screenIsBiggerOrEqualToMd,
+  transformMonthIntoISODate,
+} from "../Map/utils";
 
 type KitaListItemProps = {
   kita: Kita;
+  id?: string;
 };
 
-const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
+const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
   const { desiredStartingMonth, coordinates: currentSearchCoordinates } =
     useSearchContext();
 
@@ -86,6 +50,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
   return (
     <div
       key={"kita" + kita.uuid}
+      id={id}
       className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6"
     >
       <EmailSubmitModal open={openModal} onClose={() => setOpenModal(false)} />
@@ -127,16 +92,14 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita }) => {
             <span className="px-2 font-bold">{`${
               /** Round coordinates.dist to 2 floating points */
               //Math.round(kita.location.coordinates.dist * 100) / 100
-              Math.round(
-                getKitaHaversineDistanceToSearchCoordinates(
-                  {
-                    lng: kita.location.coordinates[0],
-                    lat: kita.location.coordinates[1],
-                  },
-                  currentSearchCoordinates
-                )
+              getDescribedHaversineDistanceBetweenCoordinates(
+                {
+                  lng: kita.location.coordinates[0],
+                  lat: kita.location.coordinates[1],
+                },
+                currentSearchCoordinates
               )
-            }m`}</span>
+            }`}</span>
           </Chip>
         </div>
         <div className="flex flex-row items-center text-sm">

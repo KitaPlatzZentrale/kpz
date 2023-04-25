@@ -7,7 +7,7 @@ const router = createBrowserRouter([
     element: <FinderPage />,
   },
   {
-    path: "/finder",
+    path: "/finder/",
     element: <FinderPage />,
   },
 ]);

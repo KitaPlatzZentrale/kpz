@@ -1,12 +1,12 @@
 import React from "react";
 import { Kita } from "../../../../types";
-import { useKitaListContext } from "../KitaListContext";
 import ServiceBanner from "../ServiceBanner";
 import KitaListItem, { KitaListItemSkeleton } from "./KitaListItem";
 
 import resolveConfig from "tailwindcss/resolveConfig";
 import tailwindConfig from "../../../../../tailwind.config";
 import clsx from "clsx";
+import { useKitaListScrollContext } from "./KitaListScrollContext";
 
 const screenIsSmallerThanLg = () => {
   const { theme } = resolveConfig(tailwindConfig);
@@ -20,6 +20,8 @@ type KitaListProps = {
 };
 
 const KitaList: React.FC<KitaListProps> = ({ kitas, className }) => {
+  const { generateElementScrollAnchor } = useKitaListScrollContext();
+
   const advertisementIndex = React.useMemo(() => {
     if (kitas === null) return null;
 
@@ -40,10 +42,19 @@ const KitaList: React.FC<KitaListProps> = ({ kitas, className }) => {
               return (
                 <>
                   <ServiceBanner />
-                  <KitaListItem kita={kita} />
+                  <KitaListItem
+                    id={generateElementScrollAnchor(kita.uuid)}
+                    kita={kita}
+                  />
                 </>
               );
-            } else return <KitaListItem kita={kita} />;
+            } else
+              return (
+                <KitaListItem
+                  id={generateElementScrollAnchor(kita.uuid)}
+                  kita={kita}
+                />
+              );
           })
         ) : (
           <div className="text-center text-gray-500">Keine Kitas gefunden</div>
