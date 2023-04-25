@@ -49,7 +49,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            cd kpz/backend
+            cd kpz_dev/backend
             docker-compose -f docker-compose.dev.yml down
             docker rm kpz-dev-backend-container
             docker rmi goodbuy/kpz-dev-backend
