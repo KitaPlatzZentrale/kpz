@@ -1,6 +1,6 @@
 import KitaService from "../entities/kitas/service";
 import haversine from "haversine-distance";
-jest.mock("../models/Kita", () => ({
+jest.mock("../entities/kitas/model", () => ({
   __esModule: true,
   default: {
     find: () => {

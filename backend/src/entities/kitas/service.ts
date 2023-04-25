@@ -1,4 +1,3 @@
-import { connectToDatabase } from "../../database";
 import KitaDetailModel from "./model";
 import { Kita } from "../../types";
 import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
@@ -11,8 +10,6 @@ class KitaService {
     page: number,
     limit: number
   ): Promise<PaginatedResultsResponse<Kita>> => {
-    await connectToDatabase();
-
     const nearestSortedKitaList = await KitaDetailModel.find({
       location: {
         $nearSphere: {
