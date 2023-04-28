@@ -1,14 +1,19 @@
 import React from "react";
-import Map, { MapProvider, NavigationControl, useMap } from "react-map-gl";
+import { useKitaListScrollContext } from "../../desktop/components/KitaList/KitaListScrollContext";
 
-import "mapbox-gl/dist/mapbox-gl.css";
-import { DEFAULT_BERLIN_CENTER, LatLng } from "../SearchContext";
+import Map, { MapProvider, NavigationControl, useMap } from "react-map-gl";
 import mapboxgl, { LngLat } from "mapbox-gl";
-import { useKitaListScrollContext } from "../KitaList/KitaListScrollContext";
-import { Kita } from "../../../../types";
+
 import HomeMarker from "./Markers/HomeMarker/HomeMarker";
 import KitaMarker from "./Markers/KitaMarker/KitaMarker";
-import KitaPopup from "./KitaPopup/KitaPopup";
+import KitaPopup from "../../desktop/components/Map/KitaPopup/KitaPopup";
+
+import { DEFAULT_BERLIN_CENTER } from "../defaults";
+
+import type { Kita } from "../../../../types";
+import type { LatLng } from "../types";
+
+import "mapbox-gl/dist/mapbox-gl.css";
 
 type KitaMapProps = {
   kitas: Kita[];
@@ -64,6 +69,8 @@ const KitaMap: React.FC<KitaMapProps> = ({
           zoom: 12,
         }}
         interactive
+        maxPitch={0}
+        dragRotate={false}
         minZoom={12}
         maxZoom={16}
       >
@@ -73,6 +80,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
           typeof centerCoordinates.lng === "number" && (
             <HomeMarker coordinates={centerCoordinates} />
           )}
+        {kitaMarkers}
         {featuredKitaInPopup && (
           <KitaPopup
             kita={featuredKitaInPopup}

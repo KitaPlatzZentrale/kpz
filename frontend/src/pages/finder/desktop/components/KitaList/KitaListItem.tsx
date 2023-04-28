@@ -1,3 +1,14 @@
+import React from "react";
+import { useSearchContext } from "../../../common/KitaSearchContext";
+
+import clsx from "clsx";
+import Balancer from "react-wrap-balancer";
+import {
+  getDescribedHaversineDistanceBetweenCoordinates,
+  screenIsBiggerOrEqualToMd,
+  transformMonthIntoISODate,
+} from "../../../common/utils";
+
 import {
   Check,
   Close,
@@ -6,19 +17,10 @@ import {
   OpenInNew,
 } from "@mui/icons-material";
 import { Button, Chip, Link } from "@mui/joy";
-import clsx from "clsx";
-import React from "react";
-import EmailSubmitModal from "../../../../components/EmailSubmitModal";
-import { useSearchContext } from "../SearchContext";
-import { Kita } from "../../../../types";
 
-import Balancer from "react-wrap-balancer";
+import EmailSubmitModal from "../../../../../components/EmailSubmitModal";
 
-import {
-  getDescribedHaversineDistanceBetweenCoordinates,
-  screenIsBiggerOrEqualToMd,
-  transformMonthIntoISODate,
-} from "../Map/utils";
+import type { Kita } from "../../../../../types";
 
 type KitaListItemProps = {
   kita: Kita;

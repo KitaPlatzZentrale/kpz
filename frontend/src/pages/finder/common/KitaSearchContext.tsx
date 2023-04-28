@@ -1,15 +1,6 @@
 import React from "react";
-import { useKitaListContext } from "./KitaList/KitaListContext";
-
-export type LatLng = {
-  lat: number;
-  lng: number;
-};
-
-export const DEFAULT_BERLIN_CENTER: LatLng = {
-  lat: 52.520008,
-  lng: 13.404954,
-};
+import { useKitaListContext } from "./KitaDataContext";
+import { LatLng } from "./types";
 
 type SearchContext = {
   address: string | null;

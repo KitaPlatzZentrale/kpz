@@ -3,10 +3,9 @@ import React from "react";
 import { Home, LocationOn } from "@mui/icons-material";
 import { AutocompleteProps, CircularProgress, Link } from "@mui/joy";
 
-import FormAutocomplete from "../../../components/FormAutocomplete";
+import FormAutocomplete from "./FormAutocomplete";
 import clsx from "clsx";
 import useGeolocation from "react-hook-geolocation";
-import { DEFAULT_BERLIN_CENTER } from "../../finder/components/SearchContext";
 
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
 

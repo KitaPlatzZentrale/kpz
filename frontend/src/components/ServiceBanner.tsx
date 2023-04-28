@@ -1,9 +1,9 @@
-import { Button, ModalClose } from "@mui/joy";
+import { Button } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
 
 import Balancer from "react-wrap-balancer";
-import { useServiceSignupModal } from "../../../components/ServiceSignupModal/ServiceSignupModalContext";
+import { useServiceSignupModal } from "./ServiceSignupModal/ServiceSignupModalContext";
 
 type ServiceBannerProps = {
   open?: boolean;

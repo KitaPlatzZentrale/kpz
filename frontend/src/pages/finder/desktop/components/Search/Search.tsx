@@ -2,11 +2,10 @@ import { DateRange } from "@mui/icons-material";
 import { Button, FormControl, FormLabel } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
-import CentricContent from "../../../components/CentricContent";
-import FormAutocomplete from "../../../components/FormAutocomplete";
-import { useSearchContext } from "./SearchContext";
-import AddressLookup from "./AddressLookup";
-import { useKitaListContext } from "./KitaList/KitaListContext";
+import FormAutocomplete from "../../../../../components/FormAutocomplete";
+import { useSearchContext } from "../../../common/KitaSearchContext";
+import AddressLookup from "../../../../../components/AddressLookup";
+import { useKitaListContext } from "../../../common/KitaDataContext";
 
 type SearchProps = {
   id?: string;

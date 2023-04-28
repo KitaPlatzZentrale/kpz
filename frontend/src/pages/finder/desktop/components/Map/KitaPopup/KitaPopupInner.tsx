@@ -1,3 +1,13 @@
+import React from "react";
+import { useSearchContext } from "../../../../common/KitaSearchContext";
+
+import clsx from "clsx";
+import {
+  getDescribedHaversineDistanceBetweenCoordinates,
+  transformMonthIntoISODate,
+} from "../../../../common/utils";
+import Balancer from "react-wrap-balancer";
+
 import {
   Check,
   Close,
@@ -5,16 +15,10 @@ import {
   NotificationsOutlined,
 } from "@mui/icons-material";
 import { Chip, IconButton, Link, ModalClose } from "@mui/joy";
-import clsx from "clsx";
-import React from "react";
-import EmailSubmitModal from "../../../../../components/EmailSubmitModal";
-import { useSearchContext } from "../../SearchContext";
-import { Kita } from "../../../../../types";
-import {
-  getDescribedHaversineDistanceBetweenCoordinates,
-  transformMonthIntoISODate,
-} from "../utils";
-import Balancer from "react-wrap-balancer";
+
+import EmailSubmitModal from "../../../../../../components/EmailSubmitModal";
+
+import type { Kita } from "../../../../../../types";
 
 type KitaPopupInnerProps = {
   kita: Kita;

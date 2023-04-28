@@ -1,14 +1,11 @@
 import React from "react";
+import { useKitaListContext } from "../common/KitaDataContext";
+import { useKitaListScrollContext } from "./components/KitaList/KitaListScrollContext";
+import { useSearchContext } from "../common/KitaSearchContext";
 
-import type { Kita } from "../../../../types";
-import { useKitaListContext } from "./KitaListContext";
-import KitaList from "./KitaList";
-import { useKitaListScrollContext } from "./KitaListScrollContext";
-import { useSearchContext } from "../SearchContext";
-import AddressLookup from "../AddressLookup";
-import FormAutocomplete from "../../../../components/FormAutocomplete";
-import { DateRange } from "@mui/icons-material";
 import { Button, FormControl, FormLabel } from "@mui/joy";
+import KitaList from "./components/KitaList/KitaList";
+import AddressLookup from "../../../components/AddressLookup";
 
 type KitaListViewProps = React.PropsWithChildren<{}>;
 
