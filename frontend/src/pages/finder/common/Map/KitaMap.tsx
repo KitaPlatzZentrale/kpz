@@ -21,11 +21,13 @@ type KitaMapProps = {
     lat?: number;
     lng?: number;
   };
+  showNavigation?: boolean;
 };
 
 const KitaMap: React.FC<KitaMapProps> = ({
   kitas = [],
   centerCoordinates = DEFAULT_BERLIN_CENTER,
+  showNavigation = true,
 }) => {
   const [featuredKitaInPopup, setFeaturedKitaInPopup] =
     React.useState<Kita | null>(null);
@@ -59,6 +61,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
   return (
     <MapProvider>
       <Map
+        id="finderMap" // used to find the map with useMap(), if you remove this the programmatic control won't work
         reuseMaps
         mapboxAccessToken="pk.eyJ1IjoiaGFubm9ncmltbSIsImEiOiJjbGdtamwyZHowNmxnM2VxbTd6eHZhMjExIn0.0wHQJStc2kgDh29Ewv_g-w"
         style={{ width: "100%", height: "100%" }}
@@ -74,7 +77,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
         minZoom={12}
         maxZoom={16}
       >
-        <NavigationControl showZoom position="top-right" />
+        {showNavigation && <NavigationControl showZoom position="top-right" />}
         {centerCoordinates &&
           typeof centerCoordinates.lat === "number" &&
           typeof centerCoordinates.lng === "number" && (
@@ -123,7 +126,6 @@ const ProgrammaticMapControl: React.FC<ProgrammaticMapControlProps> = ({
   };
 
   React.useEffect(() => {
-    console.log(finderMap);
     if (!finderMap) return;
     if (coordinates.lat === null || coordinates.lng === null) return;
 

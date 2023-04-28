@@ -10,6 +10,7 @@ import useGeolocation from "react-hook-geolocation";
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
 
 type AddressLookupProps = {
+  label?: string;
   className?: string;
   onAddressSelected?: (address: string | null) => void;
   onCoordinatesSuccessfullyRetrieved?: (coordinates: {
@@ -22,6 +23,7 @@ type AddressLookupProps = {
 } & Omit<AutocompleteProps<any, false, false, false>, "options">;
 
 const AddressLookup: React.FC<AddressLookupProps> = ({
+  label = "Wo wohnen Sie?",
   className,
   onAddressSelected,
   onCoordinatesSuccessfullyRetrieved,
@@ -239,7 +241,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
   return (
     <div className={clsx("flex flex-col", className)}>
       <FormAutocomplete
-        label="Wo wohnen Sie?"
+        label={label}
         placeholder="Ihr Wohnort"
         options={suggestions}
         onChange={(e, value) => handleAddressSelection(value)}

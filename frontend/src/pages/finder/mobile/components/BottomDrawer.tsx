@@ -3,113 +3,184 @@ import {
   useSpring,
   motion,
   useMotionValue,
-  useScroll,
   useTransform,
   PanInfo,
-  useMotionValueEvent,
 } from "framer-motion";
 
-type BottomDrawerProps = {
-  maxRestHeight: number;
+type Anchor = {
+  y: number;
+  offset?: number;
+};
+
+type BottomDrawerAnchors = {
+  fullscreen: Anchor;
+  open: Anchor;
+  closed: Anchor;
 };
 
 const DEFAULT_VISIBLE_PART_HEIGHT = 75;
 
-const useDragAndScroll = (maxTopPosition) => {
-  const y = useMotionValue(0);
-  const elementRef = React.useRef<HTMLDivElement | null>(null);
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
+export const DEFAULT_DRAWER_ANCHORS = (
+  windowHeight: number = window?.innerHeight
+): BottomDrawerAnchors => ({
+  fullscreen: {
+    y: 0,
+    offset: -50,
+  },
+  open: {
+    y: (windowHeight / 5) * 3,
+  },
+  closed: {
+    y: windowHeight,
+    offset: DEFAULT_VISIBLE_PART_HEIGHT,
+  },
+});
 
-  const clampedY = useTransform(y, (value) =>
-    Math.min(Math.max(value, -maxTopPosition), 0)
-  );
+type BottomDrawerProps = React.PropsWithChildren<{
+  windowHeight?: number;
+  anchors?: BottomDrawerAnchors;
+  startAnchor?: keyof BottomDrawerAnchors;
+  onClose?: () => void;
+  onOpen?: () => void;
+  onFullscreen?: () => void;
+}>;
 
-  React.useEffect(() => {
-    const element = elementRef.current;
-    const container = containerRef.current;
-
-    if (!element || !container) {
-      return;
-    }
-
-    const handleScroll = (e) => {
-      if (clampedY.get() <= 0) {
-        y.set(y.get() - e.deltaY);
-      }
-    };
-
-    container.addEventListener("wheel", handleScroll);
-
-    return () => {
-      container.removeEventListener("wheel", handleScroll);
-    };
-  }, [y, clampedY, maxTopPosition]);
-
-  return { y: clampedY, elementRef, containerRef };
-};
-
-const BottomDrawer: React.FC<BottomDrawerProps> = ({ maxRestHeight = 400 }) => {
+const BottomDrawer: React.FC<BottomDrawerProps> = ({
+  windowHeight = window?.innerHeight,
+  anchors = DEFAULT_DRAWER_ANCHORS(windowHeight),
+  startAnchor = "open",
+  children,
+}) => {
   // build a drawer with framer-motion that works like the Airbnb mobile drawer
   // in default position, the drawer is closed and only the top part is visible (56px as defined above)
-  // when the user drags the drawer up, the drawer opens is as big as defined by maxRestHeight (usually half of the screen height)
+  // when the user drags the drawer up, the drawer opens is as big as defined by the middle anchor (usually half of the screen height)
   // when the user drags the drawer down, the drawer closes and only the top part is visible again
   // the drawer should be at the bottom of the screen and be full-width with white background
+  // if the user drags up beyond the middle anchor, the drawer should jump to the top anchor
+  // if a user drags down beyond the top anchor, the drawer should jump back to the middle anchor
+  // if a user drags up beyond the top anchor, scroll up
 
-  const [isOpen, setIsOpen] = React.useState(false);
+  const getAnchorPosition = (anchorKey: keyof typeof anchors) => {
+    return anchors[anchorKey].y - (anchors[anchorKey].offset ?? 0);
+  };
 
   const rootRef = React.useRef<HTMLDivElement | null>(null);
   const drawerContentRef = React.useRef<HTMLDivElement | null>(null);
 
-  const screenHeight = window.innerHeight;
+  const drawerContentHeight = drawerContentRef.current?.clientHeight ?? 0;
 
-  const spring = useSpring(screenHeight - DEFAULT_VISIBLE_PART_HEIGHT, {
-    stiffness: 300,
-    damping: 60,
-  });
+  const [openState, setOpenState] = React.useState<
+    "fullscreen" | "open" | "closed"
+  >("closed");
 
-  const { scrollY } = useScroll({
-    container: rootRef,
-    axis: "y",
-  });
+  // use spring animation if not in fullscreen, otherwise make spring configs appear like drag animation
+  const offset = useSpring(
+    getAnchorPosition(startAnchor),
+    openState === "fullscreen"
+      ? {
+          duration: 0.1,
+          bounce: 0,
+          velocity: 200,
+        }
+      : {
+          stiffness: 300,
+          damping: 30,
+        }
+  );
 
-  /*const clampedY = useTransform(spring, (value) =>
-    Math.min(
-      Math.max(value, screenHeight - maxRestHeight),
-      screenHeight - DEFAULT_VISIBLE_PART_HEIGHT
-    )
-  );*/
+  const currentDragOffset = useMotionValue(0);
 
-  /*useMotionValueEvent(scrollY, "change", () => {
-    console.log("scrollY", scrollY.get());
-    spring.set(screenHeight - DEFAULT_VISIBLE_PART_HEIGHT - scrollY.get());
-  });*/
+  // work with positive value of currentDragOffset
+  // if value is higher than half of the screen height, opacity is 0.75
+  // if value is 0, opacity 0.25
+  // make opacity flow gradual
+  const drawerHandleOpacity = useTransform(
+    currentDragOffset,
+    [(windowHeight / 2) * -1, 0, windowHeight / 2],
+    [0.6, 0.2, 0.6]
+  );
 
-  const handleOpen = (info?: PanInfo) => {
-    console.log("open");
-    spring.set(screenHeight - maxRestHeight);
-    setIsOpen(true);
-  };
+  useTransform(offset, (value) =>
+    openState === "closed"
+      ? Math.min(
+          Math.max(value, getAnchorPosition("open")),
+          getAnchorPosition("closed")
+        )
+      : openState === "open"
+      ? Math.min(
+          Math.max(value, getAnchorPosition("fullscreen")),
+          getAnchorPosition("closed")
+        )
+      : openState === "fullscreen" &&
+        Math.min(
+          Math.max(value, windowHeight - drawerContentHeight),
+          getAnchorPosition("fullscreen")
+        )
+  );
 
   const handleClose = (info?: PanInfo) => {
     console.log("close");
-    spring.set(screenHeight - DEFAULT_VISIBLE_PART_HEIGHT);
-    setIsOpen(false);
+    offset.set(getAnchorPosition("closed"));
+    setOpenState("closed");
   };
 
-  const handleDrag = (_, info: PanInfo) => {
-    console.log(info.offset.y);
-    console.log(spring);
-    console.log(isOpen);
+  const handleOpen = (info?: PanInfo) => {
+    console.log("open");
+    offset.set(getAnchorPosition("open"));
+    setOpenState("open");
+  };
 
-    // if not drawn down to half of the size, dont close the drawer and reset back to open
-    if (isOpen && info.offset.y > maxRestHeight / 2) return handleClose(info);
+  const handleFullscreen = (info?: PanInfo) => {
+    console.log("fullscreen");
+    offset.set(getAnchorPosition("fullscreen"));
+    setOpenState("fullscreen");
+  };
 
-    if (!isOpen && info.offset.y < 0) return handleOpen(info);
+  const handlePanEnd = (_, info: PanInfo) => {
+    currentDragOffset.set(0);
+
+    if (
+      openState === "closed" &&
+      info.offset.y < 0 &&
+      offset.get() > getAnchorPosition("open")
+    )
+      return handleOpen(info);
+    if (
+      openState === "closed" &&
+      info.offset.y < 0 &&
+      offset.get() < getAnchorPosition("open")
+    )
+      return handleFullscreen(info);
+    if (openState === "closed" && info.offset.y > 0) return handleClose(info);
+
+    if (
+      openState === "open" &&
+      info.offset.y > 0 &&
+      info.offset.y >
+        (getAnchorPosition("closed") - getAnchorPosition("open")) / 2
+    )
+      return handleClose(info);
+    if (openState === "open" && info.offset.y > 0) return handleOpen(info);
+
+    if (openState === "open" && info.offset.y < 0)
+      return handleFullscreen(info);
+
+    if (
+      openState === "fullscreen" &&
+      info.offset.y > 0 &&
+      offset.get() > getAnchorPosition("fullscreen")
+    )
+      return handleOpen(info);
+  };
+
+  const handlePan = (_, info: PanInfo) => {
+    currentDragOffset.set(info.offset.y);
   };
 
   const handleClick = () => {
-    if (isOpen) return handleClose();
-    if (!isOpen) return handleOpen();
+    if (openState === "fullscreen") return handleOpen();
+    if (openState === "open") return handleFullscreen();
+    if (openState === "closed") return handleOpen();
   };
 
   return (
@@ -119,41 +190,56 @@ const BottomDrawer: React.FC<BottomDrawerProps> = ({ maxRestHeight = 400 }) => {
         position: "absolute",
         top: 0,
         width: "100%",
-        y: spring,
-        zIndex: 500,
-        overflowY: isOpen ? "scroll" : "hidden",
+        y: offset,
+        zIndex: 200,
+        overflowY: openState === "fullscreen" ? "scroll" : "hidden",
+        paddingBottom: 200, // long padding at the bottom of the root container so even an aggressive swipe-up on mobile won't reveal the content underneath (due to dragMomentum)
+        backgroundColor: "#fff",
       }}
+      className="rounded-t-2xl"
       drag="y"
       dragConstraints={{
-        top: screenHeight - maxRestHeight,
-        bottom: screenHeight - DEFAULT_VISIBLE_PART_HEIGHT,
+        top:
+          openState === "fullscreen"
+            ? windowHeight - drawerContentHeight
+            : openState === "open"
+            ? getAnchorPosition("fullscreen")
+            : getAnchorPosition("open"),
+        bottom:
+          openState === "fullscreen"
+            ? getAnchorPosition("open")
+            : getAnchorPosition("closed"),
       }}
-      onPanEnd={handleDrag}
+      onPan={handlePan}
+      onPanEnd={handlePanEnd}
       onDoubleClick={handleClick}
-      dragElastic={0.8}
-      dragMomentum={false}
+      dragElastic={{
+        top: openState === "fullscreen" ? 0 : 0.8,
+        bottom: openState === "fullscreen" ? 0 : 0.8,
+      }}
+      dragMomentum={
+        openState === "fullscreen" &&
+        offset.get() > getAnchorPosition("fullscreen")
+          ? true
+          : false
+      }
     >
       <motion.div
+        className="pb-8"
         ref={drawerContentRef}
         style={{
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#fff",
           height: "100%",
+          minHeight: windowHeight,
         }}
       >
-        <motion.div className="mb-2 ml-auto mr-auto mt-3 h-[7px] w-[56px] cursor-move rounded-lg bg-slate-200" />
-        <div className="mt-3 flex h-fit w-full justify-center px-8 font-semibold">
-          Starten Sie Ihre Suche
-        </div>
-        <div className="mt-3 flex w-full flex-col gap-3 px-10">
-          {Array.from({ length: 30 }).map((_, index) => {
-            return (
-              <div className="h-[300px] w-full animate-pulse bg-slate-200"></div>
-            );
-          })}
-        </div>
+        <motion.div
+          className="mb-2 ml-auto mr-auto mt-3 h-[7px] w-[56px] cursor-move rounded-lg bg-slate-400"
+          style={{ opacity: drawerHandleOpacity }}
+        />
+        {children}
       </motion.div>
     </motion.div>
   );

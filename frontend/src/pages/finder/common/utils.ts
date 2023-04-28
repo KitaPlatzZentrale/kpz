@@ -4,13 +4,13 @@ import tailwindConfig from "../../../../tailwind.config";
 
 export const screenIsBiggerOrEqualToMd = () => {
   const { theme } = resolveConfig(tailwindConfig);
-  const screens = theme.extend ? theme.extend.screens : { md: "768px" };
+  const screens = theme.extend ? theme.extend.screens : { md: 768 };
   return window.innerWidth >= screens.md;
 };
 
 export const screenIsBiggerOrEqualToXl = () => {
   const { theme } = resolveConfig(tailwindConfig);
-  const screens = theme.extend ? theme.extend.screens : { xl: "1024px" };
+  const screens = theme.extend ? theme.extend.screens : { xl: 1024 };
   return window.innerWidth >= screens.xl;
 };
 

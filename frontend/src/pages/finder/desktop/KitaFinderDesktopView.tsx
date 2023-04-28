@@ -1,4 +1,5 @@
 import React from "react";
+import Search from "./components/Search/Search";
 import KitaListView from "./KitaListView";
 import KitaMapView from "./KitaMapView";
 
@@ -11,6 +12,7 @@ const KitaFinderDesktopView: React.FC<KitaFinderDesktopViewProps> = ({
 }) => {
   return (
     <div className="flex h-full w-full flex-col lg:pb-10">
+      <Search />
       <div
         id="content"
         style={{ height }}

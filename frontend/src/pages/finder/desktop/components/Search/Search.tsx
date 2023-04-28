@@ -17,8 +17,6 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
   const {
     setCoordinates,
     setAddress,
-    coordinates,
-    address,
     desiredStartingMonth,
     setDesiredStartingMonth,
     coordinatesAreValid,

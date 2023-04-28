@@ -1,4 +1,5 @@
 import React from "react";
+import { DEFAULT_BERLIN_CENTER } from "./defaults";
 import { useKitaListContext } from "./KitaDataContext";
 import { LatLng } from "./types";
 
@@ -24,7 +25,9 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
 }) => {
   const { fetchKitas } = useKitaListContext();
   const [address, setAddress] = React.useState<string | null>(null);
-  const [coordinates, _setCoordinates] = React.useState<LatLng | null>(null);
+  const [coordinates, _setCoordinates] = React.useState<LatLng | null>(
+    DEFAULT_BERLIN_CENTER
+  );
 
   const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 
@@ -40,11 +43,11 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   );
 
   const submit = async (coordinatesProp?: LatLng) => {
+    setHasBeenSubmitted(true);
     const submittingCoordinates = coordinatesProp || coordinates;
     if (!submittingCoordinates) return;
 
     await handleSubmit(submittingCoordinates);
-    setHasBeenSubmitted(true);
   };
 
   const handleSubmit = async (coordinatesProp: LatLng) =>
@@ -55,7 +58,9 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   >("August 2023");
 
   const coordinatesAreValid = React.useMemo(() => {
-    return coordinates?.lat !== null && coordinates?.lng !== null;
+    return (
+      coordinates && coordinates?.lat !== null && coordinates?.lng !== null
+    );
   }, [coordinates]);
 
   return (

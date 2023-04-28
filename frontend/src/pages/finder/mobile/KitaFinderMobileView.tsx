@@ -1,4 +1,5 @@
 import React from "react";
+import SearchOverlayContextProvider from "./components/SearchOverlayContext";
 import KitaListMobileView from "./KitaListMobileView";
 import KitaMapMobileView from "./KitaMapMobileView";
 
@@ -16,8 +17,10 @@ const KitaFinderMobileView: React.FC<KitaFinderMobileViewProps> = ({
         style={{ height }}
         className="flex w-full flex-col overflow-y-hidden"
       >
-        <KitaMapMobileView />
-        <KitaListMobileView />
+        <SearchOverlayContextProvider>
+          <KitaMapMobileView />
+          <KitaListMobileView />
+        </SearchOverlayContextProvider>
       </div>
     </div>
   );
