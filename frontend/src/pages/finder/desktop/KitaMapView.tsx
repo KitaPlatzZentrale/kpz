@@ -1,7 +1,7 @@
 import React from "react";
-import { useSearchContext } from "../SearchContext";
-import { useKitaListContext } from "../KitaList/KitaListContext";
-import KitaMap from "./KitaMap";
+import { useSearchContext } from "../common/KitaSearchContext";
+import { useKitaListContext } from "../common/KitaDataContext";
+import KitaMap from "../common/Map/KitaMap";
 
 type KitaMapViewProps = {};
 
@@ -14,7 +14,7 @@ const KitaMapView: React.FC<KitaMapViewProps> = ({}) => {
       id="finder-map"
       className="flex h-full w-full flex-grow lg:h-fit lg:min-h-[500px] xl:h-full xl:min-h-full"
     >
-      <KitaMap kitas={[]} centerCoordinates={coordinates} />
+      <KitaMap kitas={kitas || []} centerCoordinates={coordinates} />
     </div>
   );
 };

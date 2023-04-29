@@ -1,3 +1,14 @@
+import React from "react";
+import { useSearchContext } from "../../../common/KitaSearchContext";
+
+import clsx from "clsx";
+import Balancer from "react-wrap-balancer";
+import {
+  getDescribedHaversineDistanceBetweenCoordinates,
+  screenIsBiggerOrEqualToMd,
+  transformMonthIntoISODate,
+} from "../../../common/utils";
+
 import {
   Check,
   Close,
@@ -6,19 +17,10 @@ import {
   OpenInNew,
 } from "@mui/icons-material";
 import { Button, Chip, Link } from "@mui/joy";
-import clsx from "clsx";
-import React from "react";
-import EmailSubmitModal from "../../../../components/EmailSubmitModal";
-import { useSearchContext } from "../SearchContext";
-import { Kita } from "../../../../types";
 
-import Balancer from "react-wrap-balancer";
+import EmailSubmitModal from "../../../../../components/EmailSubmitModal";
 
-import {
-  getDescribedHaversineDistanceBetweenCoordinates,
-  screenIsBiggerOrEqualToMd,
-  transformMonthIntoISODate,
-} from "../Map/utils";
+import type { Kita } from "../../../../../types";
 
 type KitaListItemProps = {
   kita: Kita;
@@ -178,29 +180,61 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
   );
 };
 
-export const KitaListItemSkeleton: React.FC<{ index?: number }> = ({
-  index = 0,
-}) => {
+export const KitaListItemSkeleton: React.FC<{
+  index?: number;
+  className?: string;
+  animate?: boolean;
+}> = ({ className, animate = true, index = 0 }) => {
   return (
     <div
       key={"kitaskeleton" + index}
-      className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6"
+      className={clsx(
+        "flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6",
+        className
+      )}
     >
       <div className="flex flex-col">
-        <div className="min-w-full animate-pulse rounded-lg bg-gray-100 md:w-24 lg:h-24" />
+        <div
+          className={clsx(
+            animate && "animate-pulse",
+            "min-w-full rounded-lg bg-gray-100 md:w-24 lg:h-24"
+          )}
+        />
       </div>
       <div className="flex flex-col gap-2">
-        <div className="h-6 w-64 animate-pulse bg-gray-100 text-xl font-extrabold underline-offset-4" />
+        <div
+          className={clsx(
+            animate && "animate-pulse",
+            "h-6 w-64 bg-gray-100 text-xl font-extrabold underline-offset-4"
+          )}
+        />
         <div className="mb-4 flex flex-row items-center gap-3">
-          <div className="text-bl h-6 w-64 animate-pulse bg-gray-100 text-sm font-bold text-deep-blue" />
+          <div
+            className={clsx(
+              animate && "animate-pulse",
+              "text-bl h-6 w-64 bg-gray-100 text-sm font-bold text-deep-blue"
+            )}
+          />
         </div>
         <div className="flex flex-row items-center text-sm">
-          <div className="h-6 w-32 animate-pulse bg-gray-100 font-bold" />
-          <div className="ml-1 h-6 w-32 animate-pulse bg-gray-100" />
+          <div
+            className={clsx(
+              animate && "animate-pulse",
+              "h-6 w-32 bg-gray-100 font-bold"
+            )}
+          />
+          <div
+            className={clsx(
+              animate && "animate-pulse",
+              "ml-1 h-6 w-32 bg-gray-100"
+            )}
+          />
         </div>
       </div>
       <div className="flex flex-col md:ml-auto">
-        <div className="h-6 w-32 animate-pulse bg-gray-100" />
+        <div
+          className={clsx(animate && "animate-pulse", "h-6 w-32 bg-gray-100")}
+        />
       </div>
     </div>
   );

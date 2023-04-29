@@ -1,10 +1,10 @@
 import React from "react";
-import { Kita } from "../../../../types";
-import ServiceBanner from "../ServiceBanner";
+import { Kita } from "../../../../../types";
+import ServiceBanner from "../../../../../components/ServiceBanner";
 import KitaListItem, { KitaListItemSkeleton } from "./KitaListItem";
 
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../../../tailwind.config";
+import tailwindConfig from "../../../../../../tailwind.config";
 import clsx from "clsx";
 import { useKitaListScrollContext } from "./KitaListScrollContext";
 

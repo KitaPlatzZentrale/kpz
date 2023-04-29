@@ -1,14 +1,19 @@
 import React from "react";
-import Map, { MapProvider, NavigationControl, useMap } from "react-map-gl";
+import { useKitaListScrollContext } from "../../desktop/components/KitaList/KitaListScrollContext";
 
-import "mapbox-gl/dist/mapbox-gl.css";
-import { DEFAULT_BERLIN_CENTER, LatLng } from "../SearchContext";
+import Map, { MapProvider, NavigationControl, useMap } from "react-map-gl";
 import mapboxgl, { LngLat } from "mapbox-gl";
-import { useKitaListScrollContext } from "../KitaList/KitaListScrollContext";
-import { Kita } from "../../../../types";
+
 import HomeMarker from "./Markers/HomeMarker/HomeMarker";
 import KitaMarker from "./Markers/KitaMarker/KitaMarker";
-import KitaPopup from "./KitaPopup/KitaPopup";
+import KitaPopup from "../../desktop/components/Map/KitaPopup/KitaPopup";
+
+import { DEFAULT_BERLIN_CENTER } from "../defaults";
+
+import type { Kita } from "../../../../types";
+import type { LatLng } from "../types";
+
+import "mapbox-gl/dist/mapbox-gl.css";
 
 type KitaMapProps = {
   kitas: Kita[];
@@ -16,11 +21,13 @@ type KitaMapProps = {
     lat?: number;
     lng?: number;
   };
+  showNavigation?: boolean;
 };
 
 const KitaMap: React.FC<KitaMapProps> = ({
   kitas = [],
   centerCoordinates = DEFAULT_BERLIN_CENTER,
+  showNavigation = true,
 }) => {
   const [featuredKitaInPopup, setFeaturedKitaInPopup] =
     React.useState<Kita | null>(null);
@@ -54,6 +61,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
   return (
     <MapProvider>
       <Map
+        id="finderMap" // used to find the map with useMap(), if you remove this the programmatic control won't work
         reuseMaps
         mapboxAccessToken="pk.eyJ1IjoiaGFubm9ncmltbSIsImEiOiJjbGdtamwyZHowNmxnM2VxbTd6eHZhMjExIn0.0wHQJStc2kgDh29Ewv_g-w"
         style={{ width: "100%", height: "100%" }}
@@ -64,15 +72,18 @@ const KitaMap: React.FC<KitaMapProps> = ({
           zoom: 12,
         }}
         interactive
+        maxPitch={0}
+        dragRotate={false}
         minZoom={12}
         maxZoom={16}
       >
-        <NavigationControl showZoom position="top-right" />
+        {showNavigation && <NavigationControl showZoom position="top-right" />}
         {centerCoordinates &&
           typeof centerCoordinates.lat === "number" &&
           typeof centerCoordinates.lng === "number" && (
             <HomeMarker coordinates={centerCoordinates} />
           )}
+        {kitaMarkers}
         {featuredKitaInPopup && (
           <KitaPopup
             kita={featuredKitaInPopup}
@@ -115,7 +126,6 @@ const ProgrammaticMapControl: React.FC<ProgrammaticMapControlProps> = ({
   };
 
   React.useEffect(() => {
-    console.log(finderMap);
     if (!finderMap) return;
     if (coordinates.lat === null || coordinates.lng === null) return;
 

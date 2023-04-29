@@ -1,15 +1,7 @@
 import React from "react";
-import { useKitaListContext } from "./KitaList/KitaListContext";
-
-export type LatLng = {
-  lat: number;
-  lng: number;
-};
-
-export const DEFAULT_BERLIN_CENTER: LatLng = {
-  lat: 52.520008,
-  lng: 13.404954,
-};
+import { DEFAULT_BERLIN_CENTER } from "./defaults";
+import { useKitaListContext } from "./KitaDataContext";
+import { LatLng } from "./types";
 
 type SearchContext = {
   address: string | null;
@@ -49,11 +41,11 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   );
 
   const submit = async (coordinatesProp?: LatLng) => {
+    setHasBeenSubmitted(true);
     const submittingCoordinates = coordinatesProp || coordinates;
     if (!submittingCoordinates) return;
 
     await handleSubmit(submittingCoordinates);
-    setHasBeenSubmitted(true);
   };
 
   const handleSubmit = async (coordinatesProp: LatLng) =>
@@ -64,7 +56,9 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   >("August 2023");
 
   const coordinatesAreValid = React.useMemo(() => {
-    return coordinates?.lat !== null && coordinates?.lng !== null;
+    return (
+      coordinates && coordinates?.lat !== null && coordinates?.lng !== null
+    );
   }, [coordinates]);
 
   return (

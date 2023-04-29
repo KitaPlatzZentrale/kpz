@@ -1,13 +1,13 @@
 import React from "react";
-import SearchContextProvider from "./components/SearchContext";
 import ServiceSignupModal from "../../components/ServiceSignupModal/ServiceSignupModal";
 import ServiceSignupModalContextProvider from "../../components/ServiceSignupModal/ServiceSignupModalContext";
 import Layout from "../layout";
-import KitaListView from "./components/KitaList/KitaListView";
-import KitaListContextProvider from "./components/KitaList/KitaListContext";
-import Search from "./components/Search";
-import KitaListScrollContextProvider from "./components/KitaList/KitaListScrollContext";
-import KitaMapView from "./components/Map/KitaMapView";
+import KitaListContextProvider from "./common/KitaDataContext";
+import KitaListScrollContextProvider from "./desktop/components/KitaList/KitaListScrollContext";
+import SearchContextProvider from "./common/KitaSearchContext";
+import KitaFinderDesktopView from "./desktop/KitaFinderDesktopView";
+import { screenIsBiggerOrEqualToXl } from "./common/utils";
+import KitaFinderMobileView from "./mobile/KitaFinderMobileView";
 
 type FinderPageProps = {};
 
@@ -16,7 +16,6 @@ const FinderPage: React.FC<FinderPageProps> = () => {
   const searchRef = React.useRef<HTMLDivElement>(null);
 
   // contentHeight should be the height of the viewport minus the height of the header minus the height of the searchbar
-
   const [contentHeight, setContentHeight] = React.useState<number>(0);
 
   React.useEffect(() => {
@@ -26,6 +25,10 @@ const FinderPage: React.FC<FinderPageProps> = () => {
     setContentHeight(window.innerHeight - headerHeight);
   }, [window.innerHeight, headerRef, searchRef]);
 
+  const isMobile = React.useMemo(() => {
+    return !screenIsBiggerOrEqualToXl();
+  }, [window.innerWidth]);
+
   return (
     <Layout headerRef={headerRef} lockAtScreenHeight>
       <KitaListScrollContextProvider>
@@ -33,18 +36,11 @@ const FinderPage: React.FC<FinderPageProps> = () => {
           <SearchContextProvider>
             <ServiceSignupModalContextProvider>
               <ServiceSignupModal />
-              <div className="flex h-full w-full flex-col lg:pb-10">
-                {/*<Search rootRef={searchRef} id="kita-searchbar" />*/}
-
-                <div
-                  id="content"
-                  style={{ height: contentHeight }}
-                  className="xl:page-padding flex w-full flex-col-reverse lg:gap-4 xl:flex-row xl:pr-0"
-                >
-                  <KitaListView />
-                  <KitaMapView />
-                </div>
-              </div>
+              {!isMobile ? (
+                <KitaFinderDesktopView height={contentHeight} />
+              ) : (
+                <KitaFinderMobileView height={contentHeight} />
+              )}
             </ServiceSignupModalContextProvider>
           </SearchContextProvider>
         </KitaListContextProvider>

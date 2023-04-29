@@ -1,5 +1,5 @@
 import React from "react";
-import { Kita, PaginatedResultsResponse } from "../../../../types";
+import type { Kita, PaginatedResultsResponse } from "../../../types";
 
 type LoaderParams = {
   lat: number;
