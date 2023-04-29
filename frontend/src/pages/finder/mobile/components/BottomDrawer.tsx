@@ -45,21 +45,20 @@ type BottomDrawerProps = React.PropsWithChildren<{
   onFullscreen?: () => void;
 }>;
 
+/**
+ * Drawer attached to bottom of the window that can be dragged up and down
+ * Enters multiple stages depending on the drag direction and the current position
+ * Stages: Closed (Rest Mode), Open (Halfway), Fullscreen (Top)
+ * In fullscreen mode, the drawer is scrollable
+ * Drawer can be closed by dragging it down, or by clicking on the handle
+ * Drawer will close in "Open" mode to "Closed" if dragged at least halfway down
+ */
 const BottomDrawer: React.FC<BottomDrawerProps> = ({
   windowHeight = window?.innerHeight,
   anchors = DEFAULT_DRAWER_ANCHORS(windowHeight),
   startAnchor = "open",
   children,
 }) => {
-  // build a drawer with framer-motion that works like the Airbnb mobile drawer
-  // in default position, the drawer is closed and only the top part is visible (56px as defined above)
-  // when the user drags the drawer up, the drawer opens is as big as defined by the middle anchor (usually half of the screen height)
-  // when the user drags the drawer down, the drawer closes and only the top part is visible again
-  // the drawer should be at the bottom of the screen and be full-width with white background
-  // if the user drags up beyond the middle anchor, the drawer should jump to the top anchor
-  // if a user drags down beyond the top anchor, the drawer should jump back to the middle anchor
-  // if a user drags up beyond the top anchor, scroll up
-
   const getAnchorPosition = (anchorKey: keyof typeof anchors) => {
     return anchors[anchorKey].y - (anchors[anchorKey].offset ?? 0);
   };
