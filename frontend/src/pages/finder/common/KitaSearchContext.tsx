@@ -25,9 +25,7 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
 }) => {
   const { fetchKitas } = useKitaListContext();
   const [address, setAddress] = React.useState<string | null>(null);
-  const [coordinates, _setCoordinates] = React.useState<LatLng | null>(
-    DEFAULT_BERLIN_CENTER
-  );
+  const [coordinates, _setCoordinates] = React.useState<LatLng | null>(null);
 
   const [hasBeenSubmitted, setHasBeenSubmitted] = React.useState(false);
 
