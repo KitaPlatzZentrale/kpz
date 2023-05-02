@@ -1,8 +1,7 @@
 # KPZ
 
 <h1>Architectural design</h1>
-
-<img width="781" alt="Architectural design" src="https://user-images.githubusercontent.com/32839416/233936119-83c05456-2281-4cda-bb29-d0dc1aa7f6c2.png">
+<img width="824" alt="Architectural design" src="https://user-images.githubusercontent.com/32839416/235698267-934fe236-b171-4840-9bf8-5f60ceeb9b3e.png">
 
 <h1>CI / CD</h1>
 
