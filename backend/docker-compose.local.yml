@@ -1,7 +1,16 @@
 version: "3"
 
 services:
-  kpz-local-backend:
+  kpz-local:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: 'nodemon dist/index.js'
+    container_name: kpz-local-backend-container
     env_file:
       - .env
-    command: sh -c 'npm run build && node dist/index.js'
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./dist:/usr/src/app/dist
+      - ./logs/local:/usr/src/app/logs

@@ -11,7 +11,7 @@ jobs:
   deploy-dev-frontend:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone or Pull KPZ Repo
+      - name: Clone or Pull KPZ Repo Dev Branch
         uses: appleboy/ssh-action@master
         with:
           host: 3.70.176.52
