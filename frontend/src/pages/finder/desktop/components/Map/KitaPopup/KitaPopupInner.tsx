@@ -52,7 +52,7 @@ export const KitaPopupInner: React.FC<KitaPopupInnerProps> = ({
   return (
     <div
       key={"kita" + kita.uuid}
-      className="relative -m-2.5 flex w-full min-w-[300px] cursor-pointer flex-col gap-3 rounded-2xl bg-white p-0 pb-3"
+      className="relative -m-2.5 flex w-full min-w-[300px] cursor-pointer flex-col gap-3 rounded-2xl bg-white p-0 py-3"
     >
       <div className="absolute bottom-2 right-3 z-10 opacity-100">
         <IconButton
@@ -71,22 +71,6 @@ export const KitaPopupInner: React.FC<KitaPopupInnerProps> = ({
         <ModalClose variant="solid" size="sm" />
       </div>
       <EmailSubmitModal open={openModal} onClose={() => setOpenModal(false)} />
-      <div className="flex flex-col">
-        <img
-          src={kita.imageUrl}
-          style={{
-            objectFit: "cover",
-          }}
-          alt="Kita Logo"
-          className="min-w-full brightness-90 transition-all ease-in-out hover:brightness-100 md:w-24"
-          onClick={() =>
-            window.open(
-              `https://kita-navigator.berlin.de/einrichtungen/${kita.uuid}`,
-              "_blank"
-            )
-          }
-        />
-      </div>
       <div
         className="flex flex-col gap-1 px-3"
         onClick={() =>

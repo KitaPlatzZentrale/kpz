@@ -34,7 +34,12 @@ const KitaList: React.FC<KitaListProps> = ({ kitas, className }) => {
   }, [kitas]);
 
   return (
-    <div className={clsx("gap flex flex-col gap-2", className)}>
+    <div
+      className={clsx(
+        "gap flex flex-col gap-2 px-4 sm:px-6 md:px-8 lg:px-0",
+        className
+      )}
+    >
       {kitas !== null ? (
         kitas.length > 0 ? (
           kitas.map((kita, index) => {
