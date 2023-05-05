@@ -53,19 +53,9 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
     <div
       key={"kita" + kita.uuid}
       id={id}
-      className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6"
+      className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 pl-8 shadow-lg sm:p-9 sm:pl-12 lg:flex-row lg:p-6 lg:pl-9 lg:shadow-none"
     >
       <EmailSubmitModal open={openModal} onClose={() => setOpenModal(false)} />
-      <div className="flex flex-col">
-        <img
-          src={kita.imageUrl}
-          style={{
-            objectFit: "cover",
-          }}
-          alt="Kita Logo"
-          className="min-w-full rounded-lg md:w-24 lg:h-24"
-        />
-      </div>
       <div className="flex flex-col gap-2">
         <Link
           href={`https://kita-navigator.berlin.de/einrichtungen/${kita.uuid}`}
@@ -189,18 +179,10 @@ export const KitaListItemSkeleton: React.FC<{
     <div
       key={"kitaskeleton" + index}
       className={clsx(
-        "flex w-full flex-col gap-6 rounded-2xl bg-white p-6 sm:p-9 lg:flex-row lg:p-6",
+        "flex w-full flex-col gap-6 rounded-2xl bg-white p-6 pl-9 sm:p-9 sm:pl-12 lg:flex-row lg:p-6 lg:pl-9",
         className
       )}
     >
-      <div className="flex flex-col">
-        <div
-          className={clsx(
-            animate && "animate-pulse",
-            "min-w-full rounded-lg bg-gray-100 md:w-24 lg:h-24"
-          )}
-        />
-      </div>
       <div className="flex flex-col gap-2">
         <div
           className={clsx(
