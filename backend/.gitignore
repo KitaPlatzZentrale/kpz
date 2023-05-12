@@ -13,3 +13,4 @@ dist/**
 /logs
 /cdk.out
 combined.log
+error.log
