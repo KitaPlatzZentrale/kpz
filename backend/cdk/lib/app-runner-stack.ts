@@ -8,13 +8,22 @@ export class AppRunnerStack extends cdk.Stack {
 
     const appRunnerService = new apprunner.CfnService(
       this,
-      "PROD_KPZ_App_Runner_Service",
+      "PROD_KPZ_App_Runner_Service_Stack",
       {
         serviceName: "prod_kpz-app-runner-service",
         sourceConfiguration: {
+          authenticationConfiguration: {
+            accessRoleArn:
+              "arn:aws:iam::897331788878:role/service-role/AppRunnerECRAccessRole",
+          },
           imageRepository: {
-            imageIdentifier: "public.ecr.aws/b2z0n9v4/apprunner:latest",
-            imageRepositoryType: "ECR_PUBLIC",
+            imageIdentifier:
+              "897331788878.dkr.ecr.eu-central-1.amazonaws.com/kpz_prod_apprunner:latest",
+            imageRepositoryType: "ECR",
+            imageConfiguration: {
+              port: "8080",
+              runtimeEnvironmentVariables: [],
+            },
           },
         },
       }
