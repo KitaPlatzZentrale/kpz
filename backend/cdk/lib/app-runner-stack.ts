@@ -1,6 +1,9 @@
 import * as cdk from "aws-cdk-lib";
 import * as apprunner from "aws-cdk-lib/aws-apprunner";
 import { Construct } from "constructs";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export class AppRunnerStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -8,23 +11,40 @@ export class AppRunnerStack extends cdk.Stack {
 
     const appRunnerService = new apprunner.CfnService(
       this,
-      "PROD_KPZ_App_Runner_Service_Stack",
+      process.env.APP_RUNNER_SERVICE_NAME!,
       {
-        serviceName: "prod_kpz-app-runner-service",
+        serviceName: process.env.APP_RUNNER_SERVICE_NAME!,
         sourceConfiguration: {
           authenticationConfiguration: {
             accessRoleArn:
               "arn:aws:iam::897331788878:role/service-role/AppRunnerECRAccessRole",
           },
           imageRepository: {
-            imageIdentifier:
-              "897331788878.dkr.ecr.eu-central-1.amazonaws.com/kpz_prod_apprunner:latest",
+            imageIdentifier: process.env.IMAGE_IDENTIFIER!,
             imageRepositoryType: "ECR",
             imageConfiguration: {
-              port: "8080",
-              runtimeEnvironmentVariables: [],
+              port: process.env.PORT!,
+              runtimeEnvironmentVariables: [
+                {
+                  name: "MONGO_DB_CONNECTION",
+                  value: process.env.MONGO_DB_CONNECTION!,
+                },
+                {
+                  name: "S3_BUCKET",
+                  value: process.env.S3_BUCKET!,
+                },
+                {
+                  name: "AIRTABLE_API_KEY",
+                  value: process.env.AIRTABLE_API_KEY!,
+                },
+                { name: "AIRTABLE_BASE", value: process.env.AIRTABLE_BASE! },
+              ],
             },
           },
+        },
+        instanceConfiguration: {
+          cpu: process.env.CPU!,
+          memory: process.env.MEMORY!,
         },
       }
     );
