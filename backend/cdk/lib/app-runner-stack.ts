@@ -19,6 +19,7 @@ export class AppRunnerStack extends cdk.Stack {
             accessRoleArn:
               "arn:aws:iam::897331788878:role/service-role/AppRunnerECRAccessRole",
           },
+          autoDeploymentsEnabled: true,
           imageRepository: {
             imageIdentifier: process.env.IMAGE_IDENTIFIER!,
             imageRepositoryType: "ECR",
