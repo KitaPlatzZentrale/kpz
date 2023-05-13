@@ -3,6 +3,9 @@ import routes = require("./routes");
 import cors from "cors";
 import logger from "./logger";
 import { connectToDatabase } from "./database";
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
@@ -13,6 +16,6 @@ app.use("", routes);
 
 connectToDatabase();
 
-app.listen(3000, () => {
-  logger.info("Server started on port 3000");
+app.listen(process.env.PORT, () => {
+  logger.info(`Server started on port ${process.env.PORT}`);
 });
