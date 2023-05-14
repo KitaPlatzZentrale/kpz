@@ -9,6 +9,7 @@ import useGeolocation from "react-hook-geolocation";
 import { DEFAULT_BERLIN_CENTER } from "../pages/finder/common/defaults";
 
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
+const MINIMUM_ADDRESS_LENGTH_BEFORE_FETCHING_COORDINATES = 1;
 
 type AddressLookupProps = {
   label?: string;
@@ -171,7 +172,9 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
     setTimer(
       setTimeout(async () => {
-        if (value?.length > 3) {
+        if (
+          value?.length >= MINIMUM_ADDRESS_LENGTH_BEFORE_FETCHING_COORDINATES
+        ) {
           setIsLoading(true);
           await fetchSuggestions(value);
           setIsLoading(false);
