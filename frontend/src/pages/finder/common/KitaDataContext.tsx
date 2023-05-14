@@ -60,9 +60,12 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
     setIsFetching(true);
     setKitas(null);
 
-    const foundKitas = await loader({ ...latlng });
-    setKitas(foundKitas);
-    setIsFetching(false);
+    //TODO: Review impact, experimental instant-delay to allow animations to fade out before fetching
+    setTimeout(async () => {
+      const foundKitas = await loader({ ...latlng });
+      setKitas(foundKitas);
+      setIsFetching(false);
+    }, 0);
   };
 
   return (
