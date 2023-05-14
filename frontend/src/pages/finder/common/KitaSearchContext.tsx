@@ -53,7 +53,7 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
 
   const [desiredStartingMonth, setDesiredStartingMonth] = React.useState<
     string | null
-  >("August 2023");
+  >(null);
 
   const coordinatesAreValid = React.useMemo(() => {
     return (
