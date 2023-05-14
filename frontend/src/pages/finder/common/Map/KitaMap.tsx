@@ -63,6 +63,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
       <Map
         id="finderMap" // used to find the map with useMap(), if you remove this the programmatic control won't work
         reuseMaps
+        // TODO: move this to an env once we separate dev and prod map keys
         mapboxAccessToken="pk.eyJ1IjoiaGFubm9ncmltbSIsImEiOiJjbGdtamwyZHowNmxnM2VxbTd6eHZhMjExIn0.0wHQJStc2kgDh29Ewv_g-w"
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
