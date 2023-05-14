@@ -76,6 +76,18 @@ const ImprintPage: React.FC<ImprintPageProps> = ({}) => {
             </p>
           </section>
           <section>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Quelle der überliegenden Punkten:{" "}
+              <a
+                className="text-happy-blue"
+                href="https://www.e-recht24.de/impressum-generator.html"
+                target="_blank"
+              >
+                https://www.e-recht24.de/impressum-generator.html
+              </a>
+            </p>
+          </section>
+          <section>
             <h2 className="mb-5 text-2xl font-bold">Haftung für Inhalte</h2>
             <p className="text-base font-normal leading-normal text-gray-700">
               Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene
@@ -132,18 +144,6 @@ const ImprintPage: React.FC<ImprintPageProps> = ({}) => {
               bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von
               Rechtsverletzungen werden wir derartige Inhalte umgehend
               entfernen.
-            </p>
-          </section>
-          <section>
-            <p className="text-base font-normal leading-normal text-gray-700">
-              Quelle:{" "}
-              <a
-                className="text-happy-blue"
-                href="https://www.e-recht24.de/impressum-generator.html"
-                target="_blank"
-              >
-                https://www.e-recht24.de/impressum-generator.html
-              </a>
             </p>
           </section>
         </div>
