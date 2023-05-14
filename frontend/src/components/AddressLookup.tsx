@@ -6,6 +6,7 @@ import { AutocompleteProps, CircularProgress, Link } from "@mui/joy";
 import FormAutocomplete from "./FormAutocomplete";
 import clsx from "clsx";
 import useGeolocation from "react-hook-geolocation";
+import { DEFAULT_BERLIN_CENTER } from "../pages/finder/common/defaults";
 
 const IDLE_TYPING_TIME_BEFORE_FETCHING_SUGGESTIONS = 200;
 
@@ -74,9 +75,13 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     setHasFetchingError(false);
     try {
       const response = await fetch(
-        `https://autocomplete.search.hereapi.com/v1/autocomplete?q=${query}&lang=de&limit=5&apikey=${
-          import.meta.env.VITE_PUBLIC_HERE_API_KEY
-        }`,
+        `https://autocomplete.search.hereapi.com/v1/autocomplete?q=${query}` +
+          // 50km surrounding of Berlin
+          `&in=circle%3A${DEFAULT_BERLIN_CENTER.lat}%2C${DEFAULT_BERLIN_CENTER.lng}%3Br%3D50000` +
+          "&lang=de" +
+          "&resultType=street" +
+          "&limit=5" +
+          `&apikey=${import.meta.env.VITE_PUBLIC_HERE_API_KEY}`,
         {
           method: "GET",
         }
