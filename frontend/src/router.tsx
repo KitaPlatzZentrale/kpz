@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import FinderPage from "./pages/finder";
+import ImprintPage from "./pages/imprint";
 
 const router = createBrowserRouter([
   {
@@ -9,6 +10,10 @@ const router = createBrowserRouter([
   {
     path: "/finder",
     element: <FinderPage />,
+  },
+  {
+    path: "/impressum",
+    element: <ImprintPage />,
   },
 ]);
 
