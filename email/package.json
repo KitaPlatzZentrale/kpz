@@ -7,13 +7,23 @@
   ],
   "scripts": {
     "dev": "email dev",
-    "export": "email export"
+    "export": "email export",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild functions/sendSingleKitaNotificationsEmail.tsx --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
+    "postbuild": "cd dist && zip -r index.zip index.js*"
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.332.0",
     "@fontsource/nunito": "^4.5.12",
     "@react-email/components": "0.0.6",
+    "@react-email/render": "^0.0.7",
+    "aws-lambda": "^1.0.7",
     "dotenv": "^16.0.3",
     "react-email": "1.9.3",
     "tailwindcss": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.115",
+    "@types/react": "^18.2.6"
   }
 }
