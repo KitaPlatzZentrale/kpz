@@ -27,6 +27,14 @@ app.use(
 app.use(helmet.noSniff());
 app.use(helmet.frameguard());
 
+// Reduce fingerprint: Obfuscate the "X-Powered-By: Express" HTTP header to reduce the risk of attacks against known vulnerabilities in Express
+// We are now publicly powered by PHP :cool:
+const PoweredByObfuscation = (req: any, res: any, next: any) => {
+  res.setHeader("X-Powered-By", "PHP 7.4.3");
+  next();
+};
+app.use(PoweredByObfuscation);
+
 // Protect against HTTP Parameter Pollution attacks, e.g. /api?sort=asc&sort=desc
 // We may want to turn off hpp for routes that require/utilize multiple values for a parameter
 app.use(hpp());
