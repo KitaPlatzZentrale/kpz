@@ -14,8 +14,8 @@ const FOOTER_NAVIGATION_LINKS: FooterNavigation = [
           to: "/finder",
         },
         {
-          title: "PlatzFinder",
-          to: "/service",
+          title: "Über uns",
+          to: "/ueber-uns",
         },
       ],
     },
