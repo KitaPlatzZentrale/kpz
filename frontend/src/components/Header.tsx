@@ -21,7 +21,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, active = false, children }) => {
         "h-full cursor-pointer after:relative after:float-left after:mt-[8px] after:h-1 after:w-full after:rounded-full after:transition-opacity active:after:transition-opacity",
         active
           ? `after:bg-primary-dark after:opacity-100`
-          : `after:bg-[${inactiveColor}] after:opacity-0 hover:after:opacity-30 active:after:opacity-100`
+          : `after:bg-[#966657] after:opacity-0 hover:after:opacity-30 active:after:opacity-100`
       )}
     >
       <Link
@@ -29,7 +29,7 @@ const NavLink: React.FC<NavLinkProps> = ({ to, active = false, children }) => {
           "h-full",
           active
             ? `font-extrabold text-primary-dark`
-            : `text-[${inactiveColor}] font-bold`
+            : `font-bold text-[#966657]`
         )}
         to={to}
       >
