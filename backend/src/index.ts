@@ -30,7 +30,7 @@ app.use(helmet.frameguard());
 // Reduce fingerprint: Obfuscate the "X-Powered-By: Express" HTTP header to reduce the risk of attacks against known vulnerabilities in Express
 // We are now publicly powered by PHP :cool:
 const PoweredByObfuscation = (req: any, res: any, next: any) => {
-  res.setHeader("X-Powered-By", "PHP 7.4.3");
+  res.setHeader("X-Powered-By", "PHP/7.4.21");
   next();
 };
 app.use(PoweredByObfuscation);
