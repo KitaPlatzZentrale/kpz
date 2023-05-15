@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import Footer from "../components/Footer/Footer";
 import Header from "../components/Header";
 
 type LayoutProps = React.PropsWithChildren<{
@@ -21,6 +22,7 @@ const Layout: React.FC<LayoutProps> = ({
     >
       <Header headerRef={headerRef} />
       {children}
+      <Footer />
     </div>
   );
 };

@@ -11,7 +11,7 @@ const KitaFinderDesktopView: React.FC<KitaFinderDesktopViewProps> = ({
   height,
 }) => {
   return (
-    <div className="flex h-full w-full flex-col lg:pb-10">
+    <div className="flex h-full w-full flex-col">
       <Search />
       <div
         id="content"
