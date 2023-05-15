@@ -1,10 +1,50 @@
 import express = require("express");
 import routes = require("./routes");
-import cors from "cors";
 import logger from "./logger";
 import { connectToDatabase } from "./database";
+import cors from "cors";
+
+import hpp from "hpp";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 
 const app = express();
+
+// Base Helmet utilization
+app.use(helmet()); // Helmpflicht.
+app.use(helmet.hsts({ maxAge: 31536000 })); // Helmpflicht.
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      frameAncestors: ["'none'"],
+      imgSrc: ["self"],
+    },
+  })
+);
+app.use(helmet.noSniff());
+app.use(helmet.frameguard());
+
+// Protect against HTTP Parameter Pollution attacks, e.g. /api?sort=asc&sort=desc
+// We may want to turn off hpp for routes that require/utilize multiple values for a parameter
+app.use(hpp());
+
+// Request Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 500 requests per windowMs
+  message: "Too many requests from this IP, please try again later.",
+  statusCode: 429, // Too Many Requests (RFC 6585)
+  standardHeaders: true, // Return rate limit info in the "Rate-Limit-*" header
+  legacyHeaders: false, // Disable the "X-RateLimit-*" headers
+});
+app.use(limiter);
+
+// Request Payload Limiting
+app.use(express.json({ limit: "100kb" }));
+app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 
 app.use(cors());
 app.use(express.json());
