@@ -1,10 +1,12 @@
 import { Button, Divider } from "@mui/joy";
 import React from "react";
+import { useServiceSignupModal } from "../ServiceSignupModal/ServiceSignupModalContext";
 import HeaderNavigationLinkList from "./HeaderNavigationLinkList";
 
 type HeaderDesktopNavigationProps = {};
 
 const HeaderDesktopNavigation: React.FC<HeaderDesktopNavigationProps> = () => {
+  const { setModalIsOpen: setServiceSignupModalOpen } = useServiceSignupModal();
   return (
     <>
       <HeaderNavigationLinkList />
@@ -22,8 +24,9 @@ const HeaderDesktopNavigation: React.FC<HeaderDesktopNavigationProps> = () => {
         color="primary"
         size="lg"
         className="shadow-md"
+        onClick={() => setServiceSignupModalOpen(true)}
       >
-        Platz finden
+        Platz finden lassen
       </Button>
     </>
   );

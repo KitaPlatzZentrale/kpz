@@ -34,14 +34,11 @@ const FinderPage: React.FC<FinderPageProps> = () => {
       <KitaListScrollContextProvider>
         <KitaListContextProvider>
           <SearchContextProvider>
-            <ServiceSignupModalContextProvider>
-              <ServiceSignupModal />
-              {!isMobile ? (
-                <KitaFinderDesktopView height={contentHeight} />
-              ) : (
-                <KitaFinderMobileView height={contentHeight} />
-              )}
-            </ServiceSignupModalContextProvider>
+            {!isMobile ? (
+              <KitaFinderDesktopView height={contentHeight} />
+            ) : (
+              <KitaFinderMobileView height={contentHeight} />
+            )}
           </SearchContextProvider>
         </KitaListContextProvider>
       </KitaListScrollContextProvider>
