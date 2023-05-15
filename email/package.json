@@ -9,8 +9,8 @@
     "dev": "email dev",
     "export": "email export",
     "prebuild": "rm -rf dist",
-    "build": "esbuild functions/sendSingleKitaNotificationsEmail.tsx --bundle --minify --sourcemap --platform=node --target=es2020 --outfile=dist/index.js",
-    "postbuild": "cd dist && zip -r index.zip index.js*"
+    "build": "esbuild src/functions/* --bundle --minify --sourcemap --platform=node --target=es2020 --outdir=dist",
+    "postbuild": "cd dist && ../zipByName.sh"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.332.0",
