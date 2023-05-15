@@ -10,4 +10,7 @@ node_modules/
 
 dist/**
 
-*.log
+/logs
+/cdk.out
+combined.log
+error.log
