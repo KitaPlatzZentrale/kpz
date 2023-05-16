@@ -2,12 +2,12 @@ import { Button, Divider } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
 import { Link } from "react-router-dom";
-import theme from "../theme";
-import HeaderDesktopNavigation from "./Header/HeaderDesktopNavigation";
-import HeaderMobileNavigation from "./Header/HeaderMobileNavigation";
-import MenuButton from "./Header/HeaderMobileNavigationButton";
-import HeaderNavigationLink from "./Header/HeaderNavigationLink";
-import HeaderNavigationLinkList from "./Header/HeaderNavigationLinkList";
+import theme from "../../theme";
+import HeaderDesktopNavigation from "./desktop/HeaderDesktopNavigation";
+import HeaderMobileNavigation from "./mobile/HeaderMobileNavigation";
+import MenuButton from "./mobile/HeaderMobileNavigationButton";
+import HeaderNavigationLink from "./HeaderNavigationLink";
+import HeaderNavigationLinkList from "./HeaderNavigationLinkList";
 
 type HeaderProps = {
   headerRef?: React.RefObject<HTMLDivElement>;
@@ -27,12 +27,12 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
           <div className="h-12 w-64 bg-gray-300" />
         </Link>
         <div
-          className="hidden h-full flex-row items-end lg:flex"
+          className="hidden h-full flex-row items-end xl:flex"
           id="nav-links-container"
         >
           <HeaderDesktopNavigation />
         </div>
-        <div className="flex flex-row items-center gap-8 lg:hidden">
+        <div className="flex flex-row items-center gap-8 xl:hidden">
           <MenuButton
             isOpen={mobileOverlayOpen}
             onClick={() => setMobileOverlayOpen(!mobileOverlayOpen)}

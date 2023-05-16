@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import React from "react";
 import Footer from "../components/Footer/Footer";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 import ServiceSignupModal from "../components/ServiceSignupModal/ServiceSignupModal";
 import ServiceSignupModalContextProvider from "../components/ServiceSignupModal/ServiceSignupModalContext";
 

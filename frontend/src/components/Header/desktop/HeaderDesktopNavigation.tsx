@@ -1,7 +1,7 @@
 import { Button, Divider } from "@mui/joy";
 import React from "react";
-import { useServiceSignupModal } from "../ServiceSignupModal/ServiceSignupModalContext";
-import HeaderNavigationLinkList from "./HeaderNavigationLinkList";
+import { useServiceSignupModal } from "../../ServiceSignupModal/ServiceSignupModalContext";
+import HeaderNavigationLinkList from "../HeaderNavigationLinkList";
 
 type HeaderDesktopNavigationProps = {};
 

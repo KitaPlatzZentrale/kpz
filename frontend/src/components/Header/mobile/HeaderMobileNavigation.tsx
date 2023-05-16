@@ -1,12 +1,9 @@
-import { DateRange, Search } from "@mui/icons-material";
-import { Button, Divider, ModalClose } from "@mui/joy";
-import zIndex from "@mui/material/styles/zIndex";
+import React from "react";
+import { Button, Divider } from "@mui/joy";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
-import { Link } from "react-router-dom";
-import MenuButton from "./HeaderMobileNavigationButton";
-import HeaderNavigationLinkList from "./HeaderNavigationLinkList";
+import { useServiceSignupModal } from "../../ServiceSignupModal/ServiceSignupModalContext";
+import HeaderNavigationLinkList from "../HeaderNavigationLinkList";
 
 type HeaderMobileNavigationProps = {
   open?: boolean;
@@ -17,6 +14,8 @@ const HeaderMobileNavigation: React.FC<HeaderMobileNavigationProps> = ({
   open: openProp = false,
   onClose,
 }) => {
+  const { setModalIsOpen: setServiceSignupModalOpen } = useServiceSignupModal();
+
   const [isOpen, setOpen] = React.useState(openProp);
 
   const handleClose = () => {
@@ -55,11 +54,7 @@ const HeaderMobileNavigation: React.FC<HeaderMobileNavigationProps> = ({
           >
             <motion.h2 className="mb-3 text-3xl font-black">Menü</motion.h2>
             <div className="flex w-full flex-col">
-              <HeaderNavigationLinkList
-                onLinkClick={() => {
-                  handleClose();
-                }}
-              />
+              <HeaderNavigationLinkList onLinkClick={() => handleClose()} />
             </div>
             <Divider
               sx={{
@@ -75,6 +70,10 @@ const HeaderMobileNavigation: React.FC<HeaderMobileNavigationProps> = ({
               size="lg"
               className="w-fit shadow-md"
               sx={{ padding: "1.25rem 2rem" }}
+              onClick={() => {
+                handleClose();
+                setServiceSignupModalOpen(true);
+              }}
             >
               Platz finden lassen
             </Button>
