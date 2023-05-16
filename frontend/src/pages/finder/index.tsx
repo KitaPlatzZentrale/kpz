@@ -30,18 +30,15 @@ const FinderPage: React.FC<FinderPageProps> = () => {
   }, [window.innerWidth]);
 
   return (
-    <Layout headerRef={headerRef} lockAtScreenHeight>
+    <Layout headerRef={headerRef}>
       <KitaListScrollContextProvider>
         <KitaListContextProvider>
           <SearchContextProvider>
-            <ServiceSignupModalContextProvider>
-              <ServiceSignupModal />
-              {!isMobile ? (
-                <KitaFinderDesktopView height={contentHeight} />
-              ) : (
-                <KitaFinderMobileView height={contentHeight} />
-              )}
-            </ServiceSignupModalContextProvider>
+            {!isMobile ? (
+              <KitaFinderDesktopView height={contentHeight} />
+            ) : (
+              <KitaFinderMobileView height={contentHeight} />
+            )}
           </SearchContextProvider>
         </KitaListContextProvider>
       </KitaListScrollContextProvider>
