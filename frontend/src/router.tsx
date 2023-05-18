@@ -1,11 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
+import FourOhFourPage from "./pages/404";
 import FinderPage from "./pages/finder";
 import PrivacyPage from "./pages/privacy";
+import ImprintPage from "./pages/imprint";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <FinderPage />,
+    errorElement: <FourOhFourPage />,
   },
   {
     path: "/finder/",
@@ -14,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: "/datenschutzerklaerung",
     element: <PrivacyPage />,
+  },
+  {
+    path: "/impressum",
+    element: <ImprintPage />,
   },
 ]);
 
