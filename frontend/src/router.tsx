@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import FourOhFourPage from "./pages/404";
 import FinderPage from "./pages/finder";
+import PrivacyPage from "./pages/privacy";
 import ImprintPage from "./pages/imprint";
 
 const router = createBrowserRouter([
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path: "/finder/",
     element: <FinderPage />,
+  },
+  {
+    path: "/datenschutzerklaerung",
+    element: <PrivacyPage />,
   },
   {
     path: "/impressum",

@@ -24,6 +24,15 @@ const Layout: React.FC<LayoutProps> = ({
           lockAtScreenHeight ? "max-h-screen overflow-hidden" : "h-full"
         )}
       >
+        {lockAtScreenHeight && (
+        <style>
+          {`
+            html, body {
+              overflow-y: hidden;
+            }
+              `}
+        </style>
+        )}
         <Header headerRef={headerRef} />
         {children}
         <Footer />
