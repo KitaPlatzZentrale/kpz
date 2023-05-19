@@ -8,16 +8,29 @@ import type { Handler } from "aws-lambda";
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
 
 interface EmailProps {
-  to: string;
-  props: {
-    kitaName: string;
-    consentId: string;
+  detail: {
+    fullDocument: {
+      uuid: string;
+      email: string;
+      consentId: string;
+      trackedKitas: [
+        {
+          id: string;
+          kitaName: string;
+          kitaAvailability: string | null;
+        }
+      ];
+      createdAt: string;
+      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+      revokedAt?: string | null;
+    };
   };
 }
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
-  const { to, props } = event;
-  const { kitaName, consentId } = props;
+  const { email, trackedKitas, consentId } = event.detail.fullDocument;
+  const { kitaName } = trackedKitas[0];
+  const to = email;
 
   if (!to) throw new Error("No recipient with `to` specified");
   if (!kitaName)
