@@ -1,25 +1,84 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface IData extends Document {
+interface IUser extends Document {
+  id: string;
   email: string;
   consentId: string;
-  id: string;
-  kitaName: string;
-  kitaDesiredAvailability: string;
-  createdAt: Date;
-  consentedAt: Date;
+  trackedKitas: {
+    id: string;
+    kitaName: string;
+    kitaAvailability: string;
+  }[];
+  createdAt: string;
+  consentedAt: string;
 }
 
-const DataSchema: Schema = new Schema({
+const UserSchema: Schema = new Schema({
+  id: { type: String, required: true },
   email: { type: String, required: true },
   consentId: { type: String, required: true },
-  id: { type: String, required: true },
-  kitaName: { type: String, required: true },
-  kitaDesiredAvailability: { type: String, required: true },
-  createdAt: { type: Date, required: true },
-  consentedAt: { type: Date, required: true },
+  trackedKitas: [
+    {
+      id: { type: String, required: true },
+      kitaName: { type: String, required: true },
+      kitaAvailability: { type: String, required: true },
+    },
+  ],
+  createdAt: { type: String, required: true },
+  consentedAt: { type: String, required: true },
 });
 
-const DataModel = mongoose.model<IData>("Data", DataSchema);
+const UserModel = mongoose.model<IUser>("user", UserSchema);
 
-export default DataModel;
+interface IEmailServiceSignup extends Document {
+  email: string;
+  consentId: string;
+  fullAddress: string;
+  desiredStartingMonth: string;
+  actualOrExpectedBirthMonth: string;
+  createdAt: string;
+  consentedAt: string;
+  revokedAt?: string | null;
+}
+
+const EmailServiceSignupSchema: Schema = new Schema({
+  email: {
+    type: String,
+    required: true,
+  },
+  consentId: {
+    type: String,
+    required: true,
+  },
+  fullAddress: {
+    type: String,
+    required: true,
+  },
+  desiredStartingMonth: {
+    type: String,
+    required: true,
+  },
+  actualOrExpectedBirthMonth: {
+    type: String,
+    required: true,
+  },
+  createdAt: {
+    type: String,
+    required: true,
+  },
+  consentedAt: {
+    type: String,
+    required: true,
+  },
+  revokedAt: {
+    type: String,
+    default: null,
+  },
+});
+
+const EmailServiceSignupModel = mongoose.model<IEmailServiceSignup>(
+  "emailService",
+  EmailServiceSignupSchema
+);
+
+export { EmailServiceSignupModel, UserModel };
