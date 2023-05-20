@@ -1,132 +1,76 @@
-import Airtable = require("airtable");
+import logger from "../../logger";
+import { UserModel, EmailServiceSignupModel } from "./model";
+import { v4 as uuidv4 } from "uuid";
 
-type AirtableEinzelbenachrichtigungen = {
-  ID: string; // unique
-  Name: string;
-  Email: string;
-  "Kita Name": string;
-  "Internal Kita ID": string;
-  "Created at": string;
-};
-
-type AirtableArealbenachrichtigungen = {
-  ID: string; //unique
-  Name: string;
-  Region: string;
-  Email: string;
-  "Created at": string;
-};
-
-type AirtableServiceAnmeldung = {
-  Email: string; // unique
-  "Full Address": string;
-  "Desired Start Month": string;
-  "Expected Birth Month": string;
-  "Created at": string;
-};
-
-export interface CreateEinzelbenachrichtigungPayload {
-  name: string;
-  email: string;
-  kitaName: string;
-  interneKitaId: string;
+export class EmailSignup {
+  public static singleKitaNotificationSignup = async (
+    email: string,
+    consentId: string,
+    kitaId: string,
+    kitaDesiredAvailability: string,
+    kitaName: string,
+    createdAt: string,
+    consentedAt: string
+  ) => {
+    try {
+      // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
+      console.log("email", email);
+      console.log("consentId", consentId);
+      console.log("kitaId", kitaId);
+      console.log("kitaDesiredAvailability", kitaDesiredAvailability);
+      console.log("kitaName", kitaName);
+      console.log("createdAt", createdAt);
+      console.log("consentedAt", consentedAt);
+      console.log("uuidv4()", uuidv4());
+      await UserModel.create({
+        id: uuidv4(),
+        email,
+        consentId,
+        trackedKitas: [
+          {
+            id: kitaId,
+            kitaName,
+            kitaAvailability: kitaDesiredAvailability,
+          },
+        ],
+        createdAt,
+        consentedAt,
+      });
+      logger.info(`User ${email} signed up for ${kitaName} with id ${kitaId}`);
+      return;
+    } catch (e) {
+      logger.error(e);
+      return e;
+    }
+  };
+  public static kitaFinderServiceSignup = async (
+    email: string,
+    consentId: string,
+    fullAddress: string,
+    desiredStartingMonth: string,
+    actualOrExpectedBirthMonth: string,
+    createdAt: string,
+    consentedAt: string,
+    revokedAt: string | null
+  ) => {
+    try {
+      // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
+      await EmailServiceSignupModel.create({
+        id: uuidv4(),
+        email,
+        consentId,
+        fullAddress,
+        desiredStartingMonth,
+        actualOrExpectedBirthMonth,
+        createdAt,
+        consentedAt,
+        revokedAt,
+      });
+      logger.info(`User ${email} signed up for kita finder service`);
+      return;
+    } catch (e) {
+      logger.error(e);
+      return e;
+    }
+  };
 }
-
-export interface CreateArealbenachrichtigungPayload {
-  name: string;
-  email: string;
-  region: string;
-}
-
-export interface CreateServiceAnmeldungPayload {
-  email: string;
-  fullAddress: string;
-  desiredStartMonth: string;
-  expectedBirthDate: string;
-}
-
-interface IAirtableAPIService {
-  base: string;
-  apiKey: string;
-
-  createEinzelbenachrichtigung(
-    payload: CreateEinzelbenachrichtigungPayload
-  ): Promise<boolean>;
-  createArealbenachrichtigung(
-    payload: CreateArealbenachrichtigungPayload
-  ): Promise<boolean>;
-  createServiceAnmeldung(
-    payload: CreateServiceAnmeldungPayload
-  ): Promise<boolean>;
-}
-
-class AirtableAPIService implements IAirtableAPIService {
-  base: string;
-  apiKey: string;
-
-  constructor() {
-    this.base = process.env.AIRTABLE_BASE as string;
-    this.apiKey = process.env.AIRTABLE_API_KEY as string;
-  }
-
-  async createEinzelbenachrichtigung(
-    payload: CreateEinzelbenachrichtigungPayload
-  ): Promise<boolean> {
-    const airtable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY });
-    const base = airtable.base(this.base);
-
-    const record = await base("Einzelbenachrichtigungen").create([
-      {
-        fields: {
-          Name: payload.name,
-          Email: payload.email,
-          "Kita Name": payload.kitaName,
-          "Internal Kita ID": payload.interneKitaId,
-        } as AirtableEinzelbenachrichtigungen,
-      },
-    ]);
-
-    return !!record;
-  }
-
-  async createArealbenachrichtigung(
-    payload: CreateArealbenachrichtigungPayload
-  ): Promise<boolean> {
-    const airtable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY });
-    const base = airtable.base(this.base);
-
-    const record = await base("Arealbenachrichtigungen").create([
-      {
-        fields: {
-          Name: payload.name,
-          Email: payload.email,
-          Region: payload.region,
-        } as AirtableArealbenachrichtigungen,
-      },
-    ]);
-
-    return !!record;
-  }
-
-  async createServiceAnmeldung(
-    payload: CreateServiceAnmeldungPayload
-  ): Promise<boolean> {
-    const airtable = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY });
-    const base = airtable.base(this.base);
-
-    const record = await base("Service Anmeldung").create([
-      {
-        fields: {
-          Email: payload.email,
-          "Full Address": payload.fullAddress,
-          "Desired Start Month": payload.desiredStartMonth,
-          "Expected Birth Month": payload.expectedBirthDate,
-        } as AirtableServiceAnmeldung,
-      },
-    ]);
-
-    return !!record;
-  }
-}
-
-export default AirtableAPIService;
