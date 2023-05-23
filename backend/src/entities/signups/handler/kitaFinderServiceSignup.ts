@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import {
+  IsDateString,
   IsEmail,
   IsNotEmpty,
   IsOptional,
@@ -21,6 +22,7 @@ interface IKitaFinderServiceSignup {
 }
 class KitaFinderServiceSignupValidator {
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
@@ -39,16 +41,16 @@ class KitaFinderServiceSignupValidator {
   @IsNotEmpty()
   actualOrExpectedBirthMonth: string;
 
-  @IsString()
+  @IsDateString()
   @IsNotEmpty()
   createdAt: string;
 
-  @IsString()
+  @IsDateString()
   @IsNotEmpty()
   consentedAt: string;
 
   @IsOptional()
-  @IsString()
+  @IsDateString()
   revokedAt: string | null;
 }
 
