@@ -14,14 +14,6 @@ export class EmailSignup {
   ) => {
     try {
       // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
-      console.log("email", email);
-      console.log("consentId", consentId);
-      console.log("kitaId", kitaId);
-      console.log("kitaDesiredAvailability", kitaDesiredAvailability);
-      console.log("kitaName", kitaName);
-      console.log("createdAt", createdAt);
-      console.log("consentedAt", consentedAt);
-      console.log("uuidv4()", uuidv4());
       await UserModel.create({
         id: uuidv4(),
         email,
