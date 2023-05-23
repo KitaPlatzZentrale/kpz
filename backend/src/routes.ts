@@ -1,7 +1,8 @@
 import express = require("express");
 
-import getPaginatedKitas from // validator as getPaginatedKitasValidator,
-"./entities/kitas/handler";
+import getPaginatedKitas, {
+  validator as getPaginatedKitasValidator,
+} from "./entities/kitas/handler";
 
 import kitaFinderServiceSignup, {
   validator as kitaFinderServiceSignupValidator,
@@ -20,7 +21,7 @@ router.get("/kita/:uuid", getBerlinDEKitaDetails);
 
 router.get(
   "/location-service/:lat/:lng/:radius/:page?/:limit?",
-  // getPaginatedKitasValidator,
+  getPaginatedKitasValidator,
   getPaginatedKitas
 );
 
