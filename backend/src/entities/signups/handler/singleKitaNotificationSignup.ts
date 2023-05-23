@@ -1,5 +1,11 @@
 import { RequestHandler } from "express";
-import { IsEmail, IsString, validate } from "class-validator";
+import {
+  IsDateString,
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  validate,
+} from "class-validator";
 import logger from "../../../logger";
 import { EmailSignup } from "../service";
 
@@ -15,24 +21,31 @@ interface ISingleKitaNotification {
 
 class SingleKitaNotificationValidator {
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
+  @IsNotEmpty()
   consentId: string;
 
   @IsString()
+  @IsNotEmpty()
   kitaId: string;
 
   @IsString()
+  @IsNotEmpty()
   kitaName: string;
 
   @IsString()
+  @IsNotEmpty()
   kitaDesiredAvailability: string;
 
-  @IsString()
+  @IsDateString()
+  @IsNotEmpty()
   createdAt: string;
 
-  @IsString()
+  @IsDateString()
+  @IsNotEmpty()
   consentedAt: string;
 }
 
