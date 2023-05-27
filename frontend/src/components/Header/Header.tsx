@@ -20,15 +20,11 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
     <header
       ref={headerRef}
       id="nav-header"
-      className="page-padding z-[205] h-20 w-full bg-white py-4"
+      className="page-padding z-[205] flex h-20 w-full flex-row items-center justify-between border-b border-gray-200 bg-white py-4"
     >
-      <nav className="flex flex-row items-center justify-between">
-        <Link to="/" id="logo-container">
-          <div id="logo">
-            <span className="text-2xl font-black md:text-3xl">
-              KitaPlatzZentrale
-            </span>
-          </div>
+      <nav className="flex w-full flex-row items-center justify-between">
+        <Link to="/" id="logo-container" className="w-56 md:w-72">
+          <img src="/logo.svg" width="100%" alt="KitaPlatzZentrale Logo" />
         </Link>
         <div
           className="hidden h-full flex-row items-end xl:flex"

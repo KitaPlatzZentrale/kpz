@@ -23,10 +23,16 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
   return (
     <Layout>
       <div className="xl:page-padding relative w-full bg-white xl:h-[800px] xl:py-64">
-        <div className="relative right-0 top-0 h-[400px] w-full xl:absolute xl:h-full">
+        <div className="relative right-0 top-0 h-[260px] w-full md:h-[400px] xl:absolute xl:h-full">
           <svg height="100%" width="100%">
             <mask id="mask" x="0" y="0" width="100%" height="100%">
-              <ellipse cx="50%" cy="0%" rx="75%" ry="100%" fill="white" />
+              <ellipse
+                cx="50%"
+                cy="0%"
+                rx={isSmallerThanXL ? "85%" : "75%"}
+                ry="100%"
+                fill="white"
+              />
             </mask>
             <image
               fill="url(#grad1)"
@@ -93,7 +99,7 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
         </div>
         <div className="page-padding mt-12 flex max-w-xl flex-col xl:mt-0 xl:max-w-md xl:px-0">
           <div className="z-10 mb-8 flex flex-col gap-2">
-            <h1 className="text-7xl font-black leading-none">
+            <h1 className="text-5xl font-black leading-none lg:text-7xl">
               Kitaplatz,
               <br />
               Kinderleicht.
