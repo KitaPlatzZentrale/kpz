@@ -24,7 +24,11 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
     >
       <nav className="flex flex-row items-center justify-between">
         <Link to="/" id="logo-container">
-          <div className="h-12 w-64 bg-gray-300" />
+          <div id="logo">
+            <span className="text-2xl font-black md:text-3xl">
+              KitaPlatzZentrale
+            </span>
+          </div>
         </Link>
         <div
           className="hidden h-full flex-row items-end xl:flex"

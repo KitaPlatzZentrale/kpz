@@ -44,7 +44,7 @@
     "typescript": "^5.0.4"
   },
   "engines": {
-    "node": "14.20.0"
+    "node": "18.16.0"
   },
   "compilerOptions": {
     "esModuleInterop": true
