@@ -1,5 +1,6 @@
 import { Button } from "@mui/joy";
 import React from "react";
+import { Link } from "react-router-dom";
 import Layout from "./layout";
 
 type IndexPageProps = {};
@@ -103,30 +104,33 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
               stöbern und die perfekte Kita finden.
             </p>
           </div>
-          <Button
-            variant="solid"
-            size="lg"
-            color="primary"
-            href="/finder"
-            endDecorator={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="ml-2 h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="#fff"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            }
-          >
-            Kitas finden
-          </Button>
+          <Link className="w-full" to="/finder">
+            <Button
+              variant="solid"
+              size="lg"
+              color="primary"
+              href="/finder"
+              fullWidth
+              endDecorator={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="ml-2 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="#fff"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              }
+            >
+              Kitas finden
+            </Button>
+          </Link>
         </div>
       </div>
       <div className="page-padding flex w-full flex-col justify-between gap-40 bg-white py-40 2xl:flex-row">
