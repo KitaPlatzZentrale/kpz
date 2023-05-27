@@ -70,12 +70,12 @@ const KitaMap: React.FC<KitaMapProps> = ({
         initialViewState={{
           latitude: centerCoordinates?.lat || DEFAULT_BERLIN_CENTER.lat,
           longitude: centerCoordinates?.lng || DEFAULT_BERLIN_CENTER.lng,
-          zoom: 12,
+          zoom: 13,
         }}
         interactive
         maxPitch={0}
         dragRotate={false}
-        minZoom={12}
+        minZoom={13}
         maxZoom={16}
       >
         {showNavigation && <NavigationControl showZoom position="top-right" />}
