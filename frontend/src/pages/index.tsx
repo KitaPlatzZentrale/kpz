@@ -29,7 +29,7 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
               <ellipse
                 cx="50%"
                 cy="0%"
-                rx={isSmallerThanXL ? "85%" : "75%"}
+                rx={isSmallerThanXL ? "90%" : "75%"}
                 ry="100%"
                 fill="white"
               />
