@@ -30,7 +30,7 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
       ref={rootRef}
       id={id}
       className={clsx(
-        "page-padding flex w-full flex-row justify-between bg-white pb-6 pt-4 align-baseline",
+        "page-padding flex w-full flex-row justify-between bg-white pb-6 pt-10 align-baseline",
         className
       )}
     >
