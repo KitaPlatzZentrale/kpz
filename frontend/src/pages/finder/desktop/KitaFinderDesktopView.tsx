@@ -16,7 +16,7 @@ const KitaFinderDesktopView: React.FC<KitaFinderDesktopViewProps> = ({
       <div
         id="content"
         style={{ height }}
-        className="xl:page-padding flex w-full flex-col-reverse lg:gap-4 xl:flex-row xl:pr-0"
+        className="xl:page-padding flex h-full w-full flex-col-reverse lg:gap-4 xl:flex-row xl:pr-0"
       >
         <KitaListView />
         <KitaMapView />
