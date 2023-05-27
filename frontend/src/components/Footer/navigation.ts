@@ -13,10 +13,10 @@ const FOOTER_NAVIGATION_LINKS: FooterNavigation = [
           title: "Kita-Karte",
           to: "/finder",
         },
-        {
+        /*{
           title: "Über uns",
           to: "/ueber-uns",
-        },
+        },*/
       ],
     },
   ],
