@@ -12,7 +12,7 @@ type LoaderParams = {
 const loader = async ({
   lat,
   lng,
-  distanceInMeters = 2500,
+  distanceInMeters = 1500,
   page = 1,
   limit = 500,
 }: LoaderParams) => {
