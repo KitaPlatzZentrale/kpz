@@ -79,7 +79,6 @@ export const validator: RequestHandler<ISingleKitaNotification> = async (
 
     const errors = await validate(newNotification);
     if (errors.length) return res.status(400).json({ error: errors });
-    console.log("Validator!!!");
 
     return next();
   } catch (err: any) {
@@ -99,8 +98,6 @@ const handler: RequestHandler<ISingleKitaNotification> = async (req, res) => {
       createdAt,
       consentedAt,
     } = req.body;
-
-    console.log("Writing to db!!!");
 
     await EmailSignup.singleKitaNotificationSignup(
       email,
