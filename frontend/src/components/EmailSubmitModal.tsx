@@ -28,21 +28,19 @@ type EmailSubmitModalProps = {
 };
 
 const submitEmailAction = async (email: string) => {
-  const res = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/anmeldungen/einzel`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: "Kein Name bekannt",
-        email,
-        kitaName: "Kita 1",
-        interneKitaId: "1",
-      }),
-    }
-  );
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/signup/single`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      //TODO
+      name: "Kein Name bekannt",
+      email,
+      kitaName: "Kita 1",
+      interneKitaId: "1",
+    }),
+  });
 
   return res.ok;
 };
