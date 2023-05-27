@@ -12,12 +12,9 @@ import { EmailSignup } from "../service";
 
 interface IKitaFinderServiceSignup {
   email: string;
-  consentId: string;
   fullAddress: string;
   desiredStartingMonth: string;
   actualOrExpectedBirthMonth: string;
-  createdAt: string;
-  consentedAt: string;
   revokedAt?: string | null;
 }
 class KitaFinderServiceSignupValidator {
@@ -27,10 +24,6 @@ class KitaFinderServiceSignupValidator {
 
   @IsString()
   @IsNotEmpty()
-  consentId: string;
-
-  @IsString()
-  @IsNotEmpty()
   fullAddress: string;
 
   @IsString()
@@ -40,14 +33,6 @@ class KitaFinderServiceSignupValidator {
   @IsString()
   @IsNotEmpty()
   actualOrExpectedBirthMonth: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  createdAt: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  consentedAt: string;
 
   @IsOptional()
   @IsDateString()
@@ -66,22 +51,16 @@ export const validator: RequestHandler<IKitaFinderServiceSignup> = async (
   try {
     const {
       email,
-      consentId,
       fullAddress,
       desiredStartingMonth,
       actualOrExpectedBirthMonth,
-      createdAt,
-      consentedAt,
       revokedAt,
     } = req.body;
     const newServiceSignup = new KitaFinderServiceSignupValidator();
     newServiceSignup.email = email;
-    newServiceSignup.consentId = consentId;
     newServiceSignup.fullAddress = fullAddress;
     newServiceSignup.desiredStartingMonth = desiredStartingMonth;
     newServiceSignup.actualOrExpectedBirthMonth = actualOrExpectedBirthMonth;
-    newServiceSignup.createdAt = createdAt;
-    newServiceSignup.consentedAt = consentedAt;
     newServiceSignup.revokedAt = revokedAt;
     const errors = await validate(newServiceSignup);
 
@@ -98,23 +77,17 @@ const handler: RequestHandler<IKitaFinderServiceSignup> = async (req, res) => {
   try {
     const {
       email,
-      consentId,
       fullAddress,
       desiredStartingMonth,
       actualOrExpectedBirthMonth,
-      createdAt,
-      consentedAt,
       revokedAt,
     } = req.body;
 
     await EmailSignup.kitaFinderServiceSignup(
       email,
-      consentId,
       fullAddress,
       desiredStartingMonth,
       actualOrExpectedBirthMonth,
-      createdAt,
-      consentedAt,
       revokedAt
     );
 
