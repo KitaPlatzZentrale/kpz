@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set Env Var base on Branch
         run: |
@@ -45,5 +45,6 @@ jobs:
           REPOSITORY: kpz_${{ env.DEPLOY_ENV }}_api
           IMAGE_TAG: latest
         run: |
+          cd backend
           docker build -t 897331788878.dkr.ecr.eu-central-1.amazonaws.com/kpz_${{ env.DEPLOY_ENV }}_api:latest .
           docker push 897331788878.dkr.ecr.eu-central-1.amazonaws.com/kpz_${{ env.DEPLOY_ENV }}_api:latest
