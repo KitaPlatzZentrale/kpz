@@ -13,22 +13,32 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Set Env Var base on Branch
         run: |
           if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
               echo "DEPLOY_ENV=prod" >> "$GITHUB_ENV"
           else
               echo "DEPLOY_ENV=dev" >> "$GITHUB_ENV"
-          fi
-      - name: Checkout Code
-        uses: actions/checkout@v2
+          fi        
 
-      - name: Build ${{ env.DEPLOY_ENV }} Docker Backend Image
-        working-directory: ./backend
-        run: docker build -t goodbuy/kpz-${{ env.DEPLOY_ENV }}-backend .
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::897331788878:user/github
+          aws-region: eu-central-1
+          
+      - name: Login to Amazon ECR Private
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
         
-      - name: Login to AWS ECR
-        run: aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 897331788878.dkr.ecr.eu-central-1.amazonaws.com
-
-      - name: Push ${{ env.DEPLOY_ENV }} Docker Image to AWS ECR
-        run: docker push 897331788878.dkr.ecr.eu-central-1.amazonaws.com/kpz-backend-${{ env.DEPLOY_ENV }}:latest
+      - name: Build, tag, and push docker ${{ env.DEPLOY_ENV }} image to Amazon ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: kpz_${{ env.DEPLOY_ENV }}_api
+          IMAGE_TAG: lates
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
