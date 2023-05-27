@@ -182,9 +182,12 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
               </svg>
             }
           >
-            <span className="text-lg font-bold">
+            <Link
+              to="mailto:hallo@kitaplatz-zentrale.de"
+              className="text-lg font-bold"
+            >
               hallo@kitaplatz-zentrale.de
-            </span>
+            </Link>
           </Button>
         </div>
       </div>
