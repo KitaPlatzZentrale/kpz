@@ -26,40 +26,34 @@ const ServiceBanner: React.FC<ServiceBannerProps> = ({ open, className }) => {
         className
       )}
     >
-      <div className="flex w-full flex-col justify-between gap-8 lg:flex-row lg:items-center lg:gap-0">
-        <div className="flex flex-col items-center gap-8 lg:flex-row lg:items-start lg:gap-8">
+      <div className="flex w-full flex-col justify-between gap-8 2xl:flex-row 2xl:items-center 2xl:gap-12">
+        <div className="flex flex-col items-center gap-8 2xl:flex-row 2xl:items-start 2xl:gap-8">
           <div className="mt-2">
-            <img src="/illustrations/service-finder.svg" alt="Finder" />
+            <img
+              src="/illustrations/service-finder.svg"
+              className="h-full w-full object-cover"
+              alt="Finder"
+            />
           </div>
-          <div className="flex flex-col items-center gap-6 lg:items-start lg:gap-2">
+          <div className="flex flex-col items-center gap-6 2xl:items-start 2xl:gap-2">
             <div className="flex flex-col gap-0">
-              <h4 className="m-0 text-center text-xl font-black lg:text-start">
+              <h4 className="m-0 text-center text-xl font-black 2xl:text-start">
                 Auf Kita-Suche?
               </h4>
-              <h4 className="m-0 text-center text-xl font-black text-happy-blue lg:text-start">
+              <h4 className="m-0 text-center text-xl font-black text-happy-blue 2xl:text-start">
                 Wir sind für dich da.
               </h4>
             </div>
             <p className="font-semibold">
-              <Balancer className="text-center lg:text-start">
+              <p className="text-center 2xl:text-start">
                 Unser PlatzFinder Service nimmt den Stress aus Ihrem
                 Elternalltag. Ganz unverbindlich —{" "}
-                <Balancer className="font-extrabold">
-                  Sie bezahlen nur bei Erfolg.
-                </Balancer>
-              </Balancer>
+                <p className="font-extrabold">Sie bezahlen nur bei Erfolg.</p>
+              </p>
             </p>
           </div>
         </div>
-        <div className="flex flex-col-reverse justify-stretch gap-4 lg:flex-row lg:items-center lg:self-end lg:self-center">
-          <Button
-            color="primary"
-            variant="plain"
-            onClick={() => setModalIsOpen(true)}
-            size="lg"
-          >
-            <span className="underline underline-offset-1">Mehr erfahren</span>
-          </Button>
+        <div className="flex flex-col-reverse justify-stretch gap-4 2xl:flex-row 2xl:items-center 2xl:self-center">
           <Button
             color="primary"
             variant="solid"
