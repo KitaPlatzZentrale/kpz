@@ -4,9 +4,13 @@ import getPaginatedKitas, {
   validator as getPaginatedKitasValidator,
 } from "./entities/kitas/handler";
 
-import serviceAnmeldungHandler from "./entities/signups/handler/anmeldung";
-import einzelBenachrichtigungHandler from "./entities/signups/handler/einzel";
-import arealBenachrichtigungHandler from "./entities/signups/handler/areal";
+import kitaFinderServiceSignup, {
+  validator as kitaFinderServiceSignupValidator,
+} from "./entities/signups/handler/kitaFinderServiceSignup";
+import singleKitaNotificationSignup, {
+  validator as singleKitaNotificationSignupValidator,
+} from "./entities/signups/handler/singleKitaNotificationSignup";
+
 import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
@@ -21,8 +25,15 @@ router.get(
   getPaginatedKitas
 );
 
-router.post("/anmeldungen/service", serviceAnmeldungHandler);
-router.post("/anmeldungen/einzel", einzelBenachrichtigungHandler);
-router.post("/anmeldungen/areal", arealBenachrichtigungHandler);
+router.post(
+  "/signup/service",
+  kitaFinderServiceSignupValidator,
+  kitaFinderServiceSignup
+);
+router.post(
+  "/signup/single",
+  singleKitaNotificationSignupValidator,
+  singleKitaNotificationSignup
+);
 
 export = router;
