@@ -1,6 +1,4 @@
 import React from "react";
-import ServiceSignupModal from "../../components/ServiceSignupModal/ServiceSignupModal";
-import ServiceSignupModalContextProvider from "../../components/ServiceSignupModal/ServiceSignupModalContext";
 import Layout from "../layout";
 import KitaListContextProvider from "./common/KitaDataContext";
 import KitaListScrollContextProvider from "./desktop/components/KitaList/KitaListScrollContext";
@@ -18,12 +16,24 @@ const FinderPage: React.FC<FinderPageProps> = () => {
   // contentHeight should be the height of the viewport minus the height of the header minus the height of the searchbar
   const [contentHeight, setContentHeight] = React.useState<number>(0);
 
-  React.useEffect(() => {
+  const adjustContentHeight = React.useCallback(() => {
     const headerHeight = headerRef.current?.clientHeight ?? 125;
     const searchHeight = searchRef.current?.clientHeight ?? 220;
 
     setContentHeight(window.innerHeight - searchHeight - headerHeight);
   }, [window.innerHeight, headerRef, searchRef]);
+
+  React.useEffect(() => {
+    window.addEventListener("resize", adjustContentHeight);
+
+    return () => {
+      window.removeEventListener("resize", adjustContentHeight);
+    };
+  }, [window.innerHeight, headerRef, searchRef]);
+
+  React.useEffect(() => {
+    adjustContentHeight();
+  }, []);
 
   const isMobile = React.useMemo(() => {
     return !screenIsBiggerOrEqualToXl();

@@ -23,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({
       <ServiceSignupModal />
       <div
         className={clsx(
-          "flex flex-col",
+          "flex min-h-[120vh] flex-col",
           lockAtScreenHeight ? "max-h-screen overflow-hidden" : "h-full"
         )}
       >

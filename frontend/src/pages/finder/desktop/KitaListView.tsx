@@ -70,7 +70,7 @@ const KitaListView: React.FC<KitaListViewProps> = ({ children }) => {
   const noKitasFoundYet = !kitas || kitas?.length === 0;
 
   return (
-    <div className="xs:page-padding sm:page-padding md:page-padding lg:page-padding absolute z-50 flex w-full flex-col rounded-t-xl  px-5 py-8 lg:relative lg:z-0 lg:max-w-[900px] xl:w-1/2 xl:pl-0 xl:pr-6">
+    <div className="xs:page-padding sm:page-padding md:page-padding lg:page-padding absolute z-50 flex h-full w-full flex-col rounded-t-xl px-5 py-8 lg:relative lg:z-0 lg:max-w-[900px] xl:w-1/2 xl:pl-0 xl:pr-6">
       <AnimatePresence>
         {noSearchHasStarted && (
           <motion.div

@@ -11,7 +11,7 @@ const KitaFinderDesktopView: React.FC<KitaFinderDesktopViewProps> = ({
   height,
 }) => {
   return (
-    <div className="flex h-full w-full flex-col">
+    <div className={`flex min-h-[${height}px] h-full w-full flex-col`}>
       <Search />
       <div
         id="content"
@@ -19,7 +19,7 @@ const KitaFinderDesktopView: React.FC<KitaFinderDesktopViewProps> = ({
         className="xl:page-padding flex h-full w-full flex-col-reverse lg:gap-4 xl:flex-row xl:pr-0"
       >
         <KitaListView />
-        <KitaMapView />
+        {height > 0 && <KitaMapView height={height} />}
       </div>
     </div>
   );

@@ -22,7 +22,7 @@ const Footer: React.FC<FooterProps> = ({
   );
 
   return (
-    <div className="page-padding w-full bg-[#233E65] pb-12 pt-12 sm:pb-28 sm:pt-20 lg:pb-10 lg:pt-16">
+    <div className="page-padding mt-auto w-full bg-[#233E65] pb-12 pt-12 sm:pb-28 sm:pt-20 lg:pb-10 lg:pt-16">
       <div className="flex w-full flex-col justify-between gap-16">
         <div className="flex min-h-[256px] flex-col justify-between gap-16 lg:flex-row">
           <div className="flex flex-col gap-2">
