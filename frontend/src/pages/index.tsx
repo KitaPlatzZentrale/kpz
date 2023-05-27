@@ -137,11 +137,15 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
         <div className="flex max-w-lg flex-col gap-6">
           <h3 className="text-3xl font-black">Was ist Kitaplatz Zentrale?</h3>
           <p className="text-xl font-medium">
-            Kitaplatz Zentrale ist eine Plattform, die allen Eltern ermöglichen
-            soll, schnell und einfach einen Kitaplatz für ihr Kind zu finden.
-            Dazu werden alle Kitas in Deutschland in einer Datenbank gespeichert
-            und können von Eltern durchsucht werden. Die Datenbank wird von den
-            Kitas selbst gepflegt, sodass die Informationen immer aktuell sind.
+            Kitaplatz Zentrale ist eine Plattform, die Eltern ermöglichen soll,
+            schnell und einfach einen Kitaplatz für ihr Kind zu finden.{" "}
+            <Link className="font-bold text-deep-blue underline" to="/finder">
+              Ganz simpel und einfach.
+            </Link>
+            <br />
+            <br />
+            Unsere Mission ist es, Eltern bei der Suche nach einem Kitaplatz zu
+            unterstützen und den Prozess so einfach wie möglich zu gestalten.
           </p>
         </div>
         <div className="max-w-md flex-col 2xl:bg-happy-blue 2xl:bg-opacity-10 2xl:p-12">
@@ -149,8 +153,8 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
             Kontakt
           </h4>
           <p className="mb-4 text-xl font-medium 2xl:text-base 2xl:font-normal">
-            If you have any questions or would like to support our mission,
-            please reach out to us.
+            Haben Sie Fragen oder Anregungen? Schreiben Sie uns gerne einfach
+            eine Mail an{" "}
           </p>
           <Button
             variant="plain"
