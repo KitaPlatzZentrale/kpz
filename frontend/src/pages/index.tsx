@@ -3,6 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "./layout";
 
+import { motion } from "framer-motion";
+
 type IndexPageProps = {};
 
 const IndexPage: React.FC<IndexPageProps> = ({}) => {
@@ -24,7 +26,19 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
     <Layout>
       <div className="xl:page-padding relative w-full bg-white xl:h-[800px] xl:py-64">
         <div className="relative right-0 top-0 h-[260px] w-full md:h-[400px] xl:absolute xl:h-full">
-          <svg height="100%" width="100%">
+          <motion.svg
+            initial={{ scale: 1.02 }}
+            animate={{ scale: 1 }}
+            transition={{
+              duration: 1.7,
+              delay: 0.1,
+              ease: "easeInOut",
+              type: "spring",
+              bounce: 0,
+            }}
+            height="100%"
+            width="100%"
+          >
             <mask id="mask" x="0" y="0" width="100%" height="100%">
               <ellipse
                 cx="50%"
@@ -35,7 +49,6 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
               />
             </mask>
             <image
-              fill="url(#grad1)"
               xlinkHref="hero.png"
               mask="url(#mask)"
               width={isSmallerThanXL ? "100%" : "80%"}
@@ -95,9 +108,14 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
                 />
               </>
             )}
-          </svg>
+          </motion.svg>
         </div>
-        <div className="page-padding mt-12 flex max-w-xl flex-col xl:mt-0 xl:max-w-md xl:px-0">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, delay: 0.2, type: "spring", bounce: 0 }}
+          className="page-padding mt-12 flex max-w-xl flex-col xl:mt-0 xl:max-w-md xl:px-0"
+        >
           <div className="z-10 mb-8 flex flex-col gap-2">
             <h1 className="text-5xl font-black leading-none lg:text-7xl">
               Kitaplatz,
@@ -137,7 +155,7 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
               Kitas finden
             </Button>
           </Link>
-        </div>
+        </motion.div>
       </div>
       <div className="page-padding flex w-full flex-col justify-between gap-40 bg-white py-40 2xl:flex-row">
         <div className="flex max-w-lg flex-col gap-6">
