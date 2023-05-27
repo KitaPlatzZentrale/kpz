@@ -1,0 +1,33 @@
+name: Build Image & Push to AWS ECR
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'backend/**'
+    
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set Env Var base on Branch
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/main' ]]; then
+              echo "DEPLOY_ENV=prod" >> "$GITHUB_ENV"
+          else
+              echo "DEPLOY_ENV=dev" >> "$GITHUB_ENV"
+          fi
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build ${{ env.DEPLOY_ENV }} Docker Backend Image
+        working-directory: ./backend
+        run: docker build -t goodbuy/kpz-${{ env.DEPLOY_ENV }}-backend .
+        
+      - name: Login to AWS ECR
+        run: aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 897331788878.dkr.ecr.eu-central-1.amazonaws.com
+
+      - name: Push ${{ env.DEPLOY_ENV }} Docker Image to AWS ECR
+        run: docker push 897331788878.dkr.ecr.eu-central-1.amazonaws.com/kpz-backend-${{ env.DEPLOY_ENV }}:latest
