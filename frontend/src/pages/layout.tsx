@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { ScrollRestoration } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
 import ServiceSignupModal from "../components/ServiceSignupModal/ServiceSignupModal";
@@ -17,6 +18,8 @@ const Layout: React.FC<LayoutProps> = ({
 }) => {
   return (
     <ServiceSignupModalContextProvider>
+      <ScrollRestoration getKey={(location, matches) => location.pathname} />
+
       <ServiceSignupModal />
       <div
         className={clsx(
@@ -25,13 +28,13 @@ const Layout: React.FC<LayoutProps> = ({
         )}
       >
         {lockAtScreenHeight && (
-        <style>
-          {`
+          <style>
+            {`
             html, body {
               overflow-y: hidden;
             }
               `}
-        </style>
+          </style>
         )}
         <Header headerRef={headerRef} />
         {children}
