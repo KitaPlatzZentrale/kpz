@@ -27,7 +27,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::897331788878:user/github
+          role-to-assume: arn:aws:iam::897331788878:role/github_actions_ecr_role
           aws-region: eu-central-1
           
       - name: Login to Amazon ECR Private
@@ -38,7 +38,7 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: kpz_${{ env.DEPLOY_ENV }}_api
-          IMAGE_TAG: lates
+          IMAGE_TAG: latest
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
