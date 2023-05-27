@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { v4 as uuidv4 } from "uuid";
 
 interface IUser extends Document {
   id: string;
@@ -13,20 +14,23 @@ interface IUser extends Document {
   consentedAt: string;
 }
 
-const UserSchema: Schema = new Schema({
-  id: { type: String, required: true },
-  email: { type: String, required: true },
-  consentId: { type: String, required: true },
-  trackedKitas: [
-    {
-      id: { type: String, required: true },
-      kitaName: { type: String, required: true },
-      kitaAvailability: { type: String, required: true },
-    },
-  ],
-  createdAt: { type: String, required: true },
-  consentedAt: { type: String, required: true },
-});
+const UserSchema: Schema = new Schema(
+  {
+    id: { type: String, required: true },
+    email: { type: String, required: true },
+    consentId: { type: String, default: uuidv4(), required: true },
+    trackedKitas: [
+      {
+        id: { type: String, required: true },
+        kitaName: { type: String, required: true },
+        kitaAvailability: { type: String, required: true },
+      },
+    ],
+    createdAt: { type: String, default: Date.now, required: true },
+    consentedAt: { type: String, default: Date.now, required: true },
+  },
+  { timestamps: true }
+);
 
 const UserModel = mongoose.model<IUser>("user", UserSchema);
 
@@ -46,10 +50,7 @@ const EmailServiceSignupSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  consentId: {
-    type: String,
-    required: true,
-  },
+  consentId: { type: String, default: uuidv4(), required: true },
   fullAddress: {
     type: String,
     required: true,
@@ -62,14 +63,8 @@ const EmailServiceSignupSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  createdAt: {
-    type: String,
-    required: true,
-  },
-  consentedAt: {
-    type: String,
-    required: true,
-  },
+  createdAt: { type: String, default: Date.now, required: true },
+  consentedAt: { type: String, default: Date.now, required: true },
   revokedAt: {
     type: String,
     default: null,
