@@ -26,7 +26,11 @@ const Footer: React.FC<FooterProps> = ({
       <div className="flex w-full flex-col justify-between gap-16">
         <div className="flex min-h-[256px] flex-col justify-between gap-16 lg:flex-row">
           <div className="flex flex-col gap-2">
-            <div className="h-14 w-72 bg-gray-300" />
+            <div id="logo">
+              <span className="text-3xl font-black text-white">
+                KitaPlatzZentrale
+              </span>
+            </div>
             <div className="text-base font-semibold text-white">
               Kita kann so einfach sein.
             </div>
