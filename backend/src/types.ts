@@ -22,10 +22,9 @@ type Kita = {
   uuid: string;
   name: string;
   number: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-    dist: number | null;
+  location: {
+    type: "Point";
+    coordinates: [number, number];
   };
   address: {
     street: string;

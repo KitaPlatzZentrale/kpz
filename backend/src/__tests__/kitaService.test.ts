@@ -1,16 +1,24 @@
-import KitaService from "../services/KitaService";
-
-// mock KitaModel.find() to return a list of kitas
-jest.mock("../models/Kita", () => ({
+import KitaService from "../entities/kitas/service";
+import haversine from "haversine-distance";
+jest.mock("../entities/kitas/model", () => ({
   __esModule: true,
   default: {
     find: () => {
       return Array.from({ length: 80 }).map((_, index) => {
+        // Generate random coordinates within the search radius
+        const [lat, lon] = generateRandomCoordinates({
+          lat: 52.51985,
+          lon: 13.38834,
+          radius: 2500,
+        });
+
         return {
-          coordinates: {
-            lat: 52.51985,
-            lng: 13.38834,
-            dist: index * 100,
+          location: {
+            type: "Point",
+            coordinates: {
+              lat,
+              lon,
+            },
           },
         };
       });
@@ -19,7 +27,7 @@ jest.mock("../models/Kita", () => ({
 }));
 
 describe("KitaService.getKitasInRadius", () => {
-  it("should return a list of kitas within the radius", async () => {
+  it("should return a list of kitas within the radius sorted by distance", async () => {
     const lat = 52.51985;
     const lon = 13.38834;
     const radius = 2500;
@@ -39,16 +47,44 @@ describe("KitaService.getKitasInRadius", () => {
     expect(kitas.meta.amountOfItems).toBe(10);
     expect(kitas.meta.nextPage).toBe(2);
     expect(kitas.items.length).toBe(limit);
-    // distance should not be null in returned list!
-    expect(kitas.items.every((item) => item.coordinates.dist !== null)).toBe(
-      true
+
+    // Calculate the distance between the search coordinates and the coordinates of each kita
+    const distances = kitas.items.map((kita) =>
+      haversine(
+        { lat, lon },
+        { lat: kita.location.coordinates[1], lon: kita.location.coordinates[0] } // [0] lon, [1] lat
+      )
     );
 
-    // check if kitas.items are sorted by distance
-    for (let i = 1; i < kitas.items.length; i++) {
-      expect(kitas.items[i].coordinates.dist).toBeGreaterThanOrEqual(
-        kitas.items[i - 1].coordinates.dist
-      );
-    }
+    // Check that the distances are sorted in ascending order
+    expect(distances).toEqual([...distances].sort());
   }, 10000);
 });
+
+interface ILocation {
+  lat: number;
+  lon: number;
+  radius: number;
+}
+
+function generateRandomCoordinates({
+  lat,
+  lon,
+  radius,
+}: ILocation): [number, number] {
+  const y0 = lat;
+  const x0 = lon;
+  const rd = radius / 111300; // Convert radius from meters to degrees
+
+  const u = Math.random();
+  const v = Math.random();
+
+  const w = rd * Math.sqrt(u);
+  const t = 2 * Math.PI * v;
+  const x = w * Math.cos(t);
+  const y = w * Math.sin(t);
+
+  const xp = x / Math.cos(y0);
+
+  return [y + y0, xp + x0];
+}

@@ -1,15 +1,18 @@
 import express = require("express");
 
-import getBerlinDEKitasAtLocation from "./handlers/berlin.de/getBerlinDEKitasAtLocation";
-import getBerlinDEKitaDetails from "./handlers/berlin.de/getBerlinDEKitaDetails";
-
 import getPaginatedKitas, {
   validator as getPaginatedKitasValidator,
-} from "./handlers/kitas/getPaginatedKitas";
+} from "./entities/kitas/handler";
 
-import serviceAnmeldungHandler from "./handlers/signups/service";
-import einzelBenachrichtigungHandler from "./handlers/signups/einzel";
-import arealBenachrichtigungHandler from "./handlers/signups/areal";
+import kitaFinderServiceSignup, {
+  validator as kitaFinderServiceSignupValidator,
+} from "./entities/signups/handler/kitaFinderServiceSignup";
+import singleKitaNotificationSignup, {
+  validator as singleKitaNotificationSignupValidator,
+} from "./entities/signups/handler/singleKitaNotificationSignup";
+
+import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
+import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
 const router = express.Router();
 
@@ -22,8 +25,15 @@ router.get(
   getPaginatedKitas
 );
 
-router.post("/anmeldungen/service", serviceAnmeldungHandler);
-router.post("/anmeldungen/einzel", einzelBenachrichtigungHandler);
-router.post("/anmeldungen/areal", arealBenachrichtigungHandler);
+router.post(
+  "/signup/service",
+  kitaFinderServiceSignupValidator,
+  kitaFinderServiceSignup
+);
+router.post(
+  "/signup/single",
+  singleKitaNotificationSignupValidator,
+  singleKitaNotificationSignup
+);
 
 export = router;

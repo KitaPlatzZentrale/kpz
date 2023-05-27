@@ -76,3 +76,32 @@ sudo systemctl start docker
 ### Problems
 
 If 3 errors because can't uninstall request package, contuniue with 4 and 5 and then try again 3
+
+## Datadog
+
+### Installing Agend on EC2 Instance
+
+```bash
+docker run -d --name datadog-agent \
+           --cgroupns host \
+           --pid host \
+           -e DD_API_KEY=$DATADOG_API_KEY \
+           -e DD_LOGS_ENABLED=true \
+           -e DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true \
+           -e DD_CONTAINER_EXCLUDE="name:datadog-agent" \
+           -v /var/run/docker.sock:/var/run/docker.sock:ro \
+           -v /var/lib/docker/containers:/var/lib/docker/containers:ro \
+           -v /proc/:/host/proc/:ro \
+           -v /opt/datadog-agent/run:/opt/datadog-agent/run:rw \
+           -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro \
+           gcr.io/datadoghq/agent:latest
+```
+
+Source: <https://docs.datadoghq.com/containers/docker/log/?tab=containerinstallation#examples>
+
+### Setting AWS up for Datadog
+
+CloudFormation (Best for quickly getting started)
+To set up the AWS integration with CloudFormation, see the the [AWS getting started guide](https://docs.datadoghq.com/getting_started/integrations/aws/).
+
+Read: <https://docs.datadoghq.com/integrations/amazon_web_services/#installation>

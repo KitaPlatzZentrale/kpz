@@ -2,7 +2,7 @@ import React from "react";
 import { Cake, DateRange, MailOutline } from "@mui/icons-material";
 import { Button, Divider } from "@mui/joy";
 
-import AddressLookup from "../../../pages/finder/components/AddressLookup";
+import AddressLookup from "../../AddressLookup";
 import FormAutocomplete from "../../FormAutocomplete";
 import FormField from "../../FormField";
 import { useServiceSignupFormContext } from "../ServiceSignupFormContext";
