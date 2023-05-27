@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { useKitaListContext } from "../common/KitaDataContext";
 import { useKitaListScrollContext } from "./components/KitaList/KitaListScrollContext";
 import { useSearchContext } from "../common/KitaSearchContext";
@@ -67,112 +67,111 @@ const KitaListView: React.FC<KitaListViewProps> = ({ children }) => {
   const { submitted } = useSearchContext();
 
   const noSearchHasStarted = !submitted;
-  const noKitasFoundYet = !kitas || kitas?.length === 0;
+  const noKitasFoundYet = React.useMemo(
+    () => !kitas || kitas?.length === 0,
+    [kitas]
+  );
 
   return (
     <div className="xs:page-padding sm:page-padding md:page-padding lg:page-padding absolute z-50 flex w-full flex-col rounded-t-xl  px-5 py-8 lg:relative lg:z-0 lg:max-w-[900px] xl:w-1/2 xl:pl-0 xl:pr-6">
-      <AnimatePresence>
-        {noSearchHasStarted && (
-          <motion.div
-            key="start-search-information-container"
-            transition={{ type: "spring", bounce: "0" }}
-            initial={{ x: -100 }}
-            animate={{ x: 0 }}
-            exit={{ height: 0, opacity: 0 }}
-          >
-            <StartKitaSearchListView />
-          </motion.div>
-        )}
+      {noSearchHasStarted && (
         <motion.div
-          key="desktop-kita-list"
-          ref={listRef}
-          className="flex flex-col gap-2 overflow-y-scroll"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{
-            type: "spring",
-            bounce: 0,
-            delay: 0.1,
-          }}
+          key="start-search-information-container"
+          transition={{ type: "spring", bounce: "0" }}
+          initial={{ x: -100 }}
+          animate={{ x: 0 }}
+          exit={{ height: 0, opacity: 0 }}
         >
-          <AnimatePresence>
-            {noKitasFoundYet ? (
+          <StartKitaSearchListView />
+        </motion.div>
+      )}
+      <motion.div
+        key="desktop-kita-list"
+        ref={listRef}
+        className="flex flex-col gap-2 overflow-y-scroll"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{
+          type: "spring",
+          bounce: 0,
+          delay: 0.1,
+        }}
+      >
+        {noKitasFoundYet ? (
+          <motion.div
+            key="start-search-information-skeletons"
+            className="flex w-full flex-col items-start gap-2"
+            style={{ overflow: "hidden" }}
+          >
+            {!noSearchHasStarted && (
               <motion.div
-                key="start-search-information-skeletons"
-                className="flex w-full flex-col items-start gap-2"
-                style={{ overflow: "hidden" }}
-              >
-                {!noSearchHasStarted && (
-                  <motion.div
-                    key="start-search-information-skeleton-headline"
-                    transition={{
-                      type: "spring",
-                      bounce: 0,
-                    }}
-                    initial={{ opacity: 0, x: -100, height: 0 }}
-                    animate={{ opacity: 1, x: 0, height: "auto" }}
-                    exit={{ opacity: 0, x: -100, height: "auto" }}
-                    className="w-full"
-                  >
-                    <div className="mb-2 mt-2 h-7 w-1/2 animate-pulse bg-slate-200" />
-                    <div className="mb-4 h-5 w-2/3 animate-pulse bg-slate-200" />
-                  </motion.div>
-                )}
-                {[0.95, 0.6, 0.3, 0.15, 0.05, 0.05, 0.05, 0.05, 0.05].map(
-                  (opacity, index) => (
-                    <motion.div
-                      key={`start-search-information-skeleton-${index}`}
-                      transition={{
-                        type: "spring",
-                        delay: index * 0.05,
-                        bounce: 0,
-                      }}
-                      initial={{ opacity: 0, y: 200 }}
-                      animate={{
-                        y: 0,
-                        opacity: noSearchHasStarted ? opacity : 1,
-                      }}
-                      className="w-full"
-                    >
-                      <KitaListItemSkeleton animate={!noSearchHasStarted} />
-                    </motion.div>
-                  )
-                )}
-              </motion.div>
-            ) : (
-              <motion.div
-                key="desktop-kita-list-"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                key="start-search-information-skeleton-headline"
                 transition={{
                   type: "spring",
                   bounce: 0,
                 }}
+                initial={{ opacity: 0, x: -100, height: 0 }}
+                animate={{ opacity: 1, x: 0, height: "auto" }}
+                exit={{ opacity: 0, x: -100, height: "auto" }}
+                className="w-full"
               >
-                <div className="mb-4 flex flex-col gap-1">
-                  <span className="text-xl font-extrabold text-gray-800">
-                    {kitas?.length || 0} Einrichtungen in der Nähe
-                  </span>
-                  <span className="text-gray-500">
-                    Informationen und Verfügbarkeiten nach{" "}
-                    <a
-                      className="font-bold text-happy-blue"
-                      target="_blank"
-                      href="https://berlin.de"
-                    >
-                      berlin.de
-                    </a>
-                  </span>
-                </div>
-                <div className="flex flex-row items-start">
-                  <KitaList className="w-full" kitas={kitas} />
-                </div>
+                <div className="mb-2 mt-2 h-7 w-1/2 animate-pulse bg-slate-200" />
+                <div className="mb-4 h-5 w-2/3 animate-pulse bg-slate-200" />
               </motion.div>
             )}
-          </AnimatePresence>
-        </motion.div>
-      </AnimatePresence>
+            {[0.95, 0.6, 0.3, 0.15, 0.05, 0.05, 0.05, 0.05, 0.05].map(
+              (opacity, index) => (
+                <motion.div
+                  key={`start-search-information-skeleton-${index}`}
+                  transition={{
+                    type: "spring",
+                    delay: index * 0.05,
+                    bounce: 0,
+                  }}
+                  initial={{ opacity: 0, y: 200 }}
+                  animate={{
+                    y: 0,
+                    opacity: noSearchHasStarted ? opacity : 1,
+                  }}
+                  className="w-full"
+                >
+                  <KitaListItemSkeleton animate={!noSearchHasStarted} />
+                </motion.div>
+              )
+            )}
+          </motion.div>
+        ) : (
+          <div
+            key="desktop-kita-list-"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{
+              type: "spring",
+              bounce: 0,
+            }}
+          >
+            <div className="mb-4 flex flex-col gap-1">
+              <span className="text-xl font-extrabold text-gray-800">
+                {kitas?.length || 0} Einrichtungen in der Nähe
+              </span>
+              <span className="text-gray-500">
+                Informationen und Verfügbarkeiten nach{" "}
+                <a
+                  className="font-bold text-happy-blue"
+                  target="_blank"
+                  href="https://berlin.de"
+                >
+                  berlin.de
+                </a>
+              </span>
+            </div>
+            <div className="flex flex-row items-start">
+              <KitaList className="w-full" kitas={kitas} />
+            </div>
+          </div>
+        )}
+      </motion.div>
     </div>
   );
 };

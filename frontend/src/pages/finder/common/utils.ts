@@ -25,6 +25,7 @@ export const getDescribedHaversineDistanceBetweenCoordinates = (
   coordinates1: { lat: number; lng: number },
   coordinates2: { lat: number; lng: number }
 ): string => {
+  return "1.00km";
   const distance = haversineDistance(coordinates1, coordinates2);
   if (distance < 1000) {
     return `${Math.round(distance)}m`;

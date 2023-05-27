@@ -1,6 +1,8 @@
 import React from "react";
 import type { Kita, PaginatedResultsResponse } from "../../../types";
 
+import kitas from "./kitas.json";
+
 type LoaderParams = {
   lat: number;
   lng: number;
@@ -16,7 +18,7 @@ const loader = async ({
   page = 1,
   limit = 500,
 }: LoaderParams) => {
-  const response = await fetch(
+  /*const response = await fetch(
     `${
       import.meta.env.VITE_BACKEND_URL
     }/location-service/${lat}/${lng}/${distanceInMeters}/${page}/${limit}`,
@@ -25,7 +27,9 @@ const loader = async ({
     }
   );
 
-  const data: PaginatedResultsResponse<Kita> = await response.json();
+  const data: PaginatedResultsResponse<Kita> = await response.json();*/
+
+  const data = kitas;
 
   //TODO: handle error
   if (!data || !data.items) return null;
@@ -57,9 +61,6 @@ const KitaListContextProvider: React.FC<KitaListContextProviderProps> = ({
   const [isFetching, setIsFetching] = React.useState(false);
 
   const fetchKitas = async (latlng: { lat: number; lng: number }) => {
-    setIsFetching(true);
-    setKitas(null);
-
     //TODO: Review impact, experimental instant-delay to allow animations to fade out before fetching
     setTimeout(async () => {
       const foundKitas = await loader({ ...latlng });

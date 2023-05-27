@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Kita } from "../../../../../types";
 import ServiceBanner from "../../../../../components/ServiceBanner";
 import KitaListItem, { KitaListItemSkeleton } from "./KitaListItem";
@@ -22,16 +22,29 @@ type KitaListProps = {
 const KitaList: React.FC<KitaListProps> = ({ kitas, className }) => {
   const { generateElementScrollAnchor } = useKitaListScrollContext();
 
-  const advertisementIndex = React.useMemo(() => {
+  const advertisementIndex = 4;
+
+  const SkeletonItem = memo(KitaListItemSkeleton);
+
+  const kitaListItems = React.useMemo(() => {
     if (kitas === null) return null;
+    if (kitas.length === 0) return null;
 
-    const kitasCount = kitas.length;
-
-    if (kitasCount < 3) return null;
-    if (kitasCount < 5) return 2;
-    if (kitasCount < 10) return 3;
-    else return 4;
+    return kitas.map((kita, index) => {
+      return (
+        <>
+          {advertisementIndex === index && <ServiceBanner />}
+          <KitaListItem
+            key={"kitalistitem-" + kita.uuid}
+            id={generateElementScrollAnchor(kita.uuid)}
+            kita={kita}
+          />
+        </>
+      );
+    });
   }, [kitas]);
+
+  console.log("yo");
 
   return (
     <div
@@ -40,37 +53,10 @@ const KitaList: React.FC<KitaListProps> = ({ kitas, className }) => {
         className
       )}
     >
-      {kitas !== null ? (
-        kitas.length > 0 ? (
-          kitas.map((kita, index) => {
-            if (advertisementIndex === index) {
-              return (
-                <>
-                  <ServiceBanner />
-                  <KitaListItem
-                    id={generateElementScrollAnchor(kita.uuid)}
-                    kita={kita}
-                  />
-                </>
-              );
-            } else
-              return (
-                <KitaListItem
-                  id={generateElementScrollAnchor(kita.uuid)}
-                  kita={kita}
-                />
-              );
-          })
-        ) : (
-          <div className="text-center text-gray-500">Keine Kitas gefunden</div>
-        )
+      {kitaListItems ? (
+        kitaListItems.map((kita, index) => kita)
       ) : (
-        Array.from({ length: 15 }).map((_, index) => (
-          <KitaListItemSkeleton
-            index={index}
-            key={"kitaitemskeleton" + index}
-          />
-        ))
+        <div className="text-center text-gray-500">Keine Kitas gefunden</div>
       )}
     </div>
   );

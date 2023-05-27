@@ -49,6 +49,20 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
     setValidStartingMonth(desiredStartingMonth);
   }, [desiredStartingMonth]);
 
+  const distanceToKita = React.useMemo(() => {
+    if (!currentSearchCoordinates) return null;
+    if (!kita.location) return null;
+    return getDescribedHaversineDistanceBetweenCoordinates(
+      {
+        lng: kita.location.coordinates[0],
+        lat: kita.location.coordinates[1],
+      },
+      currentSearchCoordinates
+    );
+  }, [currentSearchCoordinates, kita.location]);
+
+  console.log("boy");
+
   return (
     <div
       key={"kita" + kita.uuid}
@@ -84,13 +98,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
             <span className="px-2 font-bold">{`${
               /** Round coordinates.dist to 2 floating points */
               //Math.round(kita.location.coordinates.dist * 100) / 100
-              getDescribedHaversineDistanceBetweenCoordinates(
-                {
-                  lng: kita.location.coordinates[0],
-                  lat: kita.location.coordinates[1],
-                },
-                currentSearchCoordinates
-              )
+              distanceToKita
             }`}</span>
           </Chip>
         </div>
