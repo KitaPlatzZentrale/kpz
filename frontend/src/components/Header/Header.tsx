@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
       className="page-padding z-[205] flex h-20 w-full flex-row items-center justify-between border-b border-gray-200 bg-white py-4"
     >
       <nav className="flex w-full flex-row items-center justify-between">
-        <Link to="/" id="logo-container" className="w-56 md:w-72">
+        <Link to="/" id="logo-container" className="w-56 md:w-64">
           <img src="/logo.svg" width="100%" alt="KitaPlatzZentrale Logo" />
         </Link>
         <div
