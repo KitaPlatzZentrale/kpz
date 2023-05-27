@@ -12,7 +12,7 @@ const KitaMapView: React.FC<KitaMapViewProps> = ({}) => {
   return (
     <div
       id="finder-map"
-      className="flex h-full w-full flex-grow lg:h-fit lg:min-h-[500px] xl:h-full xl:min-h-full"
+      className="flex h-full w-full flex-grow lg:h-full lg:min-h-[500px] xl:h-full xl:min-h-full"
     >
       <KitaMap kitas={kitas || []} centerCoordinates={coordinates} />
     </div>

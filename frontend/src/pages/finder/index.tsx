@@ -20,9 +20,9 @@ const FinderPage: React.FC<FinderPageProps> = () => {
 
   React.useEffect(() => {
     const headerHeight = headerRef.current?.clientHeight ?? 125;
-    const searchHeight = searchRef.current?.clientHeight ?? 250;
+    const searchHeight = searchRef.current?.clientHeight ?? 220;
 
-    setContentHeight(window.innerHeight - headerHeight);
+    setContentHeight(window.innerHeight - searchHeight - headerHeight);
   }, [window.innerHeight, headerRef, searchRef]);
 
   const isMobile = React.useMemo(() => {
