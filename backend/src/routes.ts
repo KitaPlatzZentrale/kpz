@@ -11,6 +11,10 @@ import singleKitaNotificationSignup, {
   validator as singleKitaNotificationSignupValidator,
 } from "./entities/signups/handler/singleKitaNotificationSignup";
 
+import revokeAccess, {
+  validator as revokeAccessValidator,
+} from "./entities/signups/handler/revokeConsent";
+
 import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
@@ -35,5 +39,7 @@ router.post(
   singleKitaNotificationSignupValidator,
   singleKitaNotificationSignup
 );
+
+router.delete("/signup/:consentId", revokeAccessValidator, revokeAccess);
 
 export = router;

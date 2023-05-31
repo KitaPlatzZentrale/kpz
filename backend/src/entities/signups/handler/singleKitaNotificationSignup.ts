@@ -1,22 +1,13 @@
 import { RequestHandler } from "express";
-import {
-  IsDateString,
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  validate,
-} from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, validate } from "class-validator";
 import logger from "../../../logger";
 import { EmailSignup } from "../service";
 
 interface ISingleKitaNotification {
   email: string;
-  consentId: string;
   kitaId: string;
   kitaName: string;
   kitaDesiredAvailability: string;
-  createdAt: string;
-  consentedAt: string;
 }
 
 class SingleKitaNotificationValidator {
@@ -26,10 +17,6 @@ class SingleKitaNotificationValidator {
 
   @IsString()
   @IsNotEmpty()
-  consentId: string;
-
-  @IsString()
-  @IsNotEmpty()
   kitaId: string;
 
   @IsString()
@@ -39,14 +26,6 @@ class SingleKitaNotificationValidator {
   @IsString()
   @IsNotEmpty()
   kitaDesiredAvailability: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  createdAt: string;
-
-  @IsDateString()
-  @IsNotEmpty()
-  consentedAt: string;
 }
 
 export const validator: RequestHandler<ISingleKitaNotification> = async (
@@ -59,27 +38,15 @@ export const validator: RequestHandler<ISingleKitaNotification> = async (
   }
 
   try {
-    const {
-      email,
-      consentId,
-      kitaId,
-      kitaDesiredAvailability,
-      kitaName,
-      createdAt,
-      consentedAt,
-    } = req.body;
+    const { email, kitaId, kitaDesiredAvailability, kitaName } = req.body;
     const newNotification = new SingleKitaNotificationValidator();
     newNotification.email = email;
-    newNotification.consentId = consentId;
     newNotification.kitaId = kitaId;
     newNotification.kitaDesiredAvailability = kitaDesiredAvailability;
     newNotification.kitaName = kitaName;
-    newNotification.createdAt = createdAt;
-    newNotification.consentedAt = consentedAt;
 
     const errors = await validate(newNotification);
     if (errors.length) return res.status(400).json({ error: errors });
-    console.log("Validator!!!");
 
     return next();
   } catch (err: any) {
@@ -90,26 +57,13 @@ export const validator: RequestHandler<ISingleKitaNotification> = async (
 
 const handler: RequestHandler<ISingleKitaNotification> = async (req, res) => {
   try {
-    const {
-      email,
-      consentId,
-      kitaId,
-      kitaDesiredAvailability,
-      kitaName,
-      createdAt,
-      consentedAt,
-    } = req.body;
-
-    console.log("Writing to db!!!");
+    const { email, kitaId, kitaDesiredAvailability, kitaName } = req.body;
 
     await EmailSignup.singleKitaNotificationSignup(
       email,
-      consentId,
       kitaId,
       kitaDesiredAvailability,
-      kitaName,
-      createdAt,
-      consentedAt
+      kitaName
     );
 
     return res.status(200).send();
