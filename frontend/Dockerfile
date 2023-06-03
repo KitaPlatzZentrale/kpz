@@ -2,7 +2,7 @@
 FROM node:14-alpine AS builder
 
 # Set build arguments with default values (optional)
-ARG VITE_BACKEND_URL=http://172.31.19.70:3000
+ARG VITE_BACKEND_URL=http://api.kitaplatz-zentrale.de
 ARG VITE_PUBLIC_HERE_API_KEY=W4Sm0s8ksnXVnfgqHit48vXtf4MvD90-TY_vH0W1Sno
 
 # ENV
