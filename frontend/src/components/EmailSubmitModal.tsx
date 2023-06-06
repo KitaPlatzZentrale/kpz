@@ -34,11 +34,10 @@ const submitEmailAction = async (email: string) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      //TODO
-      name: "Kein Name bekannt",
       email,
       kitaName: "Kita 1",
-      interneKitaId: "1",
+      kitaId: "1",
+      kitaDesiredAvailability: "May",
     }),
   });
 
