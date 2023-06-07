@@ -10,21 +10,25 @@ class KitaService {
     page: number,
     limit: number
   ): Promise<PaginatedResultsResponse<Kita>> => {
-    const nearestSortedKitaList = await KitaDetailModel.find({
-      location: {
-        $nearSphere: {
-          $geometry: {
-            type: "Point",
-            coordinates: [lon, lat], // lon has to come first!
+    try {
+      const nearestSortedKitaList = await KitaDetailModel.find({
+        location: {
+          $nearSphere: {
+            $geometry: {
+              type: "Point",
+              coordinates: [lon, lat], // lon has to come first!
+            },
+            $maxDistance: radius, // in meter
           },
-          $maxDistance: radius, // in meter
         },
-      },
-    });
+      });
+      const paginatedKitas = paginate(nearestSortedKitaList, page, limit);
 
-    const paginatedKitas = paginate(nearestSortedKitaList, page, limit);
-
-    return paginatedKitas;
+      return paginatedKitas;
+    } catch (err) {
+      console.log(err);
+      throw new Error("Something went wrong");
+    }
   };
 }
 
