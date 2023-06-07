@@ -9,7 +9,7 @@ const kitas: Kita[] = require("../../data/kitas_berlin.json");
 async function fetchKitaWithRetry(
   uuid: string,
   retries = 6
-): Promise<KitaDetail> {
+): Promise<KitaDetail> | null {
   try {
     const response = await BerlinDEService.getKitaDetails(uuid);
 
@@ -26,7 +26,7 @@ async function fetchKitaWithRetry(
       await new Promise((resolve) => setTimeout(resolve, 10000));
       return await fetchKitaWithRetry(uuid, retries - 1);
     } else {
-      throw error;
+      return null;
     }
   }
 }
@@ -37,13 +37,14 @@ async function saveKitaDetailsToDB(): Promise<void> {
 
     for (const kita of kitas) {
       let updatedKita = await fetchKitaWithRetry(kita.uuid);
-
-      logger.info(JSON.stringify(updatedKita));
-      await KitaDetailModel.findOneAndUpdate(
-        { uuid: updatedKita.uuid },
-        updatedKita,
-        { upsert: true }
-      );
+      if (updatedKita !== null) {
+        logger.info(JSON.stringify(updatedKita));
+        await KitaDetailModel.findOneAndUpdate(
+          { uuid: updatedKita.uuid },
+          updatedKita,
+          { upsert: true }
+        );
+      }
     }
   } catch (err) {
     logger.error("Something went wrong:", err);
