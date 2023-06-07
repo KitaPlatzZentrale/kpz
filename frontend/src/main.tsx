@@ -11,7 +11,9 @@ import { RouterProvider } from "react-router-dom";
 import router from "./router";
 import "./styles/index.css";
 import theme from "./theme";
-
+import ReactGA from "react-ga4";
+const TRACKING_ID = "G-GNDE5XDS4C";
+ReactGA.initialize(TRACKING_ID);
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <ThemeProvider theme={theme}>
     <CssVarsProvider theme={theme}>
