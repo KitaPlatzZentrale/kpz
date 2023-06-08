@@ -1,8 +1,26 @@
 import logger from "../../logger";
-import { UserModel, EmailServiceSignupModel } from "./model";
+import { UserModel, EmailServiceSignupModel, AreaModel } from "./model";
 import { v4 as uuidv4 } from "uuid";
 
 export class EmailSignup {
+  public static areaNotificationSignup = async (
+    email: string,
+    areaDescription: string,
+    revokedAt?: string | null
+  ) => {
+    try {
+      await AreaModel.create({
+        email,
+        areaDescription,
+        revokedAt,
+      });
+      logger.info(`User ${email} signed up for ${areaDescription}`);
+      return;
+    } catch (e) {
+      logger.error(e);
+      return e;
+    }
+  };
   public static singleKitaNotificationSignup = async (
     email: string,
     kitaId: string,
