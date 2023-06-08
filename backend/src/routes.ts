@@ -15,6 +15,10 @@ import revokeAccess, {
   validator as revokeAccessValidator,
 } from "./entities/signups/handler/revokeConsent";
 
+import areaNotificationSignup, {
+  validator as areaNotificationSignupValidator,
+} from "./entities/signups/handler/areNotificationSignup";
+
 import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
@@ -41,5 +45,10 @@ router.post(
 );
 
 router.delete("/signup/:consentId", revokeAccessValidator, revokeAccess);
+router.post(
+  "/signup/area",
+  areaNotificationSignupValidator,
+  areaNotificationSignup
+);
 
 export = router;

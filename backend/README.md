@@ -33,7 +33,6 @@ npx tsc --watch
 
 Run dev server locally
 
-
 ```bash
 nodemon dist/index.js
 ```
@@ -44,7 +43,7 @@ nodemon dist/index.js
 
 ```bash
 ssh -i "~/.ssh/kpz-node-express-ec2-key.pem" ec2-user@ec2-3-70-176-52.eu-central-1.compute.amazonaws.com
-````
+```
 
 ### Upload files to EC2 Instance
 
@@ -57,7 +56,7 @@ scp -i "~/.ssh/kpz-node-express-ec2-key.pem" -r ./dist
 ```bash
 sudo yum update -y
 sudo yum install docker
-````
+```
 
 ### Start Docker Deamon
 
@@ -67,11 +66,11 @@ sudo systemctl start docker
 
 ### Install Docker Compose
 
-1. ```sudo yum update -y```
-2. ```sudo yum install python3-pip -y```
-3. ```sudo pip3 install docker-compose```
-4. Read Section problems before running this command ```sudo yum remove python3-requests -y```
-5. Read Section problems before running this command ```sudo pip3 install requests```
+1. `sudo yum update -y`
+2. `sudo yum install python3-pip -y`
+3. `sudo pip3 install docker-compose`
+4. Read Section problems before running this command `sudo yum remove python3-requests -y`
+5. Read Section problems before running this command `sudo pip3 install requests`
 
 ### Problems
 
@@ -105,3 +104,4 @@ CloudFormation (Best for quickly getting started)
 To set up the AWS integration with CloudFormation, see the the [AWS getting started guide](https://docs.datadoghq.com/getting_started/integrations/aws/).
 
 Read: <https://docs.datadoghq.com/integrations/amazon_web_services/#installation>
+trigger
