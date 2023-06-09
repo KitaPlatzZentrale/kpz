@@ -1,0 +1,19 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && zip -r lambda.zip dist/ node_modules/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/web-api": "^6.8.1",
+    "@types/aws-lambda": "^8.10.116",
+    "aws-lambda": "^1.0.7",
+    "dotenv": "^16.1.4",
+    "typescript": "^5.1.3"
+  }
+}
