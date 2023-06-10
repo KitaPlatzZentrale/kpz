@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'frontend/**'
+  workflow_dispatch:
 
 jobs:
   deploy-prod-frontend:
@@ -34,7 +35,7 @@ jobs:
 
       - name: Build Docker Image Frontend Prod
         working-directory: ./frontend
-        run: docker build --build-arg VITE_BACKEND_URL=${{ secrets.VITE_BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-prod-frontend .
+        run: docker build --build-arg VITE_BACKEND_URL=${{ vars.BACKEND_URL }} --build-arg VITE_PUBLIC_HERE_API_KEY=${{ secrets.VITE_PUBLIC_HERE_API_KEY }} -t goodbuy/kpz-prod-frontend .
 
       - name: Push Docker Image
         run: |

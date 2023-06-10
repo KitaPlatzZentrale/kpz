@@ -25,13 +25,13 @@ const Footer: React.FC<FooterProps> = ({ consentId }) => {
           University of Applied Sciences Berlin, Lohmühlenstraße 65, 12435
           Berlin
         </p>
-        <p>
+        {/*<p>
           Sie möchten keine Emails mehr erhalten?{" "}
           <Link style={styles.anchor} href={revokeConsentUrl(consentId)}>
             Email Benachrichtigungen abmelden
           </Link>
           .
-        </p>
+  </p>*/}
         <p>
           <Link style={styles.anchor} href="https://kitaplatz-zentrale.de">
             https://kitaplatz-zentrale.de

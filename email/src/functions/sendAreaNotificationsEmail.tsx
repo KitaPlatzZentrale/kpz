@@ -10,13 +10,22 @@ import AreaNotificationsEmail, {
 } from "../templates/areaNotifications";
 
 interface EmailProps {
-  to: string;
-  props: AreaNotificationsEmailProps;
+  detail: {
+    fullDocument: {
+      uuid: string;
+      email: string;
+      areaDescription: string;
+      consentId: string;
+      createdAt: string;
+      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+      revokedAt?: string | null;
+    };
+  };
 }
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
-  const { to, props } = event;
-  const { areaDescription, consentId } = props;
+  const { areaDescription, consentId, email } = event.detail.fullDocument;
+  const to = email;
 
   if (!to) throw new Error("No recipient with `to` specified");
   if (!areaDescription)
