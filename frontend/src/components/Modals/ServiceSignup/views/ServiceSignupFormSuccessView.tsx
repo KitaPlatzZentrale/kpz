@@ -4,7 +4,7 @@ import { CheckCircle } from "@mui/icons-material";
 import { Button } from "@mui/joy";
 
 import Balancer from "react-wrap-balancer";
-import { useServiceSignupModal } from "../ServiceSignupModalContext";
+import { useMobileOverlay } from "../../../MobileOverlay/MobileOverlayContext";
 
 type ServiceSignupFormSuccessViewProps = {
   // TODO: Add props
@@ -13,9 +13,9 @@ type ServiceSignupFormSuccessViewProps = {
 const ServiceSignupFormSuccessView: React.FC<
   ServiceSignupFormSuccessViewProps
 > = () => {
-  const { setModalIsOpen } = useServiceSignupModal();
+  const { setOpen: setModalIsOpen } = useMobileOverlay("service-signup");
   return (
-    <div className="mb-6 flex flex-col items-center justify-center">
+    <div className="mb-6 flex flex-col items-center justify-center px-3 lg:px-0">
       <div className="mb-4">
         <CheckCircle color="info" fontSize="xl7" />
       </div>

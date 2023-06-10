@@ -1,9 +1,7 @@
 import { Button } from "@mui/joy";
 import clsx from "clsx";
 import React from "react";
-
-import Balancer from "react-wrap-balancer";
-import { useServiceSignupModal } from "./ServiceSignupModal/ServiceSignupModalContext";
+import { useMobileOverlay } from "./MobileOverlay/MobileOverlayContext";
 
 type ServiceBannerProps = {
   open?: boolean;
@@ -13,7 +11,8 @@ type ServiceBannerProps = {
 const ServiceBanner: React.FC<ServiceBannerProps> = ({ open, className }) => {
   const [bannerIsOpen, setBannerIsOpen] = React.useState(open ?? true);
 
-  const { modalIsOpen, setModalIsOpen } = useServiceSignupModal();
+  const { isOpen: isMobileOverlayOpen, setOpen: setMobileOverlayOpen } =
+    useMobileOverlay("service-signup");
 
   const handleBannerClose = () => {
     setBannerIsOpen(false);
@@ -57,7 +56,7 @@ const ServiceBanner: React.FC<ServiceBannerProps> = ({ open, className }) => {
           <Button
             color="primary"
             variant="solid"
-            onClick={() => setModalIsOpen(true)}
+            onClick={() => setMobileOverlayOpen(true)}
             size="lg"
           >
             Jetzt anfragen
