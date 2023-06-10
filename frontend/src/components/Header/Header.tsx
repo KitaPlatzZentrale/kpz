@@ -1,20 +1,20 @@
-import { Button, Divider } from "@mui/joy";
-import clsx from "clsx";
 import React from "react";
 import { Link } from "react-router-dom";
 import theme from "../../theme";
 import HeaderDesktopNavigation from "./desktop/HeaderDesktopNavigation";
 import HeaderMobileNavigation from "./mobile/HeaderMobileNavigation";
 import MenuButton from "./mobile/HeaderMobileNavigationButton";
-import HeaderNavigationLink from "./HeaderNavigationLink";
-import HeaderNavigationLinkList from "./HeaderNavigationLinkList";
+import { useMobileOverlay } from "../MobileOverlay/MobileOverlayContext";
 
 type HeaderProps = {
   headerRef?: React.RefObject<HTMLDivElement>;
 };
 
 const Header: React.FC<HeaderProps> = ({ headerRef }) => {
-  const [mobileOverlayOpen, setMobileOverlayOpen] = React.useState(false);
+  const {
+    isOpen: isHeaderMobileOverlayOpen,
+    setOpen: setHeaderMobileOverlayOpen,
+  } = useMobileOverlay("header-navigation");
 
   return (
     <header
@@ -34,8 +34,10 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
         </div>
         <div className="flex flex-row items-center gap-8 xl:hidden">
           <MenuButton
-            isOpen={mobileOverlayOpen}
-            onClick={() => setMobileOverlayOpen(!mobileOverlayOpen)}
+            isOpen={isHeaderMobileOverlayOpen}
+            onClick={() =>
+              setHeaderMobileOverlayOpen(!isHeaderMobileOverlayOpen)
+            }
             strokeWidth="3"
             color={theme.palette.primary[600]}
             lineProps={{ strokeLinecap: "round" }}
@@ -45,8 +47,8 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
             className="cursor-pointer"
           />
           <HeaderMobileNavigation
-            open={mobileOverlayOpen}
-            onClose={() => setMobileOverlayOpen(false)}
+            open={isHeaderMobileOverlayOpen}
+            onClose={() => setHeaderMobileOverlayOpen(false)}
           />
         </div>
       </nav>

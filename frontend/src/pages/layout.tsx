@@ -3,8 +3,8 @@ import React from "react";
 import { ScrollRestoration } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
 import Header from "../components/Header/Header";
-import ServiceSignupModal from "../components/ServiceSignupModal/ServiceSignupModal";
-import ServiceSignupModalContextProvider from "../components/ServiceSignupModal/ServiceSignupModalContext";
+import MobileOverlayContextProvider from "../components/MobileOverlay/MobileOverlayContext";
+import ServiceSignupModal from "../components/Modals/ServiceSignup/ServiceSignup";
 
 type LayoutProps = React.PropsWithChildren<{
   lockAtScreenHeight?: boolean;
@@ -17,7 +17,7 @@ const Layout: React.FC<LayoutProps> = ({
   headerRef,
 }) => {
   return (
-    <ServiceSignupModalContextProvider>
+    <MobileOverlayContextProvider>
       <ScrollRestoration getKey={(location, matches) => location.pathname} />
 
       <ServiceSignupModal />
@@ -40,7 +40,7 @@ const Layout: React.FC<LayoutProps> = ({
         {children}
         <Footer />
       </div>
-    </ServiceSignupModalContextProvider>
+    </MobileOverlayContextProvider>
   );
 };
 

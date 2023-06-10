@@ -70,7 +70,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
       preserveAspectRatio="none"
       width={width}
       height={height}
-      style={{ zIndex: 100 }}
+      style={{ zIndex: 1000 }}
       {...props}
     >
       <motion.line
