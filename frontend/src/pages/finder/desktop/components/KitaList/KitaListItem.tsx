@@ -18,9 +18,11 @@ import {
 } from "@mui/icons-material";
 import { Button, Chip, Link } from "@mui/joy";
 
-import EmailSubmitModal from "../../../../../components/EmailSubmitModal";
+import EmailSubmitModal from "../../../../../components/Modals/SingleKitaSignup/SingleKitaSignup";
 
 import type { Kita } from "../../../../../types";
+import { useMobileOverlay } from "../../../../../components/MobileOverlay/MobileOverlayContext";
+import { useSingleKitaSignupFormContext } from "../../../../../components/Modals/SingleKitaSignup/SingleKitaSignupFormContext";
 
 type KitaListItemProps = {
   kita: Kita;
@@ -31,6 +33,19 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
   const { desiredStartingMonth, coordinates: currentSearchCoordinates } =
     useSearchContext();
 
+  const { setOpen: setEmailSubmitModalOpen } =
+    useMobileOverlay("single-kita-signup");
+
+  const { setValue } = useSingleKitaSignupFormContext();
+
+  const handleOpen = () => {
+    setEmailSubmitModalOpen(true);
+
+    setValue("kitaDesiredAvailability", desiredStartingMonth);
+    setValue("kitaId", kita.uuid);
+    setValue("kitaName", kita.name);
+  };
+
   const [validStartingMonth, setValidStartingMonth] =
     React.useState(desiredStartingMonth);
 
@@ -40,8 +55,6 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
   const hasSlotsFreeInSelectedMonth = desiredStartingMonthISODate
     ? kita.availability[desiredStartingMonthISODate]
     : false;
-
-  const [openModal, setOpenModal] = React.useState(false);
 
   React.useEffect(() => {
     if (!desiredStartingMonth) return;
@@ -55,7 +68,6 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
       id={id}
       className="flex w-full flex-col gap-6 rounded-2xl bg-white p-6 pl-8 shadow-lg sm:p-9 sm:pl-12 lg:flex-row lg:p-6 lg:pl-9 lg:shadow-none"
     >
-      <EmailSubmitModal open={openModal} onClose={() => setOpenModal(false)} />
       <div className="flex flex-col gap-2">
         <Link
           href={`https://kita-navigator.berlin.de/einrichtungen/${kita.uuid}`}
@@ -126,7 +138,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
               color="info"
               variant="plain"
               size="sm"
-              onClick={() => setOpenModal(true)}
+              onClick={() => handleOpen()}
               sx={(theme) => ({
                 padding: 0,
                 justifyContent: "flex-start",

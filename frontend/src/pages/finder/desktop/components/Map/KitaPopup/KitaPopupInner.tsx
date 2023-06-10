@@ -16,7 +16,7 @@ import {
 } from "@mui/icons-material";
 import { Chip, IconButton, Link, ModalClose } from "@mui/joy";
 
-import EmailSubmitModal from "../../../../../../components/EmailSubmitModal";
+import EmailSubmitModal from "../../../../../../components/Modals/SingleKitaSignup/SingleKitaSignup";
 
 import type { Kita } from "../../../../../../types";
 
