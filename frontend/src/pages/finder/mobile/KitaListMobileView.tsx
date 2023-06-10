@@ -1,4 +1,4 @@
-import { Button } from "@mui/joy";
+import { Button, CircularProgress } from "@mui/joy";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
@@ -6,60 +6,37 @@ import { useKitaListContext } from "../common/KitaDataContext";
 import { useSearchContext } from "../common/KitaSearchContext";
 
 import KitaList from "../desktop/components/KitaList/KitaList";
-import { KitaListItemSkeleton } from "../desktop/components/KitaList/KitaListItem";
 import BottomDrawer, {
   DEFAULT_DRAWER_ANCHORS,
 } from "./components/BottomDrawer";
 import SearchOverlay from "./components/SearchOverlay";
-import { useSearchOverlayContext } from "./components/SearchOverlayContext";
+import { useMobileOverlay } from "../../../components/MobileOverlay/MobileOverlayContext";
 
 type KitaListMobileViewProps = React.PropsWithChildren<{}>;
 
 const StartKitaSearchListView = () => {
-  const { open: isSearchOverlayOpen, setOpen: setSearchOverlayOpen } =
-    useSearchOverlayContext();
+  const { isOpen: isSearchOverlayOpen, setOpen: setSearchOverlayOpen } =
+    useMobileOverlay("kita-search");
 
   return (
-    <AnimatePresence>
-      <div className="mt-1 flex w-full flex-col items-center justify-center">
-        <Button
-          variant="solid"
-          size="lg"
-          style={{ padding: "20px 40px" }}
-          color="primary"
-          onClick={() => setSearchOverlayOpen(true)}
-        >
-          Suche starten
-        </Button>
-      </div>
-      <motion.div
-        key="start-search-information-skeletons"
-        className="mt-0 flex w-full flex-col gap-2"
-        style={{ overflow: "hidden" }}
+    <div className="mt-1 flex w-full flex-col items-center justify-center">
+      <Button
+        variant="solid"
+        size="lg"
+        style={{ padding: "20px 40px" }}
+        color="primary"
+        onClick={() => setSearchOverlayOpen(true)}
       >
-        {Array.from({ length: 5 }).map((opacity, index) => (
-          <motion.div
-            key={`start-search-information-skeleton-${index}`}
-            transition={{
-              type: "spring",
-              delay: index * 0.05,
-              bounce: 0,
-            }}
-            initial={{ opacity: 0, y: 200 }}
-            animate={{ y: 0, opacity: 0.8 }}
-          >
-            <KitaListItemSkeleton animate={false} />
-          </motion.div>
-        ))}
-      </motion.div>
-    </AnimatePresence>
+        Suche starten
+      </Button>
+    </div>
   );
 };
 
 const KitaListMobileView: React.FC<KitaListMobileViewProps> = ({
   children,
 }) => {
-  const { kitas } = useKitaListContext();
+  const { kitas, isFetching } = useKitaListContext();
 
   const { submitted } = useSearchContext();
 
@@ -87,10 +64,17 @@ const KitaListMobileView: React.FC<KitaListMobileViewProps> = ({
         >
           {noSearchHasStarted
             ? "Starten Sie Ihre Suche"
+            : isFetching
+            ? "Suche läuft..."
             : `${kitas?.length || 0} Einrichtungen in der Nähe`}
         </h3>
         {noSearchHasStarted ? (
           <StartKitaSearchListView />
+        ) : isFetching ? (
+          <div className="mt-6 flex w-full flex-col items-center justify-center gap-4">
+            <CircularProgress color="info" size="lg" />
+            <p className="text-sm">Tageseinrichtungen werden ermittelt</p>
+          </div>
         ) : (
           <KitaList kitas={kitas || []} />
         )}

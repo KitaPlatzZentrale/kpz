@@ -1,12 +1,14 @@
 import { Button, Divider } from "@mui/joy";
 import React from "react";
-import { useServiceSignupModal } from "../../ServiceSignupModal/ServiceSignupModalContext";
 import HeaderNavigationLinkList from "../HeaderNavigationLinkList";
+import { useMobileOverlay } from "../../MobileOverlay/MobileOverlayContext";
 
 type HeaderDesktopNavigationProps = {};
 
 const HeaderDesktopNavigation: React.FC<HeaderDesktopNavigationProps> = () => {
-  const { setModalIsOpen: setServiceSignupModalOpen } = useServiceSignupModal();
+  const { setOpen: setServiceSignupModalOpen } =
+    useMobileOverlay("service-signup");
+
   return (
     <>
       <HeaderNavigationLinkList />
@@ -19,7 +21,6 @@ const HeaderDesktopNavigation: React.FC<HeaderDesktopNavigationProps> = () => {
         className="mx-8"
       />
       <Button
-        href="/finder"
         variant="solid"
         color="primary"
         size="lg"

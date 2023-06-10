@@ -1,9 +1,10 @@
 import React from "react";
 import { Button, Divider } from "@mui/joy";
 import clsx from "clsx";
-import { AnimatePresence, motion } from "framer-motion";
-import { useServiceSignupModal } from "../../ServiceSignupModal/ServiceSignupModalContext";
+import { motion } from "framer-motion";
 import HeaderNavigationLinkList from "../HeaderNavigationLinkList";
+import MobileOverlay from "../../MobileOverlay/MobileOverlay";
+import { useMobileOverlay } from "../../MobileOverlay/MobileOverlayContext";
 
 type HeaderMobileNavigationProps = {
   open?: boolean;
@@ -14,9 +15,10 @@ const HeaderMobileNavigation: React.FC<HeaderMobileNavigationProps> = ({
   open: openProp = false,
   onClose,
 }) => {
-  const { setModalIsOpen: setServiceSignupModalOpen } = useServiceSignupModal();
+  const { setOpen: setServiceSignupModalOpen } =
+    useMobileOverlay("service-signup");
 
-  const [isOpen, setOpen] = React.useState(openProp);
+  const { isOpen, setOpen } = useMobileOverlay("header-navigation");
 
   const handleClose = () => {
     setOpen(false);
@@ -29,58 +31,41 @@ const HeaderMobileNavigation: React.FC<HeaderMobileNavigationProps> = ({
 
   const commonHorizontalPadding = "px-6";
   return (
-    <AnimatePresence>
-      {isOpen ? (
-        <motion.div
-          initial={{
-            x: window.innerWidth,
+    <MobileOverlay name="header-navigation" animationDirection="x" hideClose>
+      <div
+        className={clsx(
+          "flex w-full flex-col gap-7 py-3",
+          commonHorizontalPadding
+        )}
+      >
+        <div className="h-12" id="header-mobile-navigation-mock" />
+        <motion.h2 className="mb-3 text-3xl font-black">Menü</motion.h2>
+        <div className="flex w-full flex-col">
+          <HeaderNavigationLinkList onLinkClick={() => handleClose()} />
+        </div>
+        <Divider
+          sx={{
+            margin: "3rem 0rem 1rem",
           }}
-          animate={{
-            x: 0,
+          component="div"
+          orientation="horizontal"
+        />
+        <Button
+          href="/finder"
+          variant="solid"
+          color="primary"
+          size="lg"
+          className="w-fit shadow-md"
+          sx={{ padding: "1.25rem 2rem" }}
+          onClick={() => {
+            handleClose();
+            setServiceSignupModalOpen(true);
           }}
-          exit={{ x: window.innerWidth }}
-          transition={{
-            type: "spring",
-            bounce: 0,
-            duration: 0.4,
-          }}
-          className="page-padding absolute left-0 top-0 z-[99] flex h-full max-h-screen w-full flex-col overflow-hidden rounded-lg bg-white py-24"
         >
-          <div
-            className={clsx(
-              "flex w-full flex-col gap-7 py-3",
-              commonHorizontalPadding
-            )}
-          >
-            <motion.h2 className="mb-3 text-3xl font-black">Menü</motion.h2>
-            <div className="flex w-full flex-col">
-              <HeaderNavigationLinkList onLinkClick={() => handleClose()} />
-            </div>
-            <Divider
-              sx={{
-                margin: "3rem 0rem 1rem",
-              }}
-              component="div"
-              orientation="horizontal"
-            />
-            <Button
-              href="/finder"
-              variant="solid"
-              color="primary"
-              size="lg"
-              className="w-fit shadow-md"
-              sx={{ padding: "1.25rem 2rem" }}
-              onClick={() => {
-                handleClose();
-                setServiceSignupModalOpen(true);
-              }}
-            >
-              Platz finden lassen
-            </Button>
-          </div>
-        </motion.div>
-      ) : null}
-    </AnimatePresence>
+          Platz finden lassen
+        </Button>
+      </div>
+    </MobileOverlay>
   );
 };
 

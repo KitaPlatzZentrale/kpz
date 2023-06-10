@@ -16,6 +16,10 @@ const router = createBrowserRouter([
     element: <FinderPage />,
   },
   {
+    path: "/kitas",
+    element: <FinderPage />,
+  },
+  {
     path: "/datenschutzerklaerung",
     element: <PrivacyPage />,
   },

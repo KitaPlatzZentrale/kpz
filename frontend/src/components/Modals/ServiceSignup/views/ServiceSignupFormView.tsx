@@ -2,9 +2,9 @@ import React from "react";
 import { Cake, DateRange, MailOutline } from "@mui/icons-material";
 import { Button, Divider } from "@mui/joy";
 
-import AddressLookup from "../../AddressLookup";
-import FormAutocomplete from "../../FormAutocomplete";
-import FormField from "../../FormField";
+import AddressLookup from "../../../AddressLookup";
+import FormAutocomplete from "../../../FormAutocomplete";
+import FormField from "../../../FormField";
 import { useServiceSignupFormContext } from "../ServiceSignupFormContext";
 
 import { useWizardContext } from "../WizardContext";
@@ -43,7 +43,7 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
   } = register("expectedBirthDate");
 
   return (
-    <>
+    <div className="px-3 lg:px-0">
       <div className="mb-8 flex w-full flex-col">
         <h3 className="mb-2 text-2xl font-black">Wo sollen wir suchen?</h3>
         <p className="w-full text-base text-gray-800">
@@ -272,7 +272,7 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
           Unverbindlich Anmelden
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
