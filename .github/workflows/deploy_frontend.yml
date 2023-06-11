@@ -30,7 +30,7 @@ jobs:
             aws-region: eu-central-1
 
       - name: Install dependencies
-        run: yarn
+        run: yarn --cwd "frontend" install
 
       - name: Build
         run: yarn build
