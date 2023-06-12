@@ -34,13 +34,14 @@ jobs:
 
       - name: Build
         run: yarn --cwd "frontend" build
-
+        env:
+          VITE_BACKEND_URL: ${{ vars.BACKEND_URL }}
+          VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
+          
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
           folder: frontend/dist
-          VITE_BACKEND_URL: ${{ vars.BACKEND_URL }}
-          VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
           bucket: ${{ vars.S3_BUCKET }}
           bucket-region: ${{ vars.S3_BUCKET_REGION }}
           dist-id: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
