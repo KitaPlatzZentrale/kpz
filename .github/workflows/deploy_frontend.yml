@@ -8,6 +8,10 @@ on:
       - 'frontend/**'
   workflow_dispatch:
 
+env:
+  VITE_BACKEND_URL: ${{ secrets.BACKEND_URL }}
+  VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
+
 permissions:
   id-token: write
   contents: read
@@ -30,18 +34,15 @@ jobs:
         run: yarn --cwd "frontend" install
 
       - name: Build
-        env:
-          VITE_BACKEND_URL: ${{ secrets.BACKEND_URL }}
-          VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
         run: yarn --cwd "frontend" build
 
       - name: Deploy
         uses: reggionick/s3-deploy@v3
         with:
           folder: frontend/dist
-          bucket: ${{ vars.S3_BUCKET }}
-          bucket-region: ${{ vars.S3_BUCKET_REGION }}
-          dist-id: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+          bucket: ${{ secrets.S3_BUCKET }}
+          bucket-region: ${{ secrets.S3_BUCKET_REGION }}
+          dist-id: ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }}
           invalidation: /
           delete-removed: true
           no-cache: true
