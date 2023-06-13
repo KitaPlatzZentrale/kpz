@@ -1,0 +1,22 @@
+{
+  "name": "notification",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rm -rf dist",
+    "build": "esbuild src/functions/* --bundle --minify --sourcemap --platform=node --target=es2020 --outdir=dist",
+    "postbuild": "cd dist && ../zipByName.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "axios": "^1.4.0",
+    "dotenv": "^16.1.4"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.117"
+  }
+}
