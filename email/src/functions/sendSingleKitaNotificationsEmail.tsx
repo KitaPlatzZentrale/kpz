@@ -7,6 +7,40 @@ import type { Handler } from "aws-lambda";
 
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
 
+/**
+ * Lambda Function: SingleKitaNotificationsEmailHandler
+ *
+ * Description:
+ * This Lambda function handles sending notification emails for a single Kita (childcare center) to recipients.
+ * It receives an event object containing the details of the tracked Kita, including the email address, consent ID,
+ * tracked Kita information, and other relevant data.
+ * The function validates the required properties and generates the email body using the provided props.
+ * Finally, it sends the email using the sendEmail function.
+ *
+ * ...
+
+ * Sample Event:
+ * {
+ *   "detail": {
+ *     "fullDocument": {
+ *       "uuid": "12345",
+ *       "email": "recipient@example.com",
+ *       "consentId": "ABC123",
+ *       "trackedKitas": [
+ *         {
+ *           "id": "kitaid123",
+ *           "kitaName": "Example Kita",
+ *           "kitaAvailability": "June"
+ *         }
+ *       ],
+ *       "createdAt": "2023-06-08T12:00:00Z",
+ *       "consentedAt": "2023-06-08T12:00:00Z",
+ *       "revokedAt": null
+ *     }
+ *   }
+ * }
+ */
+
 interface EmailProps {
   detail: {
     fullDocument: {

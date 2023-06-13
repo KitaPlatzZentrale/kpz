@@ -9,6 +9,27 @@ import AreaNotificationsEmail, {
   AreaNotificationsEmailProps,
 } from "../templates/areaNotifications";
 
+/**
+ * Lambda Function: EmailSenderHandler
+ *
+ * Description:
+ * This Lambda function handles sending area notifications emails to recipients.
+ * It receives an event object containing the recipient's email address and the email properties.
+ * The function validates the required properties and generates the email body using the provided props.
+ * Finally, it sends the email using the sendEmail function.
+ *
+ * ...
+
+ * Sample Event:
+ * {
+ *   "to": "recipient@example.com",
+ *   "props": {
+ *     "areaDescription": "Example Area",
+ *     "consentId": "ABC123"
+ *   }
+ * }
+ */
+
 interface EmailProps {
   detail: {
     fullDocument: {
