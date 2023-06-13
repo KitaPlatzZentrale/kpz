@@ -1,5 +1,6 @@
 import { Handler } from "aws-lambda";
 import { sendSlackErrorNotification } from "../sender/sendSlackErrorNotification";
+require("dotenv").config();
 /**
  * Lambda Function: CloudWatchAlarmHandler
  *
@@ -40,8 +41,12 @@ export const handler: Handler = async (event: ICloudWatchAlarmEvent) => {
     const stateChangeTime = event.detail.stateChangeTime;
     const newStateValue = event.detail.newStateValue;
     const resources = event.detail.resources;
-    const logUrl =
-      "https://eu-central-1.console.aws.amazon.com/cloudwatch/home?region=eu-central-1#logsV2:log-groups/log-group/$252Faws$252Fapprunner$252FPROD-KPZ-APP-RUNNER-SERVICE$252F99949951b7124c0a9f1203775a8215ca$252Fapplication";
+    const logUrl = process.env.APPRUNNER_CLOUDWATCH_LOG_URL;
+    if (!logUrl) {
+      throw new Error(
+        "No APPRUNNER_CLOUDWATCH_LOG_URL specified -> In Lambda Config -> Environment variables"
+      );
+    }
 
     // Construct Slack message
     const logLink = `Logs: ${logUrl}`;
