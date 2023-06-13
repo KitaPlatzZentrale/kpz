@@ -1,4 +1,5 @@
 import axios from "axios";
+
 /**
  * Function: sendSlackMessage
  * Sends a notification message to Slack using the provided webhook URL.
@@ -12,8 +13,13 @@ interface ISlackEmail {
 
 export async function sendSlackSignupNotification(slackEmail: ISlackEmail) {
   try {
-    const webhookUrl =
-      "https://hooks.slack.com/services/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";
+    if (!process.env.SLACK_WEBHOOK_SIGNUP_URL) {
+      throw new Error(
+        "No Slack webhook URL specified -> In Lambda Config -> Environment variables "
+      );
+    }
+
+    const webhookUrl = process.env.SLACK_WEBHOOK_SIGNUP_URL;
     const smileys = [":rocket:", ":beers:", ":tada:", ":fireworks:"];
     const randomSmiley = smileys[Math.floor(Math.random() * smileys.length)];
     const message = {
