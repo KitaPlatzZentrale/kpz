@@ -29,8 +29,8 @@ const submitServiceSignupAction = async ({
       body: JSON.stringify({
         email,
         fullAddress,
-        desiredStartMonth,
-        expectedBirthDate,
+        desiredStartingMonth: desiredStartMonth,
+        actualOrExpectedBirthMonth: expectedBirthDate,
       }),
     }
   );
