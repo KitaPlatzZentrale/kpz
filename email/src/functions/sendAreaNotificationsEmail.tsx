@@ -39,7 +39,6 @@ interface EmailProps {
       consentId: string;
       createdAt: string;
       consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
-      sendEmail?: boolean;
       areaDescription: string;
     };
   };
@@ -47,7 +46,6 @@ interface EmailProps {
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
   const { email, areaDescription, consentId } = event.detail.fullDocument;
-  const shouldSendEmail = event.detail.fullDocument.sendEmail ?? true;
   const to = email;
   if (!to) throw new Error("No recipient with `to` specified");
   if (!areaDescription)
@@ -65,7 +63,6 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       consentId={consentId}
     />
   );
-  if (!shouldSendEmail) return;
   await sendEmail({
     to,
     body,
