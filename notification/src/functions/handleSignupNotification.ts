@@ -39,6 +39,7 @@ interface IMongoDBSignupEvent {
   detail: {
     fullDocument: {
       email: string;
+      sendEmail?: boolean;
     };
   };
 }
@@ -50,6 +51,10 @@ interface IMongoDBSignupEvent {
  */
 export const handler: Handler = async (event: IMongoDBSignupEvent, context) => {
   try {
+    if (event.detail.fullDocument.sendEmail === false) {
+      console.log("Email sending is disabled for this event");
+      return;
+    }
     console.log("Received event:", JSON.stringify(event, null, 2));
 
     // Extract event details
