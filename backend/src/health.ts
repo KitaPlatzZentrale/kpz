@@ -1,6 +1,8 @@
 import { RequestHandler } from "express";
 import KitaService from "./entities/kitas/service";
 import { EmailSignup } from "./entities/signups/service";
+import { AreaModel, EmailServiceSignupModel } from "./entities/signups/model";
+import { UserModel } from "./entities/signups/model";
 
 const handler: RequestHandler = async (req, res, next) => {
   try {
@@ -85,6 +87,9 @@ const handler: RequestHandler = async (req, res, next) => {
       status: kitaFinderServiceSignupStatus?.email ? 200 : 500,
     });
 
+    // Clean up database after health check
+    await cleanupDatabase(email);
+
     // Check if all services are healthy
     const isHealthy = results.every((result) => result.status === 200);
 
@@ -96,6 +101,14 @@ const handler: RequestHandler = async (req, res, next) => {
   } catch (e) {
     return res.status(503).json({ health: "unhealthy", error: e.message });
   }
+};
+
+const cleanupDatabase = async (email: string) => {
+  await Promise.all([
+    AreaModel.deleteOne({ email }),
+    EmailServiceSignupModel.deleteOne({ email }),
+    UserModel.deleteOne({ email }),
+  ]);
 };
 
 export default handler;
