@@ -22,6 +22,7 @@ import areaNotificationSignup, {
 import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
+import getHealthStatus from "./health";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -50,5 +51,7 @@ router.post(
   areaNotificationSignupValidator,
   areaNotificationSignup
 );
+
+router.get("/health", getHealthStatus);
 
 export = router;

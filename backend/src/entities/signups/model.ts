@@ -8,6 +8,7 @@ interface IArea extends Document {
   createdAt: string;
   consentedAt: string;
   revokedAt?: string | null;
+  sendEmail?: boolean;
 }
 
 const AreaSchema: Schema = new Schema(
@@ -18,6 +19,7 @@ const AreaSchema: Schema = new Schema(
     createdAt: { type: String, default: Date.now, required: true },
     consentedAt: { type: String, default: Date.now, required: true },
     revokedAt: { type: String, default: null },
+    sendEmail: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -34,6 +36,7 @@ interface IUser extends Document {
   }[];
   createdAt: string;
   consentedAt: string;
+  sendEmail?: boolean;
 }
 
 const UserSchema: Schema = new Schema(
@@ -50,6 +53,7 @@ const UserSchema: Schema = new Schema(
     ],
     createdAt: { type: String, default: Date.now, required: true },
     consentedAt: { type: String, default: Date.now, required: true },
+    sendEmail: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -65,6 +69,7 @@ interface IEmailServiceSignup extends Document {
   createdAt: string;
   consentedAt: string;
   revokedAt?: string | null;
+  sendEmail?: boolean;
 }
 
 const EmailServiceSignupSchema: Schema = new Schema({
@@ -91,6 +96,7 @@ const EmailServiceSignupSchema: Schema = new Schema({
     type: String,
     default: null,
   },
+  sendEmail: { type: Boolean, default: true },
 });
 
 const EmailServiceSignupModel = mongoose.model<IEmailServiceSignup>(

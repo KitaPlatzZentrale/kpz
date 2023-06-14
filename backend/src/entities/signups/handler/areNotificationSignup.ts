@@ -56,7 +56,7 @@ export const validator: RequestHandler<IAreaNotificationSignup> = async (
 const handler: RequestHandler<IAreaNotificationSignup> = async (req, res) => {
   try {
     const { areaDescription, email, revokedAt } = req.body;
-    await EmailSignup.areaNotificationSignup(areaDescription, email, revokedAt);
+    await EmailSignup.areaNotificationSignup(email, areaDescription, revokedAt);
     return res.status(200).send();
   } catch (e) {
     logger.error(e);
