@@ -47,6 +47,7 @@ interface EmailProps {
       createdAt: string;
       consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
       revokedAt?: string | null;
+      sendEmail?: boolean;
     };
   };
 }
@@ -54,6 +55,7 @@ interface EmailProps {
 export const handler: Handler = async (event: EmailProps, ctx) => {
   const { email, consentId } = event.detail.fullDocument;
   const to = email;
+  const shouldSendEmail = event.detail.fullDocument.sendEmail ?? true;
 
   if (!to) throw new Error("No recipient with `to` specified");
   if (!consentId)
@@ -62,7 +64,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
     );
 
   const body = render(<ServiceSignupEmail consentId={consentId} />);
-
+  if (!shouldSendEmail) return;
   await sendEmail({
     to,
     body,

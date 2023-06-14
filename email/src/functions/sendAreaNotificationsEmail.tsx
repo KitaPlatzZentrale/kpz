@@ -22,23 +22,33 @@ import AreaNotificationsEmail, {
 
  * Sample Event:
  * {
- *   "to": "recipient@example.com",
- *   "props": {
- *     "areaDescription": "Example Area",
- *     "consentId": "ABC123"
+ *   "detail": {
+ *     "fullDocument": {
+ *       "email": "recipient@example.com",
+ *       "areaDescription": "Example Area",
+ *       "consentId": "ABC123"
+ *     }
  *   }
  * }
  */
 
 interface EmailProps {
-  to: string;
-  props: AreaNotificationsEmailProps;
+  detail: {
+    fullDocument: {
+      email: string;
+      consentId: string;
+      createdAt: string;
+      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+      sendEmail?: boolean;
+      areaDescription: string;
+    };
+  };
 }
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
-  const { to, props } = event;
-  const { areaDescription, consentId } = props;
-
+  const { email, areaDescription, consentId } = event.detail.fullDocument;
+  const shouldSendEmail = event.detail.fullDocument.sendEmail ?? true;
+  const to = email;
   if (!to) throw new Error("No recipient with `to` specified");
   if (!areaDescription)
     throw new Error(
@@ -55,7 +65,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       consentId={consentId}
     />
   );
-
+  if (!shouldSendEmail) return;
   await sendEmail({
     to,
     body,

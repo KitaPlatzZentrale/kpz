@@ -57,12 +57,14 @@ interface EmailProps {
       createdAt: string;
       consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
       revokedAt?: string | null;
+      sendEmail?: boolean;
     };
   };
 }
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
   const { email, trackedKitas, consentId } = event.detail.fullDocument;
+  const shouldSendEmail = event.detail.fullDocument.sendEmail ?? true;
   const { kitaName } = trackedKitas[0];
   const to = email;
 
@@ -79,7 +81,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
   const body = render(
     <SingleKitaNotificationsEmail kitaName={kitaName} consentId={consentId} />
   );
-
+  if (!shouldSendEmail) return;
   await sendEmail({
     to,
     body,
