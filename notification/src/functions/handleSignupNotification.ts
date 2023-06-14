@@ -77,11 +77,11 @@ export const handler: Handler = async (event: IMongoDBSignupEvent, context) => {
           eventDescription: "New Email Service Signup",
         });
         break;
-      case "MongoDB Database Trigger for realData.kitadetails":
-        console.log("Sending notification for new Kita Details signup");
+      case "MongoDB Database Trigger for test.areas":
+        console.log("Sending notification for new Kita Areas signup");
         await sendSlackSingupNotification({
           email,
-          eventDescription: "New Kita Details Signup",
+          eventDescription: "New Kita Area Signup",
         });
         break;
       default:
