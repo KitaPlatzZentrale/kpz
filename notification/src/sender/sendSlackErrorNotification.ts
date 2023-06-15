@@ -1,6 +1,7 @@
 import axios from "axios";
-require("dotenv").config();
+import dotenv from "dotenv";
 
+dotenv.config();
 export async function sendSlackErrorNotification(message: string) {
   try {
     if (!process.env.SLACK_WEBHOOK_ERROR_URL) {
