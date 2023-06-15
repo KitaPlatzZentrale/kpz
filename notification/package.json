@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.352.0",
     "aws-lambda": "^1.0.7",
     "axios": "^1.4.0",
     "dotenv": "^16.1.4"
