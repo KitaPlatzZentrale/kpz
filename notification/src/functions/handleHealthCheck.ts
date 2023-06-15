@@ -13,7 +13,7 @@ export const handler: Handler = async (event, context) => {
       console.log("Health check failed");
       sendSNS(SNS);
 
-      throw new Error("Health check failed");
+      return;
     }
   } catch (error) {
     console.log(error);
