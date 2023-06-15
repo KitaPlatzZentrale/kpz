@@ -2,18 +2,11 @@ import * as React from "react";
 
 import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
-import {
-  SNSClient,
-  SNSClientConfig,
-  PublishCommand,
-} from "@aws-sdk/client-sns";
-
 import type { Handler } from "aws-lambda";
 
-import AreaNotificationsEmail, {
-  AreaNotificationsEmailProps,
-} from "../templates/areaNotifications";
+import AreaNotificationsEmail from "../templates/areaNotifications";
 import dotenv from "dotenv";
+import { sendSNS, setupSNS } from "../sender/sendSNS";
 
 dotenv.config();
 /**
@@ -52,11 +45,7 @@ interface EmailProps {
 }
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
-  const snsClientConfig: SNSClientConfig = {
-    region: "eu-central-1",
-  };
-  const SNS = new SNSClient(snsClientConfig); // Example for Amazon SNS
-
+  const SNS = setupSNS();
   try {
     const { email, areaDescription, consentId } = event.detail.fullDocument;
     const to = email;
@@ -83,27 +72,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
     });
   } catch (e) {
     console.error(e);
-    const event = {
-      detail: {
-        alarmName: "sendAreaNotificationAlarm",
-        resources: [
-          `arn:aws:lambda:eu-central-1:897331788878:function/${process.env.AWS_LAMBDA_FUNCTION_NAME}`,
-        ],
-      },
-    };
-
-    const params = {
-      Message: JSON.stringify(event),
-      TopicArn: "arn:aws:sns:eu-central-1:897331788878:5XX_ALARM_TOPIC",
-      MessageAttributes: {
-        "Content-Type": {
-          DataType: "String",
-          StringValue: "application/json",
-        },
-      },
-    };
-    const command = new PublishCommand(params);
-    SNS.send(command);
+    sendSNS(SNS);
     throw e;
   }
 };
