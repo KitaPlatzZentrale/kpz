@@ -17,6 +17,7 @@
     "dotenv": "^16.1.4"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.117"
+    "@types/aws-lambda": "^8.10.117",
+    "@types/node": "^20.3.1"
   }
 }
