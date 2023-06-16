@@ -11,7 +11,7 @@ Kindergarten will then be able to accept the children they want in a convenient 
 
 <h2>Architectural design</h2>
 
-![KPZ-Cloud Architecture + CD _ CD - CI _ CD   Current Design (4)](https://github.com/KitaPlatzZentrale/kpz/assets/32839416/d6f432e5-1a1a-4119-be19-e4496aa93324)
+![KPZ-Cloud Architecture + CD _ CD - CI _ CD   Current Design (5)](https://github.com/KitaPlatzZentrale/kpz/assets/32839416/73f30d25-c62b-45ae-9042-7b057787632c)
 
 
 <h2>CI / CD</h2>
