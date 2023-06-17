@@ -25,7 +25,7 @@ Kindergarten will then be able to accept the children they want in a convenient 
  
 - SlackNotificationService: This Service handles the SNS (Simple Notification Service) integration. It includes two Lambda function triggered by SNS notifications one for errors and one for signups and sends messages to Slack.
  
-- Health Check Service microservice: This microservice is a scheduled Lambda function that periodically calls the /health endpoint of the API. In case of a 503 response, it sends an SNS event, triggering the Lambda function responsible for sending a Slack message.
+- Health Check Service: This Service is a scheduled Lambda function that periodically calls the /health endpoint of the API. In case of a 503 response, it sends an SNS event, triggering the Lambda function responsible for sending a Slack message.
 
 <h2>CI / CD</h2>
 
