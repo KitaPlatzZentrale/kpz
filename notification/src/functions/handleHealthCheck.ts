@@ -18,6 +18,6 @@ export const handler: Handler = async (event, context) => {
   } catch (error) {
     console.log(error);
     sendSNS(SNS);
-    throw error;
+    return;
   }
 };
