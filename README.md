@@ -13,6 +13,15 @@ Kindergarten will then be able to accept the children they want in a convenient 
 
 ![KPZ-Cloud Architecture + CD _ CD - CI _ CD   Current Design (5)](https://github.com/KitaPlatzZentrale/kpz/assets/32839416/73f30d25-c62b-45ae-9042-7b057787632c)
 
+- API: This Service acts as a Gateway, handles incoming requests, writes and fetches data from and to the MongoDB. It also handles the logic of the location-service. ( Can be decoupled in the future )
+
+- AWS EventBridge: This Service consumes events emitted by the MongoDB and triggers various Lambda functions based on different event types.
+ 
+- EmailSignup: This Service integrates with AWS Simple Email Service (SES) and consists of multiple Lambda functions responsible for sending different types of emails like signupForAreaService.
+ 
+- SlackNotificationService: This Service handles the SNS (Simple Notification Service) integration. It includes two Lambda function triggered by SNS notifications one for errors and one for signups and sends messages to Slack.
+ 
+- Health Check Service microservice: This microservice is a scheduled Lambda function that periodically calls the /health endpoint of the API. In case of a 503 response, it sends an SNS event, triggering the Lambda function responsible for sending a Slack message.
 
 <h2>CI / CD</h2>
 
