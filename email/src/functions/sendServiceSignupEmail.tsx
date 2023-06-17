@@ -62,7 +62,6 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
     );
 
   const body = render(<ServiceSignupEmail consentId={consentId} />);
-
   await sendEmail({
     to,
     body,

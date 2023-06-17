@@ -6,16 +6,18 @@ export class EmailSignup {
   public static areaNotificationSignup = async (
     email: string,
     areaDescription: string,
-    revokedAt?: string | null
+    revokedAt?: string | null,
+    sendEmail?: boolean
   ) => {
     try {
-      await AreaModel.create({
+      const createdDocument = await AreaModel.create({
         email,
         areaDescription,
         revokedAt,
+        sendEmail,
       });
       logger.info(`User ${email} signed up for ${areaDescription}`);
-      return;
+      return createdDocument;
     } catch (e) {
       logger.error(e);
       return e;
@@ -25,11 +27,12 @@ export class EmailSignup {
     email: string,
     kitaId: string,
     kitaDesiredAvailability: string,
-    kitaName: string
+    kitaName: string,
+    sendEmail?: boolean
   ) => {
     try {
       // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
-      await UserModel.create({
+      const createdDocument = await UserModel.create({
         id: uuidv4(),
         email,
         trackedKitas: [
@@ -39,9 +42,10 @@ export class EmailSignup {
             kitaAvailability: kitaDesiredAvailability,
           },
         ],
+        sendEmail,
       });
       logger.info(`User ${email} signed up for ${kitaName} with id ${kitaId}`);
-      return;
+      return createdDocument;
     } catch (e) {
       logger.error(e);
       return e;
@@ -52,20 +56,22 @@ export class EmailSignup {
     fullAddress: string,
     desiredStartingMonth: string,
     actualOrExpectedBirthMonth: string,
-    revokedAt: string | null
+    revokedAt: string | null,
+    sendEmail?: boolean
   ) => {
     try {
       // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
-      await EmailServiceSignupModel.create({
+      const createdDocument = await EmailServiceSignupModel.create({
         id: uuidv4(),
         email,
         fullAddress,
         desiredStartingMonth,
         actualOrExpectedBirthMonth,
         revokedAt,
+        sendEmail,
       });
       logger.info(`User ${email} signed up for kita finder service`);
-      return;
+      return createdDocument;
     } catch (e) {
       logger.error(e);
       return e;
