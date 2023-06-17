@@ -1,5 +1,9 @@
 # Kitaplatz-Zentrale
 
+## Getting Started
+To explore the features of Kitaplatz-Zentrale, simply visit our website at https://kitaplatz-zentrale.de/.
+
+
 <h2>Introduction</h2>
 <p>
 In big cities like Berlin it is a struggle to find a Kindergarten both for the parents who have to start applying for the Kindergarten even before the child is born and the kindergartens who are being flooded with calls and visits from parents even when they are already full. 
