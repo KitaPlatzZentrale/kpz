@@ -1,5 +1,7 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
+dotenv.config();
 /**
  * Function: sendSlackMessage
  * Sends a notification message to Slack using the provided webhook URL.
@@ -7,7 +9,6 @@ import axios from "axios";
  */
 
 interface ISlackEmail {
-  email: string;
   eventDescription: string;
 }
 
@@ -23,7 +24,7 @@ export async function sendSlackSignupNotification(slackEmail: ISlackEmail) {
     const smileys = [":rocket:", ":beers:", ":tada:", ":fireworks:"];
     const randomSmiley = smileys[Math.floor(Math.random() * smileys.length)];
     const message = {
-      text: `*${slackEmail.eventDescription}* from _${slackEmail.email}_ ${randomSmiley}`,
+      text: `*${slackEmail.eventDescription}*  ${randomSmiley}`,
     };
 
     const response = await axios.post(webhookUrl, message);
