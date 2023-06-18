@@ -39,7 +39,7 @@ export const validator: RequestHandler<IAreaNotificationSignup> = async (
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
-    const { areaDescription, email, revokedAt } = req.body;
+    const { email, areaDescription, revokedAt } = req.body;
     const newAreaNotification = new AreaNotificationSignupValidator();
     newAreaNotification.areaDescription = areaDescription;
     newAreaNotification.email = email;
@@ -55,8 +55,8 @@ export const validator: RequestHandler<IAreaNotificationSignup> = async (
 
 const handler: RequestHandler<IAreaNotificationSignup> = async (req, res) => {
   try {
-    const { areaDescription, email, revokedAt } = req.body;
-    await EmailSignup.areaNotificationSignup(areaDescription, email, revokedAt);
+    const { email, areaDescription, revokedAt } = req.body;
+    await EmailSignup.areaNotificationSignup(email, areaDescription, revokedAt);
     return res.status(200).send();
   } catch (e) {
     logger.error(e);
