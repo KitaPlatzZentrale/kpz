@@ -17,7 +17,7 @@ import revokeAccess, {
 
 import areaNotificationSignup, {
   validator as areaNotificationSignupValidator,
-} from "./entities/signups/handler/areNotificationSignup";
+} from "./entities/signups/handler/areaNotificationSignup";
 
 import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDEKitasAtLocation";
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";

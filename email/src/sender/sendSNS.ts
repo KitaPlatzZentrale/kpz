@@ -3,6 +3,9 @@ import {
   SNSClient,
   SNSClientConfig,
 } from "@aws-sdk/client-sns";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const setupSNS = () => {
   const snsClientConfig: SNSClientConfig = {
@@ -12,8 +15,8 @@ export const setupSNS = () => {
   return SNS;
 };
 
-export const sendSNS = async (SNS: SNSClient) => {
-  const errorEvent = {
+export const sendSNS = async (SNS: SNSClient, topicArn: string) => {
+  const eventParams = {
     detail: {
       alarmName: process.env.AWS_LAMBDA_FUNCTION_NAME,
       resources: [
@@ -23,8 +26,8 @@ export const sendSNS = async (SNS: SNSClient) => {
   };
 
   const params = {
-    Message: JSON.stringify(errorEvent),
-    TopicArn: "arn:aws:sns:eu-central-1:897331788878:5XX_ALARM_TOPIC",
+    Message: JSON.stringify(eventParams),
+    TopicArn: topicArn,
     MessageAttributes: {
       "Content-Type": {
         DataType: "String",
@@ -33,6 +36,6 @@ export const sendSNS = async (SNS: SNSClient) => {
     },
   };
   const command = new PublishCommand(params);
-  SNS.send(command);
+  await SNS.send(command);
   return;
 };

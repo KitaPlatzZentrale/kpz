@@ -5,8 +5,8 @@ import { render } from "@react-email/render";
 import type { Handler } from "aws-lambda";
 
 import AreaNotificationsEmail from "../templates/areaNotifications";
-import dotenv from "dotenv";
 import { sendSNS, setupSNS } from "../sender/sendSNS";
+import dotenv from "dotenv";
 
 dotenv.config();
 /**
@@ -46,8 +46,15 @@ interface EmailProps {
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
   const SNS = setupSNS();
+  if (!process.env.SNS_ERROR_ARN)
+    throw new Error("No SNS_ERROR_ARN specified in environment variables");
+  if (!process.env.SNS_SUCCESS_ARN)
+    throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
   try {
     const { email, areaDescription, consentId } = event.detail.fullDocument;
+    console.log("Sending area notifications email to", email);
+    console.log("Area description:", areaDescription);
+    console.log("Consent ID:", consentId);
     const to = email;
     if (!to) throw new Error("No recipient with `to` specified");
     if (!areaDescription)
@@ -70,9 +77,11 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
+    await sendSNS(SNS, process.env.SNS_SUCCESS_ARN);
   } catch (e) {
     console.error(e);
-    sendSNS(SNS);
+
+    await sendSNS(SNS, process.env.SNS_ERROR_ARN);
     throw e;
   }
 };

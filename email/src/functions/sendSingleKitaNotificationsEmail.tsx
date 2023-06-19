@@ -7,7 +7,9 @@ import type { Handler } from "aws-lambda";
 
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
 import { sendSNS, setupSNS } from "../sender/sendSNS";
+import dotenv from "dotenv";
 
+dotenv.config();
 /**
  * Lambda Function: SingleKitaNotificationsEmailHandler
  *
@@ -64,6 +66,10 @@ interface EmailProps {
 
 export const handler: Handler = async (event: EmailProps, ctx) => {
   const SNS = setupSNS();
+  if (!process.env.SNS_ERROR_ARN)
+    throw new Error("No SNS_ERROR_ARN specified in environment variables");
+  if (!process.env.SNS_SUCCESS_ARN)
+    throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
   try {
     const { email, trackedKitas, consentId } = event.detail.fullDocument;
     const { kitaName } = trackedKitas[0];
@@ -88,9 +94,10 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
+    await sendSNS(SNS, process.env.SNS_SUCCESS_ARN);
   } catch (e) {
     console.error(e);
-    await sendSNS(SNS);
+    await sendSNS(SNS, process.env.SNS_ERROR_ARN);
     throw e;
   }
 };
