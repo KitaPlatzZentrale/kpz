@@ -5,29 +5,40 @@ import BerlinDEKitaModel, {
   BerlinDEKitaSummaryEntity,
 } from "./model";
 import { Kita, KitaDetail } from "../../types";
+require("dotenv").config();
+
+const KITA_API_URL = process.env.KITA_API_URL;
 
 class BerlinDEService {
-  /**
-   * Returns details for a specific kita center
-   * @param {string} uuid - The uuid of the kita center
-   * @returns {KitaDetail | void} - The details of the kita center in JSON format
-   */
-  public static getKitaDetails = async (
-    uuid: string
-  ): Promise<KitaDetail | void> => {
-    let kita = await axios.get(
-      `https://kita-navigator.berlin.de/api/v1/kitas/${uuid}`
-    );
+  public static getAllKitaUUIDs = async (): Promise<number[]> => {
+    try {
+      let kitaList = await axios.get(
+        `${KITA_API_URL}/umkreissuche?entfernung=50&seite=0&max=5000`
+      );
 
-    logger.info(`Retrieved details for Kita with uuid ${uuid}.`);
-
-    const kitaSummaryObj = this.transformBerlinDEKitaDetailedEntityToKitaDetail(
-      kita.data
-    );
-
-    return kitaSummaryObj;
+      let ids = kitaList.data.einrichtungen.map((kita: any) => kita.id);
+      return ids;
+    } catch (error) {
+      logger.error("Error in getAllKitaUUIDs:", error);
+      throw error;
+    }
   };
 
+  public static getKitaDetails = async (
+    uuid: number
+  ): Promise<KitaDetail | void> => {
+    try {
+      let kita = await axios.get(`${KITA_API_URL}/${uuid}`);
+      const kitaDetails =
+        KitaTransformer.transformBerlinDEKitaDetailedEntityToKitaDetail(
+          kita.data
+        );
+      return kitaDetails;
+    } catch (error) {
+      logger.error(`Error in getKitaDetails for uuid ${uuid}:`, error);
+      throw error;
+    }
+  };
   /**
    * Finds nearby kita centers based on latitude and longitude
    * @param {number} lat - The latitude coordinate
@@ -41,7 +52,7 @@ class BerlinDEService {
     const kitaSummaries = await BerlinDEKitaModel.findManyAtLocation(lat, lon);
 
     const transformedToKitas = kitaSummaries.map((kitaSummary) =>
-      this.transformBerlinDEKitaSummaryEntityToKita(kitaSummary)
+      KitaTransformer.transformBerlinDEKitaSummaryEntityToKita(kitaSummary)
     );
 
     logger.info(
@@ -50,8 +61,10 @@ class BerlinDEService {
 
     return transformedToKitas;
   };
+}
 
-  private static transformBerlinDEKitaSummaryEntityToKita(
+class KitaTransformer {
+  public static transformBerlinDEKitaSummaryEntityToKita(
     kitaSummary: BerlinDEKitaSummaryEntity
   ): Kita {
     const availability: { [key: string]: boolean } = {};
@@ -83,7 +96,7 @@ class BerlinDEService {
     return kitaObj;
   }
 
-  private static transformBerlinDEKitaDetailedEntityToKitaDetail = (
+  public static transformBerlinDEKitaDetailedEntityToKitaDetail = (
     kitaDetailed: any
   ): KitaDetail => {
     const availability: { [key: string]: boolean } = {};

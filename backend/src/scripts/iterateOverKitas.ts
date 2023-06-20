@@ -1,13 +1,11 @@
 import logger from "../logger";
-import { Kita, KitaDetail } from "../types";
+import { KitaDetail } from "../types";
 import KitaDetailModel from "../entities/kitas/model";
 import { closeDatabaseConnection, connectToDatabase } from "../database";
 import BerlinDEService from "../entities/berlin.de/service";
 
-const kitas: Kita[] = require("../../data/kitas_berlin.json");
-
 async function fetchKitaWithRetry(
-  uuid: string,
+  uuid: number,
   retries = 6
 ): Promise<KitaDetail> | null {
   try {
@@ -34,9 +32,9 @@ async function fetchKitaWithRetry(
 async function saveKitaDetailsToDB(): Promise<void> {
   try {
     await connectToDatabase();
-
-    for (const kita of kitas) {
-      let updatedKita = await fetchKitaWithRetry(kita.uuid);
+    const kitaIds = await BerlinDEService.getAllKitaUUIDs();
+    for (const kitaId of kitaIds) {
+      let updatedKita = await fetchKitaWithRetry(kitaId);
       if (updatedKita !== null) {
         logger.info(JSON.stringify(updatedKita));
         await KitaDetailModel.findOneAndUpdate(
