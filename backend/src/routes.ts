@@ -23,6 +23,12 @@ import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDE
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
 import getHealthStatus from "./health";
+import saveChildData, {
+  validator as saveChildDataValidator,
+} from "./entities/child/handler/saveChildData";
+import getChildData, {
+  validator as getChildDataValidator,
+} from "./entities/child/handler/getChildData";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -54,4 +60,6 @@ router.post(
 
 router.get("/health", getHealthStatus);
 
+router.post("/save-child", saveChildDataValidator, saveChildData);
+router.get("/get-child", getChildDataValidator, getChildData);
 export = router;

@@ -1,5 +1,5 @@
 import ChildDataModel from "./model";
-import { IChildData } from "./handler/childData";
+import { IChildData } from "./handler/saveChildData";
 import { dataKeyId, encryption } from "./encryption";
 import logger from "../../logger";
 
