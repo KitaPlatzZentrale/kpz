@@ -3,7 +3,7 @@ import logger from "../../../logger";
 import BerlinDEService from "../service";
 
 interface IGetBerlinDEKitaList {
-  uuid: string;
+  uuid: number;
 }
 
 const handler: RequestHandler<IGetBerlinDEKitaList> = (req, res) => {
