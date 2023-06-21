@@ -43,6 +43,7 @@ async function saveKitaDetailsToDB(): Promise<void> {
           { upsert: true }
         );
       }
+      await new Promise((resolve) => setTimeout(resolve, 300));
     }
   } catch (err) {
     logger.error("Something went wrong:", err);
