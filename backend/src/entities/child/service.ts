@@ -47,6 +47,43 @@ class ChildDataService {
       throw e;
     }
   }
+  async getChildData(id: string): Promise<IChildData | null> {
+    try {
+      const encryptedChildData = await ChildDataModel.findById(id);
+
+      if (!encryptedChildData) {
+        return null;
+      }
+
+      const decryptedFirstName = await encryption.decrypt(
+        encryptedChildData.firstName
+      );
+      const decryptedLastName = await encryption.decrypt(
+        encryptedChildData.lastName
+      );
+      const decryptedGender = await encryption.decrypt(
+        encryptedChildData.gender
+      );
+      const decryptedActualOrExpectedBirthMonth = await encryption.decrypt(
+        encryptedChildData.actualOrExpectedBirthMonth
+      );
+
+      const decryptedChildData: IChildData = {
+        id: encryptedChildData.id,
+        firstName: decryptedFirstName,
+        lastName: decryptedLastName,
+        gender: decryptedGender,
+        actualOrExpectedBirthMonth: decryptedActualOrExpectedBirthMonth,
+        desiredStartingMonth: encryptedChildData.desiredStartingMonth,
+        careHours: encryptedChildData.careHours,
+      };
+
+      return decryptedChildData;
+    } catch (e) {
+      logger.error("Failed to retrieve or decrypt child data:", e);
+      throw e;
+    }
+  }
 }
 
 export default ChildDataService;
