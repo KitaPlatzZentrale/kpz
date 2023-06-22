@@ -29,6 +29,7 @@ import saveChildData, {
 import getChildData, {
   validator as getChildDataValidator,
 } from "./entities/child/handler/getChildData";
+import { isAuthenticated, isAuthorized } from "./entities/auth/service";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -60,6 +61,18 @@ router.post(
 
 router.get("/health", getHealthStatus);
 
-router.post("/save-child", saveChildDataValidator, saveChildData);
-router.get("/get-child", getChildDataValidator, getChildData);
+router.post(
+  "/save-child",
+  isAuthenticated,
+  isAuthorized,
+  saveChildDataValidator,
+  saveChildData
+);
+router.get(
+  "/get-child/:id",
+  isAuthenticated,
+  isAuthorized,
+  getChildDataValidator,
+  getChildData
+);
 export = router;
