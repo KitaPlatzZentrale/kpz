@@ -5,6 +5,7 @@ import ChildDataService from "../service";
 
 export interface IChildData {
   id: string;
+  parentId: string;
   firstName: string;
   lastName: string;
   gender: "Male" | "Female" | "Other";
@@ -17,6 +18,10 @@ class ChildDataValidator {
   @IsString()
   @IsNotEmpty()
   id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  parentId: string;
 
   @IsString()
   @IsNotEmpty()
@@ -50,20 +55,22 @@ export const validator: RequestHandler<IChildData> = async (req, res, next) => {
     }
     const {
       id,
+      parentId,
       firstName,
       lastName,
       gender,
-      childBirthday,
-      startOfCare,
+      actualOrExpectedBirthMonth,
+      desiredStartingMonth,
       careHours,
     } = req.body;
     const newChildData = new ChildDataValidator();
     newChildData.id = id;
+    newChildData.parentId = parentId;
     newChildData.firstName = firstName;
     newChildData.lastName = lastName;
     newChildData.gender = gender;
-    newChildData.actualOrExpectedBirthMonth = childBirthday;
-    newChildData.desiredStartingMonth = startOfCare;
+    newChildData.actualOrExpectedBirthMonth = actualOrExpectedBirthMonth;
+    newChildData.desiredStartingMonth = desiredStartingMonth;
     newChildData.careHours = careHours;
     const errors = await validate(newChildData);
     if (errors.length) return res.status(400).json({ error: errors });
@@ -78,6 +85,7 @@ const handler: RequestHandler<IChildData> = async (req, res) => {
   try {
     const {
       id,
+      parentId,
       firstName,
       lastName,
       gender,
@@ -89,6 +97,7 @@ const handler: RequestHandler<IChildData> = async (req, res) => {
     const childDataService = new ChildDataService();
     await childDataService.saveChildData({
       id,
+      parentId,
       firstName,
       lastName,
       gender,

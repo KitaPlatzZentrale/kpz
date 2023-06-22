@@ -2,10 +2,11 @@ import { Schema, Document, model } from "mongoose";
 
 interface IChildData extends Document {
   id: string;
-  firstName: string;
-  lastName: string;
-  gender: "Male" | "Female" | "Other";
-  actualOrExpectedBirthMonth: string;
+  parentId: string;
+  firstName: Schema.Types.Buffer;
+  lastName: Schema.Types.Buffer;
+  gender: Schema.Types.Buffer;
+  actualOrExpectedBirthMonth: Schema.Types.Buffer;
   desiredStartingMonth: string;
   careHours: string[];
   createdAt: string;
@@ -15,16 +16,17 @@ interface IChildData extends Document {
 const ChildDataSchema = new Schema<IChildData>(
   {
     id: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    gender: { type: String, enum: ["Male", "Female", "Other"], required: true },
-    actualOrExpectedBirthMonth: { type: String, required: true },
+    parentId: { type: String, required: true },
+    firstName: { type: Schema.Types.Buffer, required: true },
+    lastName: { type: Schema.Types.Buffer, required: true },
+    gender: { type: Schema.Types.Buffer, required: true },
+    actualOrExpectedBirthMonth: { type: Schema.Types.Buffer, required: true },
     desiredStartingMonth: { type: String, required: true },
     careHours: { type: [String], required: true },
   },
   { timestamps: true }
 );
 
-const ChildDataModel = model<IChildData>("ChildData", ChildDataSchema);
+const ChildDataModel = model<IChildData>("child", ChildDataSchema);
 
 export default ChildDataModel;

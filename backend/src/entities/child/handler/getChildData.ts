@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, validate } from "class-validator";
 import { RequestHandler } from "express";
 import logger from "../../../logger";
-import ChildDataService from "../service";
+// import ChildDataService from "../service";
 
 interface IGetChildData {
   id: string;
@@ -32,13 +32,14 @@ export const validator: RequestHandler<IGetChildData> = async (
 
 const handler: RequestHandler<IGetChildData> = async (req, res) => {
   try {
-    const { id } = req.params;
-    const childDataService = new ChildDataService();
-    const childData = await childDataService.getChildData(id);
-    if (!childData) {
-      return res.status(404).json({ error: "Child data not found" });
-    }
-    return res.status(200).json(childData);
+    // const { id } = req.params;
+    // const childDataService = new ChildDataService();
+    // const childData = await childDataService.getChildData(id);
+    // if (!childData) {
+    //   return res.status(404).json({ error: "Child data not found" });
+    // }
+    // return res.status(200).json(childData);
+    return res.status(200).json({ message: "Hello World" });
   } catch (e) {
     logger.error(e);
     return res.status(500).send("Something went wrong");

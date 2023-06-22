@@ -61,6 +61,7 @@ const UserSchema: Schema = new Schema(
 const UserModel = mongoose.model<IUser>("user", UserSchema);
 
 interface IEmailServiceSignup extends Document {
+  id: string;
   email: string;
   consentId: string;
   fullAddress: string;
@@ -73,6 +74,7 @@ interface IEmailServiceSignup extends Document {
 }
 
 const EmailServiceSignupSchema: Schema = new Schema({
+  id: { type: String, required: true },
   email: {
     type: String,
     required: true,

@@ -1,13 +1,18 @@
 import ChildDataModel from "./model";
 import { IChildData } from "./handler/saveChildData";
-import { dataKeyId, encryption } from "./encryption";
+import { encryption, getDataKey } from "./encryption";
 import logger from "../../logger";
-
+import { UUID } from "bson";
 const encryptionAlgorithm = "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic";
 
 class ChildDataService {
   async saveChildData(childData: IChildData) {
     try {
+      console.log("childData", childData);
+      console.log("childData.parentId", childData.parentId);
+      console.log("typeof childData.parentId", typeof childData.parentId);
+      const dataKeyId = await getDataKey(childData.parentId);
+      console.log("dataKeyId", dataKeyId);
       const encryptedFirstName = await encryption.encrypt(childData.firstName, {
         keyId: dataKeyId,
         algorithm: encryptionAlgorithm,
@@ -33,6 +38,7 @@ class ChildDataService {
 
       const encryptedChildData = {
         id: childData.id,
+        parentId: childData.parentId,
         firstName: encryptedFirstName,
         lastName: encryptedLastName,
         gender: encryptedGender,
@@ -47,43 +53,44 @@ class ChildDataService {
       throw e;
     }
   }
-  async getChildData(id: string): Promise<IChildData | null> {
-    try {
-      const encryptedChildData = await ChildDataModel.findById(id);
+  // async getChildData(id: string): Promise<IChildData | null> {
+  //   try {
+  //     const encryptedChildData = await ChildDataModel.findOne({ id: id });
 
-      if (!encryptedChildData) {
-        return null;
-      }
+  //     if (!encryptedChildData) {
+  //       return null;
+  //     }
 
-      const decryptedFirstName = await encryption.decrypt(
-        encryptedChildData.firstName
-      );
-      const decryptedLastName = await encryption.decrypt(
-        encryptedChildData.lastName
-      );
-      const decryptedGender = await encryption.decrypt(
-        encryptedChildData.gender
-      );
-      const decryptedActualOrExpectedBirthMonth = await encryption.decrypt(
-        encryptedChildData.actualOrExpectedBirthMonth
-      );
+  //     const decryptedFirstName = await encryption.decrypt(
+  //       encryptedChildData.firstName
+  //     );
+  //     const decryptedLastName = await encryption.decrypt(
+  //       encryptedChildData.lastName
+  //     );
+  //     const decryptedGender = await encryption.decrypt(
+  //       encryptedChildData.gender
+  //     );
+  //     const decryptedActualOrExpectedBirthMonth = await encryption.decrypt(
+  //       encryptedChildData.actualOrExpectedBirthMonth
+  //     );
 
-      const decryptedChildData: IChildData = {
-        id: encryptedChildData.id,
-        firstName: decryptedFirstName,
-        lastName: decryptedLastName,
-        gender: decryptedGender,
-        actualOrExpectedBirthMonth: decryptedActualOrExpectedBirthMonth,
-        desiredStartingMonth: encryptedChildData.desiredStartingMonth,
-        careHours: encryptedChildData.careHours,
-      };
+  //     const decryptedChildData: IChildData = {
+  //       id: encryptedChildData.id,
+  //       parentId: encryptedChildData.parentId,
+  //       firstName: decryptedFirstName,
+  //       lastName: decryptedLastName,
+  //       gender: decryptedGender,
+  //       actualOrExpectedBirthMonth: decryptedActualOrExpectedBirthMonth,
+  //       desiredStartingMonth: encryptedChildData.desiredStartingMonth,
+  //       careHours: encryptedChildData.careHours,
+  //     };
 
-      return decryptedChildData;
-    } catch (e) {
-      logger.error("Failed to retrieve or decrypt child data:", e);
-      throw e;
-    }
-  }
+  //     return decryptedChildData;
+  //   } catch (e) {
+  //     logger.error("Failed to retrieve or decrypt child data:", e);
+  //     throw e;
+  //   }
+  // }
 }
 
 export default ChildDataService;
