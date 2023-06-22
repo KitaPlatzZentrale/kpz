@@ -37,7 +37,6 @@ const encryption = new ClientEncryption(client, {
 
 // Create unqique data key for each user
 const createDataKey = async (userId: string) => {
-  console.log("userId", userId);
   const dataKeyId = await encryption.createDataKey("aws", dataKeyOptions);
   // const keyVaultCollection = client.db("encryption").collection("__keyVault");
   // await keyVaultCollection.updateOne(
@@ -49,19 +48,14 @@ const createDataKey = async (userId: string) => {
 
 // Get data key for a specific user
 const getDataKey = async (userId: string) => {
-  console.log("userId", userId);
-
   const keyVaultCollection = client.db("test").collection("keyVault");
-  console.log("keyVaultCollection", keyVaultCollection);
   const keyVaultDocument = await keyVaultCollection.findOne({});
   // const keyVaultDocument = await keyVaultCollection.findOne({ userId: userId });
-  console.log("keyVaultDocument", keyVaultDocument);
   if (!keyVaultDocument) {
     throw new Error("No data key found for the specified user");
   }
 
   const binaryDataKeyId = keyVaultDocument._id;
-  console.log("binaryDataKeyId", binaryDataKeyId);
   return binaryDataKeyId;
 };
 
