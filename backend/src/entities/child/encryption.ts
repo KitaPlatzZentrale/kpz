@@ -1,4 +1,4 @@
-import { MongoClient, Binary, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import { ClientEncryption } from "mongodb-client-encryption";
 
 import dotenv from "dotenv";
@@ -38,19 +38,22 @@ const encryption = new ClientEncryption(client, {
 // Create unqique data key for each user
 const createDataKey = async (userId: string) => {
   const dataKeyId = await encryption.createDataKey("aws", dataKeyOptions);
-  // const keyVaultCollection = client.db("encryption").collection("__keyVault");
-  // await keyVaultCollection.updateOne(
-  //   { _id: dataKeyId },
-  //   { $set: { userId: userId } }
-  // );
+  const keyVaultCollection = client.db("test").collection("keyVault");
+  await keyVaultCollection.updateOne(
+    { _id: dataKeyId },
+    { $set: { keyAltNames: [userId] } }
+  );
   return dataKeyId;
 };
 
 // Get data key for a specific user
 const getDataKey = async (userId: string) => {
   const keyVaultCollection = client.db("test").collection("keyVault");
-  const keyVaultDocument = await keyVaultCollection.findOne({});
-  // const keyVaultDocument = await keyVaultCollection.findOne({ userId: userId });
+  console.log("userId", userId);
+  const keyVaultDocument = await keyVaultCollection.findOne({
+    keyAltNames: { $in: [userId] },
+  });
+  console.log("keyVaultDocument", keyVaultDocument);
   if (!keyVaultDocument) {
     throw new Error("No data key found for the specified user");
   }
