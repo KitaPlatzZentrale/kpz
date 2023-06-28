@@ -10,13 +10,23 @@ require("dotenv").config();
 const KITA_API_URL = process.env.KITA_API_URL;
 
 class BerlinDEService {
-  public static getAllKitaUUIDs = async (): Promise<number[]> => {
+  public static getKitaList = async (): Promise<Kita[]> => {
     try {
       let kitaList = await axios.get(
         `${KITA_API_URL}/umkreissuche?entfernung=50&seite=0&max=5000`
       );
+      return kitaList.data.einrichtungen;
+    } catch (error) {
+      logger.error("Error in getKitaList:", error);
+      throw error;
+    }
+  };
 
-      let ids = kitaList.data.einrichtungen.map((kita: any) => kita.id);
+  public static getAllKitaUUIDs = async (
+    kitaList: Kita[]
+  ): Promise<number[]> => {
+    try {
+      let ids = kitaList.map((kita: Kita) => kita.id);
       return ids;
     } catch (error) {
       logger.error("Error in getAllKitaUUIDs:", error);

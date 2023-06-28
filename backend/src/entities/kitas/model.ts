@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const KitaDetailSchema = new mongoose.Schema({
   uuid: {
@@ -91,6 +91,14 @@ const KitaDetailSchema = new mongoose.Schema({
   },
   closingDate: {
     type: String,
+  },
+  version: {
+    type: String,
+    required: true,
+  },
+  checkSum: {
+    type: String,
+    required: true,
   },
 });
 
