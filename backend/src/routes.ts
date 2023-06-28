@@ -23,6 +23,7 @@ import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDE
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
 import getHealthStatus from "./health";
+import scrapeNewKitaData from "./scripts/iterateOverKitas";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -53,5 +54,6 @@ router.post(
 );
 
 router.get("/health", getHealthStatus);
+router.get("/scrape", scrapeNewKitaData);
 
 export = router;

@@ -26,8 +26,13 @@ class BerlinDEService {
     kitaList: Kita[]
   ): Promise<number[]> => {
     try {
-      let ids = kitaList.map((kita: Kita) => kita.id);
-      return ids;
+      const idsSet = new Set<number>();
+      kitaList.forEach((kita: Kita) => {
+        idsSet.add(kita.id);
+      });
+
+      const idsArray: number[] = Array.from(idsSet);
+      return idsArray;
     } catch (error) {
       logger.error("Error in getAllKitaUUIDs:", error);
       throw error;
