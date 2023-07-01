@@ -36,14 +36,157 @@ const PrivacyPage: React.FC<PrivacyPageProps> = ({}) => {
               Abschnitt &bdquo;Hinweis zur Verantwortlichen Stelle&ldquo; in
               dieser Datenschutzerkl&auml;rung entnehmen.
             </p>{" "}
-            <h4 className="mb-2 mt-3 text-lg font-semibold">
+            <h3 className="mb-2 mt-3 text-lg font-semibold">
               Wie erfassen wir Ihre Daten?
-            </h4>{" "}
+            </h3>
+            <h4 className="mb-2 mt-3 text-lg font-semibold">
+              Wir bieten folgende Services an, die Daten erfassen:
+            </h4>
+            <h4 className="mb-2 mt-3 text-lg font-semibold">
+              Kita-Platz Benachrichtigungsservice
+            </h4>
             <p className="text-base font-normal leading-normal text-gray-700">
-              Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese
-              mitteilen. Hierbei kann es sich z.&nbsp;B. um Daten handeln, die
-              Sie in ein Kontaktformular eingeben.
-            </p>{" "}
+              Beschreibung und Umfang der Datenverarbeitung: Auf unserer
+              Internetseite besteht die Möglichkeit, einen kostenfreien
+              Kita-Platz Benachrichtigungsservice zu abonnieren. Dabei werden
+              bei der Anmeldung zum Kita-Platz Benachrichtigungsservice die
+              folgenden Daten aus dem Eingabeformular an uns übermittelt:
+            </p>
+            <br></br>
+            <ul>
+              {" "}
+              <li>E-Mail-Adresse</li>{" "}
+            </ul>
+            <br></br>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Zudem werden folgende Daten bei der Anmeldung erhoben:
+            </p>
+            <br></br>
+            <ul>
+              <li className="text-base font-normal leading-normal text-gray-700">
+                Datum und Uhrzeit der Registrierung
+              </li>
+            </ul>
+            <br></br>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Für die Verarbeitung der Daten wird im Rahmen des Anmeldevorgangs
+              Ihre Einwilligung mittels Email-Opt-In-Verfahren eingeholt und auf
+              diese Datenschutzerklärung verwiesen. Der Kita-Platz
+              Benachrichtigungsservice setzt erst ein, wenn Sie den
+              Bestätigungslink in der Einladungs-E-Mail anklicken.
+              <br></br>
+              Der Versand erfolgt über Amazon-Server (mit Servern im EU-Raum).
+              Außer für den Versand erfolgt im Zusammenhang mit der
+              Datenverarbeitung für den Kita-Platz Benachrichtigungsservice
+              keine Weitergabe der Daten an Dritte. Die Daten werden
+              ausschließlich für den Versand des Kita-Platz
+              Benachrichtigungsservice verwendet.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Rechtsgrundlage für die Datenverarbeitung: Rechtsgrundlage für die
+              Verarbeitung der Daten nach Anmeldung zum Kita-Platz
+              Benachrichtigungsservice durch den Nutzer ist bei Vorliegen einer
+              Einwilligung des Nutzers Art. 6 Abs. 1 lit. a DSGVO.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Zweck der Datenverarbeitung: Die Erhebung der E-Mail-Adresse des
+              Nutzers dient dazu, den Kita-Platz Benachrichtigungsservice
+              zuzustellen. Die Erhebung sonstiger personenbezogener Daten im
+              Rahmen des Anmeldevorgangs dient dazu, einen Missbrauch der
+              Dienste oder der verwendeten E-Mail-Adresse zu verhindern.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Dauer der Speicherung: Die Daten werden gelöscht, sobald sie für
+              die Erreichung des Zwecks ihrer Erhebung nicht mehr erforderlich
+              sind. Die E-Mail-Adresse des Nutzers wird demnach solange
+              gespeichert, wie das Abonnement des Kita-Platz
+              Benachrichtigungsservice aktiv ist, maximal jedoch 3 Monate. Die
+              sonstigen im Rahmen des Anmeldevorgangs erhobenen
+              personenbezogenen Daten werden ebenfalls bei Beendigung des
+              Abonnements gelöscht.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Widerspruchs- und Beseitigungsmöglichkeit: Das Abonnement des
+              Kita-Platz Benachrichtigungsservice kann durch den betroffenen
+              Nutzer jederzeit gekündigt werden. Zu diesem Zweck kontaktieren
+              Sie uns bitte per E-Mail. Hierdurch wird ebenfalls ein Widerruf
+              der Einwilligung zur Speicherung der während des Anmeldevorgangs
+              erhobenen personenbezogenen Daten ermöglicht. Wenn Sie auf die
+              Blacklist gesetzt werden möchten, um zukünftige Anmeldungen
+              dauerhaft zu verhindern, kontaktieren Sie uns bitte per E-Mail.
+            </p>
+            <h4 className="mb-2 mt-3 text-lg font-semibold">
+              Kita Finder Service
+            </h4>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Beschreibung und Umfang der Datenverarbeitung: Auf unserer
+              Internetseite besteht die Möglichkeit, sich für einen Kita Finder
+              Service anzumelden. Wenn ein Nutzer diese Möglichkeit wahrnimmt,
+              werden die folgenden Daten in der Eingabemaske eingegeben und an
+              uns übermittelt:
+            </p>
+            <br></br>
+            <ul>
+              <li className="text-base font-normal leading-normal text-gray-700">
+                Wohnort
+              </li>
+              <li className="text-base font-normal leading-normal text-gray-700">
+                Gewünschter Beginn
+              </li>
+              <li className="text-base font-normal leading-normal text-gray-700">
+                Geburtsmonat des Kindes
+              </li>
+              <li className="text-base font-normal leading-normal text-gray-700">
+                E-Mail-Adresse
+              </li>
+            </ul>
+            <br></br>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Für die Verarbeitung der Daten wird im Rahmen des Anmeldevorgangs
+              Ihre Einwilligung mittels Double-Opt-In-Verfahren eingeholt und
+              auf diese Datenschutzerklärung verwiesen. Der Kita Finder Service
+              wird erst aktiviert, wenn Sie den Bestätigungslink in der
+              Einladungs-E-Mail anklicken.
+              <br></br>
+              Der Versand erfolgt über Amazon-Server (mit Servern im EU-Raum).
+              Außer für den Versand erfolgt im Zusammenhang mit der
+              Datenverarbeitung für den Kita Finder Service keine Weitergabe der
+              Daten an Dritte. Die Daten werden ausschließlich für den Versand
+              des Kita Finder Service verwendet.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Rechtsgrundlage für die Datenverarbeitung: Rechtsgrundlage für die
+              Verarbeitung der Daten nach Anmeldung zum Kita Finder Service
+              durch den Nutzer ist bei Vorliegen einer Einwilligung des Nutzers
+              Art. 6 Abs. 1 lit. a DSGVO.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Zweck der Datenverarbeitung: Die Erhebung der oben genannten Daten
+              dient dazu, den Kita Finder Service durchzuführen und dem Nutzer
+              passende Kitas basierend auf dem Wohnort, dem gewünschten Beginn
+              und dem Geburtsmonat des Kindes zu empfehlen. Die Erhebung der
+              E-Mail-Adresse des Nutzers dient dazu, den Kita Finder Service
+              zuzustellen.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Dauer der Speicherung: Die Daten werden gelöscht, sobald sie für
+              die Erreichung des Zwecks ihrer Erhebung nicht mehr erforderlich
+              sind. Die E-Mail-Adresse des Nutzers wird demnach solange
+              gespeichert, wie das Abonnement des Kita Finder Service aktiv ist,
+              maximal jedoch 3 Monate. Die sonstigen im Rahmen des
+              Anmeldevorgangs erhobenen personenbezogenen Daten werden ebenfalls
+              bei Beendigung des Abonnements gelöscht.
+            </p>
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Widerspruchs- und Beseitigungsmöglichkeit: Das Abonnement des Kita
+              Finder Service kann durch den betroffenen Nutzer jederzeit
+              gekündigt werden. Zu diesem Zweck kontaktieren Sie uns bitte per
+              E-Mail. Hierdurch wird ebenfalls ein Widerruf der Einwilligung zur
+              Speicherung der während des Anmeldevorgangs erhobenen
+              personenbezogenen Daten ermöglicht. Wenn Sie auf die Blacklist
+              gesetzt werden möchten, um zukünftige Anmeldungen dauerhaft zu
+              verhindern, kontaktieren Sie uns bitte per E-Mail.
+            </p>
             <p className="text-base font-normal leading-normal text-gray-700">
               Andere Daten werden automatisch oder nach Ihrer Einwilligung beim
               Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor
@@ -58,6 +201,34 @@ const PrivacyPage: React.FC<PrivacyPageProps> = ({}) => {
               Ein Teil der Daten wird erhoben, um eine fehlerfreie
               Bereitstellung der Website zu gew&auml;hrleisten. Andere Daten
               k&ouml;nnen zur Analyse Ihres Nutzerverhaltens verwendet werden.
+            </p>{" "}
+            <h4 className="mb-2 mt-3 text-lg font-semibold">Analyse-Tools</h4>{" "}
+            <p className="text-base font-normal leading-normal text-gray-700">
+              Google Analytics Diese Website nutzt Funktionen des
+              Webanalysedienstes Google Analytics. Anbieter ist die Google
+              Ireland Limited („Google“), Gordon House, Barrow Street, Dublin 4,
+              Irland. Google Analytics ermöglicht es dem Websitebetreiber, das
+              Verhalten der Websitebesucher zu analysieren. Hierbei erhält der
+              Websitebetreiber verschiedene Nutzungsdaten, wie z. B.
+              Seitenaufrufe, Verweildauer, verwendete Betriebssysteme und
+              Herkunft des Nutzers. Diese Daten werden dem jeweiligen Endgerät
+              des Users zugeordnet. Eine Zuordnung zu einer User-ID erfolgt
+              nicht. Des Weiteren können wir mit Google Analytics u. a. Ihre
+              Maus- und Scrollbewegungen und Klicks aufzeichnen. Ferner
+              verwendet Google Analytics verschiedene Modellierungsansätze, um
+              die erfassten Datensätze zu ergänzen und setzt
+              Machine-Learning-Technologien bei der Datenanalyse ein. Google
+              Analytics verwendet Technologien, die die Wiedererkennung des
+              Nutzers zum Zwecke der Analyse des Nutzerverhaltens ermöglichen
+              (z. B. Cookies oder Device-Fingerprinting). Die von Google
+              erfassten Informationen über die Benutzung dieser Website werden
+              in der Regel an einen Server von Google in den USA übertragen und
+              dort gespeichert. Die Nutzung dieses Dienstes erfolgt auf
+              Grundlage Ihrer Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO und §
+              25 Abs. 1 TTDSG. Die Einwilligung ist jederzeit widerrufbar. Die
+              Datenübertragung in die USA wird auf die Standardvertragsklauseln
+              der EU-Kommission gestützt. Details finden Sie hier:
+              https://privacy.google.com/businesses/controllerterms/mccs/.
             </p>{" "}
             <h4 className="mb-2 mt-3 text-lg font-semibold">
               Welche Rechte haben Sie bez&uuml;glich Ihrer Daten?
