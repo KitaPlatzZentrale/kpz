@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  title: Your API Documentation
+  version: 1.0.0
+paths:
+  /kitas/{lat}/{lng}:
+    get:
+      summary: Get Berlin DE Kitas at location
+      parameters:
+        - name: lat
+          in: path
+          required: true
+          schema:
+            type: number
+          description: Latitude of the location
+        - name: lng
+          in: path
+          required: true
+          schema:
+            type: number
+          description: Longitude of the location
+      responses:
+        "200":
+          description: Successful response
+  /kita/{uuid}:
+    get:
+      summary: Get Berlin DE Kita details
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: UUID of the Kita
+      responses:
+        "200":
+          description: Successful response
+  /location-service/{lat}/{lng}/{radius}/{page}/{limit}:
+    get:
+      summary: Get paginated kitas
+      parameters:
+        - name: lat
+          in: path
+          required: true
+          schema:
+            type: number
+          description: Latitude of the location
+        - name: lng
+          in: path
+          required: true
+          schema:
+            type: number
+          description: Longitude of the location
+        - name: radius
+          in: path
+          required: true
+          schema:
+            type: number
+          description: Radius in meters
+        - name: page
+          in: path
+          schema:
+            type: integer
+          description: Page number (optional)
+        - name: limit
+          in: path
+          schema:
+            type: integer
+          description: Number of results per page (optional)
+      responses:
+        "200":
+          description: Successful response
+  /signup/service:
+    post:
+      summary: Signup for Kita Finder service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/KitaFinderServiceSignup"
+      responses:
+        "200":
+          description: Successful response
+  /signup/single:
+    post:
+      summary: Signup for single Kita notification
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SingleKitaNotification"
+      responses:
+        "200":
+          description: Successful response
+components:
+  schemas:
+    KitaFinderServiceSignup:
+      type: object
+      properties:
+        email:
+          type: string
+        fullAddress:
+          type: string
+        desiredStartingMonth:
+          type: string
+        actualOrExpectedBirthMonth:
+          type: string
+      required:
+        - email
+        - fullAddress
+        - desiredStartingMonth
+        - actualOrExpectedBirthMonth
+    SingleKitaNotification:
+      type: object
+      properties:
+        email:
+          type: string
+        kitaId:
+          type: string
+        kitaDesiredAvailability:
+          type: string
+      required:
+        - email
+        - kitaId
+        - kitaDesiredAvailability
