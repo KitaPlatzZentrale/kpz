@@ -27,6 +27,35 @@ Kindergarten will then be able to accept the children they want in a convenient 
  
 - Health Check Service: This Service is a scheduled Lambda function that periodically calls the /health endpoint of the API. In case of a 503 response, it sends an SNS event, triggering the Lambda function responsible for sending a Slack message.
 
-<h2>CI / CD</h2>
 
-TODO
+## Setup
+
+You need env variables and [mongoDB setup for local development](https://www.mongodb.com/docs/manual/installation/). 
+To get the env variables please contact one of the main contributor.
+
+### Backend
+
+```
+cd backend
+npm i
+npx tsc --watch
+npm run local
+```
+
+### Frontend
+```
+yarn
+yarn dev
+```
+
+### Email 
+```
+yarn 
+yarn build
+```
+
+### Notification 
+```
+yarn
+yarn build
+```
