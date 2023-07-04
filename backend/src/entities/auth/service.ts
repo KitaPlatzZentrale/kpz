@@ -1,11 +1,7 @@
-import { Request, Response, NextFunction, RequestHandler } from "express";
+import { RequestHandler } from "express";
 
 //  middleware to check if user is authenticated
-export const isAuthenticated: RequestHandler<Request> = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isAuthenticated: RequestHandler<Request> = (req, res, next) => {
   const placeholder = true;
   if (placeholder) {
     return next();
@@ -13,11 +9,7 @@ export const isAuthenticated: RequestHandler<Request> = (
   return res.status(401).send("Unauthorized");
 };
 
-export const isAuthorized: RequestHandler<Request> = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isAuthorized: RequestHandler<Request> = (req, res, next) => {
   const isAuthorizedUser = true;
 
   if (isAuthorizedUser) {

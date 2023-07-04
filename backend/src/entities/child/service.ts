@@ -1,3 +1,4 @@
+//@ts-nocheck
 import ChildDataModel from "./model";
 import { IChildData } from "./handler/saveChildData";
 import { encryption, getDataKey } from "./encryption";

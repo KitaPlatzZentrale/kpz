@@ -48,7 +48,11 @@ class ChildDataValidator {
   careHours: string[];
 }
 
-export const validator: RequestHandler<IChildData> = async (req, res, next) => {
+export const validator: RequestHandler<any, any, IChildData> = async (
+  req,
+  res,
+  next
+) => {
   try {
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
@@ -81,7 +85,7 @@ export const validator: RequestHandler<IChildData> = async (req, res, next) => {
   }
 };
 
-const handler: RequestHandler<IChildData> = async (req, res) => {
+const handler: RequestHandler<any, any, IChildData> = async (req, res) => {
   try {
     const {
       id,

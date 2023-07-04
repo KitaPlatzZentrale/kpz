@@ -13,7 +13,7 @@ class GetChildDataValidator {
   id: string;
 }
 
-export const validator: RequestHandler<IGetChildData> = async (
+export const validator: RequestHandler<any, any, IGetChildData> = async (
   req,
   res,
   next
@@ -30,7 +30,7 @@ export const validator: RequestHandler<IGetChildData> = async (
   }
 };
 
-const handler: RequestHandler<IGetChildData> = async (req, res) => {
+const handler: RequestHandler<any, any, IGetChildData> = async (req, res) => {
   try {
     const { id } = req.params;
     const childDataService = new ChildDataService();
