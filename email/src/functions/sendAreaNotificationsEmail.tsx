@@ -7,6 +7,7 @@ import type { Handler } from "aws-lambda";
 import AreaNotificationsEmail from "../templates/areaNotifications";
 import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
+import ConsentConfirmationEmail from "../templates/consentConfirmation";
 
 dotenv.config();
 /**
@@ -38,7 +39,7 @@ interface EmailProps {
       email: string;
       consentId: string;
       createdAt: string;
-      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+      consentedAt: string | null;
       areaDescription: string;
     };
   };
@@ -66,12 +67,24 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
         "No consent id with `consentId` specified. This will otherwise result in a broken opt-out link (not compliant with GDPR)."
       );
 
-    const body = render(
-      <AreaNotificationsEmail
-        areaDescription={areaDescription}
-        consentId={consentId}
-      />
-    );
+    // if consentedAt is null send confirmationEmail
+    let body = "";
+    if (event.detail.fullDocument.consentedAt == null) {
+      body = render(
+        <ConsentConfirmationEmail
+          consentId={consentId}
+          serviceName={"Area Notification"}
+        />
+      );
+    } else {
+      body = render(
+        <AreaNotificationsEmail
+          areaDescription={areaDescription}
+          consentId={consentId}
+        />
+      );
+    }
+    if (!body) throw new Error("Something went wrong");
     await sendEmail({
       to,
       body,

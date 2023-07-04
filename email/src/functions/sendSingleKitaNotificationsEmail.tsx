@@ -8,6 +8,7 @@ import type { Handler } from "aws-lambda";
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
 import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
+import ConsentConfirmationEmail from "../templates/consentConfirmation";
 
 dotenv.config();
 /**
@@ -85,10 +86,24 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
         "No consent id with `consentId` specified. This will otherwise result in a broken opt-out link (not compliant with GDPR)."
       );
 
-    const body = render(
-      <SingleKitaNotificationsEmail kitaName={kitaName} consentId={consentId} />
-    );
-
+    // if consentedAt is null send confirmationEmail
+    let body = "";
+    if (event.detail.fullDocument.consentedAt == null) {
+      body = render(
+        <ConsentConfirmationEmail
+          consentId={consentId}
+          serviceName={"Area Notification"}
+        />
+      );
+    } else {
+      body = render(
+        <SingleKitaNotificationsEmail
+          kitaName={kitaName}
+          consentId={consentId}
+        />
+      );
+    }
+    if (!body) throw new Error("Something went wrong");
     await sendEmail({
       to,
       body,
