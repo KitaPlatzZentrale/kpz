@@ -11,6 +11,7 @@ interface IChildData extends Document {
   careHours: string[];
   createdAt: string;
   updatedAt: string;
+  consentedAt: Date;
 }
 
 const ChildDataSchema = new Schema<IChildData>(
@@ -23,6 +24,7 @@ const ChildDataSchema = new Schema<IChildData>(
     actualOrExpectedBirthMonth: { type: Schema.Types.Buffer, required: true },
     desiredStartingMonth: { type: String, required: true },
     careHours: { type: [String], required: true },
+    consentedAt: { type: Date, default: Date.now, required: true },
   },
   { timestamps: true }
 );

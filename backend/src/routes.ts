@@ -31,6 +31,8 @@ import getChildData, {
 } from "./entities/child/handler/getChildData";
 import { isAuthenticated, isAuthorized } from "./entities/auth/service";
 import deleteUser from "./entities/user/handler/deleteUser";
+
+import deleteOutdatedUserData from "./entities/user/handler/retentionPeriod";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -82,6 +84,13 @@ router.delete(
   isAuthenticated,
   isAuthorized,
   deleteUser
+);
+
+router.delete(
+  "/retention-period",
+  isAuthenticated,
+  isAuthorized,
+  deleteOutdatedUserData
 );
 
 export = router;
