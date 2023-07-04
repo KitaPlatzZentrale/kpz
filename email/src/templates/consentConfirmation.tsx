@@ -46,6 +46,17 @@ export const ConsentConfirmationEmail: React.FC<
         </a>
       </Paragraph>
       <Paragraph>
+        Durch Klicken der Schaltfläche bestätigen Sie, dass Sie unserer
+        Datenschutzerklärung zustimmen:
+        <a
+          href="https://kitaplatz-zentrale.de/datenschutzerklaerung"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Datenschutzerklärung
+        </a>
+      </Paragraph>
+      <Paragraph>
         Wenn Sie den obigen Link nicht anklicken können, kopieren Sie bitte die
         folgende URL und fügen Sie sie in die Adressleiste Ihres Browsers ein:
       </Paragraph>

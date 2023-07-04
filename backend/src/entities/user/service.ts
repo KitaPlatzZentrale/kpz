@@ -60,9 +60,17 @@ class User {
 
   public static confirmConsent = async (consentId: IUserConsent) => {
     try {
-      // Currently only used for EmailServiceSignupModel
-      // Could be extended for other models
+      // think about bruteforce protection
+      // maybe we should check for email + consentId
       await EmailServiceSignupModel.updateOne(
+        { consentId: consentId },
+        { $set: { consentedAt: new Date() } }
+      );
+      await UserModel.updateOne(
+        { consentId: consentId },
+        { $set: { consentedAt: new Date() } }
+      );
+      await AreaModel.updateOne(
         { consentId: consentId },
         { $set: { consentedAt: new Date() } }
       );
