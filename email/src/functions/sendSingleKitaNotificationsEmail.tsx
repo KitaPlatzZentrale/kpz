@@ -81,10 +81,6 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       throw new Error(
         "No kita name with `kitaName` specified. Aborting. This will otherwise result in messy copy."
       );
-    if (!consentId)
-      throw new Error(
-        "No consent id with `consentId` specified. This will otherwise result in a broken opt-out link (not compliant with GDPR)."
-      );
 
     // if consentedAt is null send confirmationEmail
     let body = "";
@@ -92,7 +88,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       body = render(
         <ConsentConfirmationEmail
           consentId={consentId}
-          serviceName={"Area Notification"}
+          serviceName={"Kita-Notification"}
         />
       );
     } else {

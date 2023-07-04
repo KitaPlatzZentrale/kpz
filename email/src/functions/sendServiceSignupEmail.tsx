@@ -78,7 +78,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       body = render(
         <ConsentConfirmationEmail
           consentId={consentId}
-          serviceName={"Area Notification"}
+          serviceName={"Kita-Finder"}
         />
       );
     } else {
