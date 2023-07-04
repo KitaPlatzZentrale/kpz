@@ -30,6 +30,7 @@ import getChildData, {
   validator as getChildDataValidator,
 } from "./entities/child/handler/getChildData";
 import { isAuthenticated, isAuthorized } from "./entities/auth/service";
+import deleteUser from "./entities/user/handler/deleteUser";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -75,4 +76,12 @@ router.get(
   getChildDataValidator,
   getChildData
 );
+
+router.delete(
+  "/user/:email/:parentId",
+  isAuthenticated,
+  isAuthorized,
+  deleteUser
+);
+
 export = router;
