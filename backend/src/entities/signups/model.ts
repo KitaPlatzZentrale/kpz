@@ -68,7 +68,7 @@ interface IEmailServiceSignup extends Document {
   desiredStartingMonth: string;
   actualOrExpectedBirthMonth: string;
   createdAt: string;
-  consentedAt: string;
+  consentedAt: string | null;
   revokedAt?: string | null;
   sendEmail?: boolean;
 }
@@ -93,7 +93,7 @@ const EmailServiceSignupSchema: Schema = new Schema({
     required: true,
   },
   createdAt: { type: String, default: Date.now, required: true },
-  consentedAt: { type: String, default: Date.now, required: true },
+  consentedAt: { type: String, default: null },
   revokedAt: {
     type: String,
     default: null,

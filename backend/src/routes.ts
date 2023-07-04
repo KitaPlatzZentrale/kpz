@@ -33,6 +33,7 @@ import { isAuthenticated, isAuthorized } from "./entities/auth/service";
 import deleteUser from "./entities/user/handler/deleteUser";
 
 import deleteOutdatedUserData from "./entities/user/handler/retentionPeriod";
+import confirmConsent from "./entities/user/handler/confirmConsent";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -92,5 +93,7 @@ router.delete(
   isAuthorized,
   deleteOutdatedUserData
 );
+
+router.post("/confirm-consent/:consentId", confirmConsent);
 
 export = router;

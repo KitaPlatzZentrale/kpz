@@ -11,6 +11,10 @@ interface IUser {
   parentId: string;
 }
 
+interface IUserConsent {
+  consentId: string;
+}
+
 class User {
   public static deleteUser = async (user: IUser) => {
     try {
@@ -47,6 +51,21 @@ class User {
       await ChildDataModel.deleteMany({
         consentedAt: { $lt: threeMonthsAgo },
       });
+      return;
+    } catch (error) {
+      logger.error(error);
+      throw error;
+    }
+  };
+
+  public static confirmConsent = async (consentId: IUserConsent) => {
+    try {
+      // Currently only used for EmailServiceSignupModel
+      // Could be extended for other models
+      await EmailServiceSignupModel.updateOne(
+        { consentId: consentId },
+        { $set: { consentedAt: new Date() } }
+      );
       return;
     } catch (error) {
       logger.error(error);
