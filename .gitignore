@@ -3,3 +3,4 @@ frontend/.env
 notification/node_modules
 notification/dist
 notification/.env
+/notification
