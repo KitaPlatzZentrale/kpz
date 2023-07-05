@@ -2,14 +2,16 @@ import React from "react";
 
 import { Container, Hr, Link, Section } from "@react-email/components";
 
-import Paragraph from "./Text";
-
 import styles from "../../styles";
+import dotenv from "dotenv";
+dotenv.config();
 
-import { REVOKE_CONSENT_ENDPOINT } from "../../variables";
-
-const revokeConsentUrl = (consentUrl: string) =>
-  `${REVOKE_CONSENT_ENDPOINT}/${consentUrl}`;
+const API_URL = process.env.API_URL;
+if (!API_URL) {
+  throw new Error("API_URL is not defined");
+}
+const revokeConsentUrl = (consentId: string) =>
+  `${API_URL}/revoke-consent/${consentId}`;
 
 type FooterProps = {
   consentId: string;
@@ -25,13 +27,12 @@ const Footer: React.FC<FooterProps> = ({ consentId }) => {
           University of Applied Sciences Berlin, Lohmühlenstraße 65, 12435
           Berlin
         </p>
-        {/*<p>
+        <p>
           Sie möchten keine Emails mehr erhalten?{" "}
           <Link style={styles.anchor} href={revokeConsentUrl(consentId)}>
             Email Benachrichtigungen abmelden
           </Link>
-          .
-  </p>*/}
+        </p>
         <p>
           <Link style={styles.anchor} href="https://kitaplatz-zentrale.de">
             https://kitaplatz-zentrale.de

@@ -84,6 +84,8 @@ export class EmailSignup {
   public static revokeConsent = async (consentId: string) => {
     try {
       await EmailServiceSignupModel.deleteOne({ consentId });
+      await AreaModel.deleteOne({ consentId });
+      await UserModel.deleteOne({ consentId });
       logger.info(`Consent ${consentId} revoked and User deleted`);
       return;
     } catch (e) {

@@ -11,8 +11,8 @@ import singleKitaNotificationSignup, {
   validator as singleKitaNotificationSignupValidator,
 } from "./entities/signups/handler/singleKitaNotificationSignup";
 
-import revokeAccess, {
-  validator as revokeAccessValidator,
+import revokeConsent, {
+  validator as revokeConsentValidator,
 } from "./entities/signups/handler/revokeConsent";
 
 import areaNotificationSignup, {
@@ -57,12 +57,12 @@ router.post(
   singleKitaNotificationSignup
 );
 
-router.delete(
-  "/signup/:consentId",
+router.get(
+  "/revoke-consent/:consentId",
   isAuthenticated,
   isAuthorized,
-  revokeAccessValidator,
-  revokeAccess
+  revokeConsentValidator,
+  revokeConsent
 );
 router.post(
   "/signup/area",
