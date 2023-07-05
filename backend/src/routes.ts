@@ -96,6 +96,6 @@ router.delete(
   deleteOutdatedUserData
 );
 
-router.post("/confirm-consent/:consentId", confirmConsent);
+router.get("/confirm-consent/:consentId", confirmConsent);
 
 export = router;
