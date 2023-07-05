@@ -7,6 +7,7 @@ import type { Handler } from "aws-lambda";
 import ServiceSignupEmail from "../templates/serviceSignup";
 import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
+import ConsentConfirmationEmail from "../templates/consentConfirmation";
 
 dotenv.config();
 /**
@@ -49,7 +50,7 @@ interface EmailProps {
       desiredStartingMonth: string;
       actualOrExpectedBirthMonth: string;
       createdAt: string;
-      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+      consentedAt: string | null; // same as createdAt, important to track this separately for GDPR reasons
       revokedAt?: string | null;
     };
   };
@@ -71,7 +72,19 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
         "No consent id with `consentId` specified. This will otherwise result in a broken opt-out link (not compliant with GDPR)."
       );
 
-    const body = render(<ServiceSignupEmail consentId={consentId} />);
+    // if consentedAt is null send confirmationEmail
+    let body = "";
+    if (event.detail.fullDocument.consentedAt == null) {
+      body = render(
+        <ConsentConfirmationEmail
+          consentId={consentId}
+          serviceName={"Kita-Finder"}
+        />
+      );
+    } else {
+      body = render(<ServiceSignupEmail consentId={consentId} />);
+    }
+    if (!body) throw new Error("Something went wrong");
     await sendEmail({
       to,
       body,

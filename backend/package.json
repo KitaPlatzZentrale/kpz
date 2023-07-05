@@ -27,6 +27,7 @@
     "express-rate-limit": "^6.7.0",
     "helmet": "^7.0.0",
     "hpp": "^0.2.3",
+    "mongodb-client-encryption": "^2.8.0",
     "mongoose": "^7.0.3",
     "winston": "^3.8.2"
   },

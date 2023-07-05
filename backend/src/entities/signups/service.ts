@@ -1,4 +1,5 @@
 import logger from "../../logger";
+import { createDataKey } from "../child/encryption";
 import { UserModel, EmailServiceSignupModel, AreaModel } from "./model";
 import { v4 as uuidv4 } from "uuid";
 
@@ -61,8 +62,9 @@ export class EmailSignup {
   ) => {
     try {
       // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
+      const id = uuidv4();
       const createdDocument = await EmailServiceSignupModel.create({
-        id: uuidv4(),
+        id: id,
         email,
         fullAddress,
         desiredStartingMonth,
@@ -70,6 +72,7 @@ export class EmailSignup {
         revokedAt,
         sendEmail,
       });
+      await createDataKey(id);
       logger.info(`User ${email} signed up for kita finder service`);
       return createdDocument;
     } catch (e) {

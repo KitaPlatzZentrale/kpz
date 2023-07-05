@@ -23,6 +23,17 @@ import getBerlinDEKitasAtLocation from "./entities/berlin.de/handler/getBerlinDE
 import getBerlinDEKitaDetails from "./entities/berlin.de/handler/getBerlinDEKitaDetails";
 
 import getHealthStatus from "./health";
+import saveChildData, {
+  validator as saveChildDataValidator,
+} from "./entities/child/handler/saveChildData";
+import getChildData, {
+  validator as getChildDataValidator,
+} from "./entities/child/handler/getChildData";
+import { isAuthenticated, isAuthorized } from "./entities/auth/service";
+import deleteUser from "./entities/user/handler/deleteUser";
+
+import deleteOutdatedUserData from "./entities/user/handler/retentionPeriod";
+import confirmConsent from "./entities/user/handler/confirmConsent";
 const router = express.Router();
 
 router.get("/kitas/:lat/:lng", getBerlinDEKitasAtLocation);
@@ -53,5 +64,36 @@ router.post(
 );
 
 router.get("/health", getHealthStatus);
+
+router.post(
+  "/save-child",
+  isAuthenticated,
+  isAuthorized,
+  saveChildDataValidator,
+  saveChildData
+);
+router.get(
+  "/get-child/:id",
+  isAuthenticated,
+  isAuthorized,
+  getChildDataValidator,
+  getChildData
+);
+
+router.delete(
+  "/user/:email/:parentId",
+  isAuthenticated,
+  isAuthorized,
+  deleteUser
+);
+
+router.delete(
+  "/retention-period",
+  isAuthenticated,
+  isAuthorized,
+  deleteOutdatedUserData
+);
+
+router.post("/confirm-consent/:consentId", confirmConsent);
 
 export = router;
