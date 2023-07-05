@@ -4,6 +4,7 @@ const KitaDetailSchema = new mongoose.Schema({
   uuid: {
     type: String,
     required: true,
+    unique: false,
   },
   name: {
     type: String,
