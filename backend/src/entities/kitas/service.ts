@@ -1,6 +1,7 @@
 import KitaDetailModel from "./model";
 import { Kita } from "../../types";
 import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
+import logger from "../../logger";
 
 class KitaService {
   public static getKitasInRadius = async (
@@ -26,7 +27,7 @@ class KitaService {
 
       return paginatedKitas;
     } catch (err) {
-      console.log(err);
+      logger.error("Error in getKitasInRadius:", err);
       throw new Error("Something went wrong");
     }
   };

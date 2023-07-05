@@ -49,11 +49,9 @@ const createDataKey = async (userId: string) => {
 // Get data key for a specific user
 const getDataKey = async (userId: string) => {
   const keyVaultCollection = client.db("test").collection("keyVault");
-  console.log("userId", userId);
   const keyVaultDocument = await keyVaultCollection.findOne({
     keyAltNames: { $in: [userId] },
   });
-  console.log("keyVaultDocument", keyVaultDocument);
   if (!keyVaultDocument) {
     throw new Error("No data key found for the specified user");
   }

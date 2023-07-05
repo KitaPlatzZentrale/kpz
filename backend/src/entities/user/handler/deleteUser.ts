@@ -40,7 +40,6 @@ export const validator: RequestHandler<any, any, IUserParams> = async (
 const handler: RequestHandler<any, any, IUserParams> = async (req, res) => {
   try {
     const { email, parentId } = req.params;
-    console.log("email", email, "parentId", parentId);
     await User.deleteUser({ email, parentId });
     return res.status(200).send();
   } catch (e) {

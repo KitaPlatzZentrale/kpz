@@ -58,21 +58,21 @@ class User {
     }
   };
 
-  public static confirmConsent = async (consentId: IUserConsent) => {
+  public static confirmConsent = async (consent: IUserConsent) => {
     try {
       // think about bruteforce protection
       // maybe we should check for email + consentId
-      await EmailServiceSignupModel.updateOne(
-        { consentId: consentId },
-        { $set: { consentedAt: new Date() } }
+      const sencondRes = await EmailServiceSignupModel.updateOne(
+        { consentId: consent.consentId },
+        { $set: { consentedAt: Date.now() } }
       );
       await UserModel.updateOne(
-        { consentId: consentId },
-        { $set: { consentedAt: new Date() } }
+        { consentId: consent.consentId },
+        { $set: { consentedAt: Date.now() } }
       );
       await AreaModel.updateOne(
-        { consentId: consentId },
-        { $set: { consentedAt: new Date() } }
+        { consentId: consent.consentId },
+        { $set: { consentedAt: Date.now() } }
       );
       return;
     } catch (error) {

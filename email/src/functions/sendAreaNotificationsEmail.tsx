@@ -53,9 +53,6 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
     throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
   try {
     const { email, areaDescription, consentId } = event.detail.fullDocument;
-    console.log("Sending area notifications email to", email);
-    console.log("Area description:", areaDescription);
-    console.log("Consent ID:", consentId);
     const to = email;
     if (!to) throw new Error("No recipient with `to` specified");
     if (!areaDescription)
