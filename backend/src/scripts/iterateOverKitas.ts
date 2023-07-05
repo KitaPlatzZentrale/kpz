@@ -43,7 +43,6 @@ async function getKitasByUUIDs(uuids: number[]): Promise<KitaDetail[]> {
       let kita = await fetchKitaWithRetry(uuid);
       if (kita !== null) {
         kitas.push(kita);
-        console.log("kita", kita);
       }
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
@@ -63,13 +62,10 @@ const generateHash = (data: any) => {
 async function checkIfKitaDetailVersionNeedsUpdate(): Promise<boolean> {
   try {
     const kitaList = await BerlinDEService.getKitaList();
-    console.log("kitaList", kitaList);
     const kitaListHash = generateHash(kitaList);
-    console.log("kitaListHash", kitaListHash);
     const kitaFromCurrentVersion = await KitaDetailModel.findOne({
       version: CURRENT_KITA_DATA_VERSION,
     });
-    console.log("kitaFromCurrentVersion", kitaFromCurrentVersion);
     if (kitaFromCurrentVersion) {
       if (kitaListHash === kitaFromCurrentVersion.checkSum) {
         return false;
@@ -93,23 +89,16 @@ async function saveNewKitaDetailVersionToDB(): Promise<void> {
   const session = await KitaDetailModel.startSession();
   try {
     session.startTransaction();
-    console.log("saveNewKitaDetailVersionToDB");
     let kitaList = await BerlinDEService.getKitaList();
-    console.log("kitaList", kitaList);
     const kitaIds = await BerlinDEService.getAllKitaUUIDs(kitaList);
-    console.log("kitaIds", kitaIds);
     const kitaListHash = generateHash(kitaList);
-    console.log("kitaListHash", kitaListHash);
     const newKitas = await getKitasByUUIDs(kitaIds);
-    console.log("newKitas", newKitas);
     newKitas.map((kita) => {
       kita.version = CURRENT_KITA_DATA_VERSION;
       kita.checkSum = kitaListHash;
     });
     await KitaDetailModel.insertMany(newKitas, { session });
-    console.log("insertedMany");
     await session.commitTransaction();
-    console.log("session.commitTransaction()");
   } catch (err) {
     logger.error("Something went wrong:", err);
     await session.abortTransaction();
@@ -124,7 +113,6 @@ async function deleteOldestKitaDetailVersionFromDB(): Promise<void> {
   try {
     session.startTransaction();
     const oldestValidKitaDetailVersion = Number(CURRENT_KITA_DATA_VERSION) - 1;
-    console.log("oldestValidKitaDetailVersion", oldestValidKitaDetailVersion);
     if (oldestValidKitaDetailVersion > 0) {
       await KitaDetailModel.deleteMany(
         {
@@ -133,7 +121,6 @@ async function deleteOldestKitaDetailVersionFromDB(): Promise<void> {
         { session }
       );
       await session.commitTransaction();
-      console.log("session.commitTransaction()");
     }
   } catch (err) {
     logger.error("Something went wrong:", err);
@@ -142,11 +129,13 @@ async function deleteOldestKitaDetailVersionFromDB(): Promise<void> {
   }
 }
 
-export const handler: RequestHandler = async (req: Request, res: Response) => {
+export const handler: RequestHandler<any, any> = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const updateForKitaDetailRequired =
       await checkIfKitaDetailVersionNeedsUpdate();
-    console.log("updateForKitaDetailRequired", updateForKitaDetailRequired);
     if (updateForKitaDetailRequired) {
       await saveNewKitaDetailVersionToDB();
 
