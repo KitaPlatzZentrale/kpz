@@ -57,7 +57,13 @@ router.post(
   singleKitaNotificationSignup
 );
 
-router.delete("/signup/:consentId", revokeAccessValidator, revokeAccess);
+router.delete(
+  "/signup/:consentId",
+  isAuthenticated,
+  isAuthorized,
+  revokeAccessValidator,
+  revokeAccess
+);
 router.post(
   "/signup/area",
   areaNotificationSignupValidator,
@@ -65,7 +71,7 @@ router.post(
 );
 
 router.get("/health", getHealthStatus);
-router.get("/scrape", scrapeNewKitaData);
+router.get("/scrape", isAuthenticated, isAuthorized, scrapeNewKitaData);
 
 router.post(
   "/save-child",
