@@ -62,7 +62,7 @@ class User {
     try {
       // think about bruteforce protection
       // maybe we should check for email + consentId
-      const sencondRes = await EmailServiceSignupModel.updateOne(
+      await EmailServiceSignupModel.updateOne(
         { consentId: consent.consentId },
         { $set: { consentedAt: Date.now() } }
       );
