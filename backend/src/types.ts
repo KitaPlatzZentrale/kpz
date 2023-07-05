@@ -19,6 +19,7 @@ type Weekday =
   | "sunday";
 
 type Kita = {
+  id?: number;
   uuid: string;
   name: string;
   number: string;
@@ -63,6 +64,8 @@ interface KitaDetail extends Kita {
   };
   foundingDate: string;
   closingDate?: string;
+  version?: string;
+  checkSum?: string;
 }
 
 export { Kita, KitaDetail, KitaResponse, Weekday };
