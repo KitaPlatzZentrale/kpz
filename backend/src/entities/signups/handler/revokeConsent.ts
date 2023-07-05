@@ -13,7 +13,7 @@ class RevokeConsentValidator {
   consentId: string;
 }
 
-export const validator: RequestHandler<IRevokeConsent> = async (
+export const validator: RequestHandler<any, any, IRevokeConsent> = async (
   req,
   res,
   next
