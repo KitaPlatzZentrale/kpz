@@ -6,8 +6,9 @@ interface IArea extends Document {
   areaDescription: string;
   consentId: string;
   createdAt: string;
-  consentedAt: string;
+  consentedAt: string | null;
   revokedAt?: string | null;
+  sendEmail?: boolean;
 }
 
 const AreaSchema: Schema = new Schema(
@@ -16,8 +17,9 @@ const AreaSchema: Schema = new Schema(
     areaDescription: { type: String, required: true },
     consentId: { type: String, default: uuidv4(), required: true },
     createdAt: { type: String, default: Date.now, required: true },
-    consentedAt: { type: String, default: Date.now, required: true },
+    consentedAt: { type: String, default: null },
     revokedAt: { type: String, default: null },
+    sendEmail: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -33,7 +35,8 @@ interface IUser extends Document {
     kitaAvailability: string;
   }[];
   createdAt: string;
-  consentedAt: string;
+  consentedAt: string | null;
+  sendEmail?: boolean;
 }
 
 const UserSchema: Schema = new Schema(
@@ -49,7 +52,8 @@ const UserSchema: Schema = new Schema(
       },
     ],
     createdAt: { type: String, default: Date.now, required: true },
-    consentedAt: { type: String, default: Date.now, required: true },
+    consentedAt: { type: String, default: null },
+    sendEmail: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
@@ -57,17 +61,20 @@ const UserSchema: Schema = new Schema(
 const UserModel = mongoose.model<IUser>("user", UserSchema);
 
 interface IEmailServiceSignup extends Document {
+  id: string;
   email: string;
   consentId: string;
   fullAddress: string;
   desiredStartingMonth: string;
   actualOrExpectedBirthMonth: string;
   createdAt: string;
-  consentedAt: string;
+  consentedAt: string | null;
   revokedAt?: string | null;
+  sendEmail?: boolean;
 }
 
 const EmailServiceSignupSchema: Schema = new Schema({
+  id: { type: String, required: true },
   email: {
     type: String,
     required: true,
@@ -86,11 +93,12 @@ const EmailServiceSignupSchema: Schema = new Schema({
     required: true,
   },
   createdAt: { type: String, default: Date.now, required: true },
-  consentedAt: { type: String, default: Date.now, required: true },
+  consentedAt: { type: String, default: null },
   revokedAt: {
     type: String,
     default: null,
   },
+  sendEmail: { type: Boolean, default: true },
 });
 
 const EmailServiceSignupModel = mongoose.model<IEmailServiceSignup>(

@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.332.0",
+    "@aws-sdk/client-sns": "^3.352.0",
     "@fontsource/nunito": "^4.5.12",
     "@react-email/components": "0.0.6",
     "@react-email/render": "^0.0.7",
