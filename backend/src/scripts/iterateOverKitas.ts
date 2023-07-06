@@ -108,7 +108,7 @@ async function saveNewKitaDetailVersionToDB(): Promise<void> {
   }
 }
 
-async function deleteOldestKitaDetailVersionFromDB(): Promise<void> {
+export async function deleteOldestKitaDetailVersionFromDB(): Promise<void> {
   const session = await KitaDetailModel.startSession();
   try {
     session.startTransaction();
@@ -134,12 +134,19 @@ export const handler: RequestHandler<any, any> = async (
   res: Response
 ) => {
   try {
+    // check if x-api-key is set
+    if (!req.headers["x-api-key"]) {
+      return res.status(401).json({ message: "No API key provided" });
+    }
+    // check if x-api-key is correct
+    if (req.headers["x-api-key"] !== process.env.API_KEY) {
+      return res.status(401).json({ message: "Wrong API key provided" });
+    }
     const updateForKitaDetailRequired =
       await checkIfKitaDetailVersionNeedsUpdate();
     if (updateForKitaDetailRequired) {
       await saveNewKitaDetailVersionToDB();
 
-      // await deleteOldestKitaDetailVersionFromDB();
       return res.status(200).json({ message: "Kitas updated" });
     }
     return res.status(200).json({ message: "Kitas already up to date" });
