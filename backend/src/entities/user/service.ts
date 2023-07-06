@@ -8,7 +8,6 @@ import {
 
 interface IUser {
   email: string;
-  parentId: string;
 }
 
 interface IUserConsent {
@@ -18,6 +17,10 @@ interface IUserConsent {
 class User {
   public static deleteUser = async (user: IUser) => {
     try {
+      // Currently we remove many but in the future this will be one when we restricted the user to only sign up once
+      const doc = await EmailServiceSignupModel.findOne({
+        email: user.email,
+      });
       // Remove user from UserModel
       await UserModel.deleteMany({ email: user.email });
       // Remove user from EmailServiceSignupModel
@@ -29,7 +32,7 @@ class User {
 
       // Remove encrypted child data
       await ChildDataModel.deleteMany({
-        parentId: user.parentId,
+        parentId: doc.id,
       });
       return;
     } catch (error) {
