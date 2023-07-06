@@ -100,20 +100,21 @@ const PrivacyPage: React.FC<PrivacyPageProps> = ({}) => {
               die Erreichung des Zwecks ihrer Erhebung nicht mehr erforderlich
               sind. Die E-Mail-Adresse des Nutzers wird demnach solange
               gespeichert, wie das Abonnement des Kita-Platz
-              Benachrichtigungsservice aktiv ist, maximal jedoch 3 Monate. Die
-              sonstigen im Rahmen des Anmeldevorgangs erhobenen
-              personenbezogenen Daten werden ebenfalls bei Beendigung des
-              Abonnements gelöscht.
+              Benachrichtigungsservice aktiv ist. Die sonstigen im Rahmen des
+              Anmeldevorgangs erhobenen personenbezogenen Daten werden ebenfalls
+              bei Beendigung des Abonnements gelöscht.
             </p>
             <p className="text-base font-normal leading-normal text-gray-700">
               Widerspruchs- und Beseitigungsmöglichkeit: Das Abonnement des
               Kita-Platz Benachrichtigungsservice kann durch den betroffenen
               Nutzer jederzeit gekündigt werden. Zu diesem Zweck kontaktieren
-              Sie uns bitte per E-Mail. Hierdurch wird ebenfalls ein Widerruf
-              der Einwilligung zur Speicherung der während des Anmeldevorgangs
-              erhobenen personenbezogenen Daten ermöglicht. Wenn Sie auf die
-              Blacklist gesetzt werden möchten, um zukünftige Anmeldungen
-              dauerhaft zu verhindern, kontaktieren Sie uns bitte per E-Mail.
+              Sie uns bitte per E-Mail oder klicken sie auf den "Email
+              Benachrichtigungen abmelden" button in der Anmeldungs Email.
+              Hierdurch wird ebenfalls ein Widerruf der Einwilligung zur
+              Speicherung der während des Anmeldevorgangs erhobenen
+              personenbezogenen Daten ermöglicht. Wenn Sie auf die Blacklist
+              gesetzt werden möchten, um zukünftige Anmeldungen dauerhaft zu
+              verhindern, kontaktieren Sie uns bitte per E-Mail.
             </p>
             <h4 className="mb-2 mt-3 text-lg font-semibold">
               Kita Finder Service
@@ -140,6 +141,9 @@ const PrivacyPage: React.FC<PrivacyPageProps> = ({}) => {
                 E-Mail-Adresse
               </li>
             </ul>
+            <br></br>
+            <p>Zudem werden folgende Daten bei der Anmeldung erhoben:</p>
+            <p>Datum und Uhrzeit der Registrierung</p>
             <br></br>
             <p className="text-base font-normal leading-normal text-gray-700">
               Für die Verarbeitung der Daten wird im Rahmen des Anmeldevorgangs
@@ -181,11 +185,13 @@ const PrivacyPage: React.FC<PrivacyPageProps> = ({}) => {
               Widerspruchs- und Beseitigungsmöglichkeit: Das Abonnement des Kita
               Finder Service kann durch den betroffenen Nutzer jederzeit
               gekündigt werden. Zu diesem Zweck kontaktieren Sie uns bitte per
-              E-Mail. Hierdurch wird ebenfalls ein Widerruf der Einwilligung zur
-              Speicherung der während des Anmeldevorgangs erhobenen
-              personenbezogenen Daten ermöglicht. Wenn Sie auf die Blacklist
-              gesetzt werden möchten, um zukünftige Anmeldungen dauerhaft zu
-              verhindern, kontaktieren Sie uns bitte per E-Mail.
+              E-Mail oder klicken sie auf den "Email Benachrichtigungen
+              abmelden" button in der Anmeldungs Email. Hierdurch wird ebenfalls
+              ein Widerruf der Einwilligung zur Speicherung der während des
+              Anmeldevorgangs erhobenen personenbezogenen Daten ermöglicht. Wenn
+              Sie auf die Blacklist gesetzt werden möchten, um zukünftige
+              Anmeldungen dauerhaft zu verhindern, kontaktieren Sie uns bitte
+              per E-Mail.
             </p>
             <p className="text-base font-normal leading-normal text-gray-700">
               Andere Daten werden automatisch oder nach Ihrer Einwilligung beim
