@@ -82,12 +82,7 @@ router.get(
   getChildData
 );
 
-router.delete(
-  "/user/:email/:parentId",
-  isAuthenticated,
-  isAuthorized,
-  deleteUser
-);
+router.delete("/user/:email", isAuthenticated, isAuthorized, deleteUser);
 
 router.delete("/retention-period", deleteOutdatedUserData);
 
