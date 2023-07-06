@@ -71,7 +71,7 @@ router.post(
 );
 
 router.get("/health", getHealthStatus);
-router.get("/scrape", isAuthenticated, isAuthorized, scrapeNewKitaData);
+router.get("/scrape", scrapeNewKitaData);
 
 router.post(
   "/save-child",
