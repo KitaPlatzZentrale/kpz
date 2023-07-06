@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString, validate } from "class-validator";
+import { IsEmail, IsNotEmpty, validate } from "class-validator";
 import { RequestHandler } from "express";
 import logger from "../../../logger";
 import User from "../service";
