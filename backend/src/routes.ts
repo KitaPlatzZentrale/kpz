@@ -57,13 +57,7 @@ router.post(
   singleKitaNotificationSignup
 );
 
-router.get(
-  "/revoke-consent/:consentId",
-  isAuthenticated,
-  isAuthorized,
-  revokeConsentValidator,
-  revokeConsent
-);
+router.get("/revoke-consent/:consentId", revokeConsentValidator, revokeConsent);
 router.post(
   "/signup/area",
   areaNotificationSignupValidator,
@@ -95,12 +89,7 @@ router.delete(
   deleteUser
 );
 
-router.delete(
-  "/retention-period",
-  isAuthenticated,
-  isAuthorized,
-  deleteOutdatedUserData
-);
+router.delete("/retention-period", deleteOutdatedUserData);
 
 router.get("/confirm-consent/:consentId", confirmConsent);
 
