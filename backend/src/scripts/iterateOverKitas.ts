@@ -139,7 +139,7 @@ export const handler: RequestHandler<any, any> = async (
     if (updateForKitaDetailRequired) {
       await saveNewKitaDetailVersionToDB();
 
-      await deleteOldestKitaDetailVersionFromDB();
+      // await deleteOldestKitaDetailVersionFromDB();
       return res.status(200).json({ message: "Kitas updated" });
     }
     return res.status(200).json({ message: "Kitas already up to date" });
