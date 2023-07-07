@@ -3,10 +3,6 @@ import { KitaDetail } from "../../types";
 import KitaDetailModel from "../kitas/model";
 import BerlinDEService from "../berlin.de/service";
 import crypto from "crypto";
-const CURRENT_KITA_DATA_VERSION = process.env.CURRENT_KITA_DATA_VERSION;
-if (!CURRENT_KITA_DATA_VERSION) {
-  throw new Error("No CURRENT_KITA_DATA_VERSION found in .env");
-}
 
 class KitaScraper {
   private static generateHash(data: any): string {
@@ -62,7 +58,7 @@ class KitaScraper {
       const kitaList = await BerlinDEService.getKitaList();
       const kitaListHash = this.generateHash(kitaList);
       const kitaFromCurrentVersion = await KitaDetailModel.findOne({
-        version: CURRENT_KITA_DATA_VERSION,
+        version: process.env.CURRENT_KITA_DATA_VERSION,
       });
       if (kitaFromCurrentVersion) {
         if (kitaListHash === kitaFromCurrentVersion.checkSum) {
@@ -85,7 +81,7 @@ class KitaScraper {
       const kitaListHash = this.generateHash(kitaList);
       const newKitas = await this.getKitasByUUIDs(kitaIds);
       newKitas.map((kita) => {
-        kita.version = CURRENT_KITA_DATA_VERSION;
+        kita.version = process.env.CURRENT_KITA_DATA_VERSION;
         kita.checkSum = kitaListHash;
       });
       await KitaDetailModel.insertMany(newKitas, { session });
@@ -104,7 +100,7 @@ class KitaScraper {
     try {
       session.startTransaction();
       const oldestValidKitaDetailVersion =
-        Number(CURRENT_KITA_DATA_VERSION) - 1;
+        Number(process.env.CURRENT_KITA_DATA_VERSION) - 1;
       if (oldestValidKitaDetailVersion > 0) {
         await KitaDetailModel.deleteMany(
           {

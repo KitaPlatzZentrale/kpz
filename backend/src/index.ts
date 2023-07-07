@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express = require("express");
 import routes = require("./routes");
 import logger from "./logger";
@@ -7,8 +9,9 @@ import cors from "cors";
 import hpp from "hpp";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import dotenv from "dotenv";
-dotenv.config();
+import { checkIfAllEnvVariablesAreSet } from "./utils";
+
+checkIfAllEnvVariablesAreSet();
 
 const app = express();
 
