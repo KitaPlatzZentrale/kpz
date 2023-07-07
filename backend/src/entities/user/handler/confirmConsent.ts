@@ -2,7 +2,14 @@ import { RequestHandler } from "express";
 import logger from "../../../logger";
 import User from "../service";
 import { IConsentParams } from "../types";
-
+/**
+ * Request handler for deleting outdated user data.
+ *
+ * @param req - The request object.
+ * @param res - The response object used to send the response.
+ *
+ * @returns A response indicating the status of the operation.
+ */
 const handler: RequestHandler<any, any, IConsentParams> = async (req, res) => {
   try {
     const { consentId } = req.params;

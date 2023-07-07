@@ -2,6 +2,14 @@ import { Request, RequestHandler, Response } from "express";
 import KitaScraper from "./service";
 import logger from "../../logger";
 
+/**
+ * Request handler for updating kitas if required.
+ *
+ * @param req - The request object containing the necessary headers.
+ * @param res - The response object used to send the response.
+ *
+ * @returns A response indicating the success or failure of the update operation.
+ */
 export const handler: RequestHandler<any, any> = async (
   req: Request,
   res: Response

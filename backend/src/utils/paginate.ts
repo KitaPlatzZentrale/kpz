@@ -12,6 +12,14 @@ export interface PaginatedResultsResponse<T> {
   items: T[];
 }
 
+/**
+ * Paginates a sorted list of items.
+ *
+ * @param sortedList - The sorted list of items to be paginated.
+ * @param page - The page number of the desired page.
+ * @param limit - The maximum number of items per page.
+ * @returns A paginated response containing the items for the specified page along with metadata about the pagination.
+ */
 const paginate = <T = any>(
   sortedList: any[],
   page: number,

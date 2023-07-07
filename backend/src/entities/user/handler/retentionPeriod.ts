@@ -1,7 +1,14 @@
 import { RequestHandler } from "express";
 import logger from "../../../logger";
 import User from "../service";
-
+/**
+ * Request handler for deleting outdated user data.
+ *
+ * @param req - The request object.
+ * @param res - The response object used to send the response.
+ *
+ * @returns A response indicating the status of the operation.
+ */
 const handler: RequestHandler<any, any> = async (req, res) => {
   try {
     // check if x-api-key is set

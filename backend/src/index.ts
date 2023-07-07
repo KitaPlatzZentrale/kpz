@@ -9,7 +9,7 @@ import cors from "cors";
 import hpp from "hpp";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-import { checkIfAllEnvVariablesAreSet } from "./utils";
+import { checkIfAllEnvVariablesAreSet } from "./utils/validateEnv";
 
 checkIfAllEnvVariablesAreSet();
 

@@ -1,12 +1,29 @@
 //@ts-nocheck
 import ChildDataModel from "./model";
-import { IChildData } from "./handler/saveChildData";
 import { encryption, getDataKey } from "./encryption";
 import logger from "../../logger";
+import { IChildData } from "./types";
 const encryptionAlgorithm = "AEAD_AES_256_CBC_HMAC_SHA_512-Deterministic";
-
+/**
+ * Service class for handling child data encryption and storage.
+ */
 class ChildDataService {
-  async saveChildData(childData: IChildData) {
+  /**
+   * Saves the encrypted child data to the database.
+   *
+   * @param childData - The child data to be saved.
+   *   - `id`: The unique identifier of the child.
+   *   - `parentId`: The unique identifier of the parent associated with the child.
+   *   - `firstName`: The first name of the child.
+   *   - `lastName`: The last name of the child.
+   *   - `gender`: The gender of the child, which can be "Male", "Female", or "Other".
+   *   - `actualOrExpectedBirthMonth`: The actual or expected birth month of the child.
+   *   - `desiredStartingMonth`: The desired starting month for the child's care.
+   *   - `careHours`: An array of strings representing the child's care hours.
+   *
+   * @throws Error if the encryption or database operation fails.
+   */
+  async saveChildData(childData: IChildData): Promise<void> {
     try {
       const dataKeyId = await getDataKey(childData.parentId);
       const encryptedFirstName = await encryption.encrypt(childData.firstName, {
@@ -32,7 +49,7 @@ class ChildDataService {
         }
       );
 
-      const encryptedChildData = {
+      const encryptedChildData: IChildData = {
         id: childData.id,
         parentId: childData.parentId,
         firstName: encryptedFirstName,
@@ -49,6 +66,14 @@ class ChildDataService {
       throw e;
     }
   }
+
+  /**
+   * Retrieves and decrypts the child data from the database.
+   *
+   * @param id - The ID of the child data to retrieve.
+   * @returns The decrypted child data, or null if not found.
+   * @throws Error if the decryption or database operation fails.
+   */
   async getChildData(id: string): Promise<IChildData | null> {
     try {
       const encryptedChildData = await ChildDataModel.findOne({ id: id });

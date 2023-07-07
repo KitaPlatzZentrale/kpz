@@ -6,36 +6,44 @@ import {
   UserModel,
 } from "../signups/model";
 import { IUser, IUserConsent } from "./types";
-
+/**
+ * The User class provides static methods for managing user data and consent.
+ */
 class User {
+  /**
+   * Delete a user and associated data.
+   *
+   * @param user - An object containing the user email.
+   * @property email - The email address of the user.
+   *
+   * @returns A Promise that resolves with no value if the deletion is successful.
+   * @throws An error if an error occurs during the deletion process.
+   */
   public static deleteUser = async (user: IUser) => {
     try {
-      // Currently we remove many but in the future this will be one when we restricted the user to only sign up once
       const doc = await EmailServiceSignupModel.findOne({
         email: user.email,
       });
-      // Remove user from UserModel
-      await UserModel.deleteMany({ email: user.email });
-      // Remove user from EmailServiceSignupModel
-      await EmailServiceSignupModel.deleteMany({
-        email: user.email,
-      });
-      // Remove user from AreaModel
-      await AreaModel.deleteMany({ email: user.email });
 
-      // Remove encrypted child data
-      await ChildDataModel.deleteMany({
-        parentId: doc.id,
-      });
+      await UserModel.deleteMany({ email: user.email });
+      await EmailServiceSignupModel.deleteMany({ email: user.email });
+      await AreaModel.deleteMany({ email: user.email });
+      await ChildDataModel.deleteMany({ parentId: doc.id });
+
       return;
     } catch (error) {
       console.error("Error removing user:", error);
       throw error;
     }
   };
-  // limited to 3 months
-  // notification for Area and SingleKitas are excluded
-  // since the user wants to be updated for longer than 3 month
+
+  /**
+   * Delete outdated user data based on consented date.
+   * Data older than 3 months will be deleted.
+   *
+   * @returns A Promise that resolves with no value if the deletion is successful.
+   * @throws An error if an error occurs during the deletion process.
+   */
   public static deleteOutdatedUserData = async () => {
     const currentDate = new Date();
     const threeMonthsAgo = new Date();
@@ -54,10 +62,17 @@ class User {
     }
   };
 
+  /**
+   * Confirm user consent by updating consentedAt date.
+   *
+   * @param consent - An object containing the consent ID.
+   * @property consentId - The ID of the consent to confirm.
+   *
+   * @returns A Promise that resolves with no value if the confirmation is successful.
+   * @throws An error if an error occurs during the confirmation process.
+   */
   public static confirmConsent = async (consent: IUserConsent) => {
     try {
-      // think about bruteforce protection
-      // maybe we should check for email + consentId
       await EmailServiceSignupModel.updateOne(
         { consentId: consent.consentId },
         { $set: { consentedAt: Date.now() } }
