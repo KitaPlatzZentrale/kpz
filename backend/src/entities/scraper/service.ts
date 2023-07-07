@@ -3,8 +3,6 @@ import { KitaDetail } from "../../types";
 import KitaDetailModel from "../kitas/model";
 import BerlinDEService from "../berlin.de/service";
 import crypto from "crypto";
-import dotenv from "dotenv";
-dotenv.config();
 
 const CURRENT_KITA_DATA_VERSION = process.env.CURRENT_KITA_DATA_VERSION;
 if (!CURRENT_KITA_DATA_VERSION) {

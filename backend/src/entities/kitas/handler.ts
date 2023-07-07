@@ -2,8 +2,6 @@ import logger from "../../logger";
 import KitaService from "./service";
 import { RequestHandler } from "express";
 import { IPaginatedKitasParams } from "./types";
-import dotenv from "dotenv";
-dotenv.config();
 
 const handler: RequestHandler<IPaginatedKitasParams> = async (req, res) => {
   try {

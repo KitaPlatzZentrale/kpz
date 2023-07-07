@@ -1,6 +1,5 @@
 import { RequestHandler } from "express";
-import dotenv from "dotenv";
-dotenv.config();
+
 //  middleware to check if user is authenticated
 export const isAuthenticated: RequestHandler<Request> = (req, res, next) => {
   const placeholder = true;

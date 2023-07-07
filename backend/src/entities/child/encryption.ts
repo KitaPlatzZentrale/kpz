@@ -1,9 +1,6 @@
 import { MongoClient } from "mongodb";
 import { ClientEncryption } from "mongodb-client-encryption";
 
-import dotenv from "dotenv";
-
-dotenv.config();
 if (
   !process.env.AWS_KMS_KEY_ID ||
   !process.env.AWS_ACCESS_KEY_ID ||

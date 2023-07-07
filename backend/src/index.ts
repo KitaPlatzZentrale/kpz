@@ -7,6 +7,8 @@ import cors from "cors";
 import hpp from "hpp";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 

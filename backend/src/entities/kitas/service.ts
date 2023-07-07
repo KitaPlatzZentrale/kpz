@@ -2,8 +2,6 @@ import KitaDetailModel from "./model";
 import { Kita } from "../../types";
 import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
 import logger from "../../logger";
-import dotenv from "dotenv";
-dotenv.config();
 
 const CURRENT_KITA_DATA_VERSION = process.env.CURRENT_KITA_DATA_VERSION;
 if (!CURRENT_KITA_DATA_VERSION)
