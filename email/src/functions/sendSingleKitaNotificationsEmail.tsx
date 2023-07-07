@@ -73,7 +73,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
     throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
   try {
     const { email, trackedKitas, consentId } = event.detail.fullDocument;
-    const { kitaName } = trackedKitas[0];
+    const { kitaName } = trackedKitas[trackedKitas.length - 1];
     const to = email;
 
     if (!to) throw new Error("No recipient with `to` specified");

@@ -11,6 +11,12 @@ export class EmailSignup {
     sendEmail?: boolean
   ) => {
     try {
+      const existingUser = await AreaModel.findOne({
+        email,
+      });
+      if (existingUser) {
+        return;
+      }
       const createdDocument = await AreaModel.create({
         email,
         areaDescription,
@@ -32,7 +38,25 @@ export class EmailSignup {
     sendEmail?: boolean
   ) => {
     try {
-      // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
+      const existingUser = await UserModel.findOne({ email });
+      if (existingUser) {
+        // Check if the kita with the given kitaId is already signed up for
+        const isKitaAlreadySignedUp = existingUser.trackedKitas.some(
+          (kita) => kita.id === kitaId
+        );
+        if (isKitaAlreadySignedUp) {
+          // Kita is already signed up for by the user, return
+          return;
+        }
+        // Add the kita to the trackedKitas array
+        existingUser.trackedKitas.push({
+          id: kitaId,
+          kitaName,
+          kitaAvailability: kitaDesiredAvailability,
+        });
+        await existingUser.save();
+        return;
+      }
       const createdDocument = await UserModel.create({
         id: uuidv4(),
         email,
@@ -52,6 +76,7 @@ export class EmailSignup {
       return e;
     }
   };
+
   public static kitaFinderServiceSignup = async (
     email: string,
     fullAddress: string,
@@ -61,7 +86,10 @@ export class EmailSignup {
     sendEmail?: boolean
   ) => {
     try {
-      // needs logic if user already exists but then MongoDB triggers might have to be adjusted aswell
+      const existingUser = await EmailServiceSignupModel.findOne({ email });
+      if (existingUser) {
+        return;
+      }
       const id = uuidv4();
       const createdDocument = await EmailServiceSignupModel.create({
         id: id,

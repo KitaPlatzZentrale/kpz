@@ -5,7 +5,6 @@ import BerlinDEKitaModel, {
   BerlinDEKitaSummaryEntity,
 } from "./model";
 import { Kita, KitaDetail } from "../../types";
-require("dotenv").config();
 
 const KITA_API_URL = process.env.KITA_API_URL;
 if (!KITA_API_URL) throw new Error("No KITA_API_URL found in .env");
