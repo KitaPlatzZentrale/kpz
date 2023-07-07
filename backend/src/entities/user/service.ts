@@ -5,14 +5,7 @@ import {
   EmailServiceSignupModel,
   UserModel,
 } from "../signups/model";
-
-interface IUser {
-  email: string;
-}
-
-interface IUserConsent {
-  consentId: string;
-}
+import { IUser, IUserConsent } from "./types";
 
 class User {
   public static deleteUser = async (user: IUser) => {
