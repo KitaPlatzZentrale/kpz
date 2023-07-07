@@ -40,7 +40,15 @@ export class EmailSignup {
     try {
       const existingUser = await UserModel.findOne({ email });
       if (existingUser) {
-        // User already exists, add the kita to the trackedKitas array
+        // Check if the kita with the given kitaId is already signed up for
+        const isKitaAlreadySignedUp = existingUser.trackedKitas.some(
+          (kita) => kita.id === kitaId
+        );
+        if (isKitaAlreadySignedUp) {
+          // Kita is already signed up for by the user, return
+          return;
+        }
+        // Add the kita to the trackedKitas array
         existingUser.trackedKitas.push({
           id: kitaId,
           kitaName,
@@ -68,6 +76,7 @@ export class EmailSignup {
       return e;
     }
   };
+
   public static kitaFinderServiceSignup = async (
     email: string,
     fullAddress: string,
