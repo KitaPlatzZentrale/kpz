@@ -27,48 +27,47 @@ router.get(
   "/location-service/:lat/:lng/:radius/:page?/:limit?",
   getPaginatedKitasValidator,
   getPaginatedKitas
-); // done
+);
 
 router.post(
   "/signup/service",
   kitaFinderServiceSignupValidator,
-  kitaFinderServiceSignup // done
+  kitaFinderServiceSignup
 );
 router.post(
   "/signup/single",
   singleKitaNotificationSignupValidator,
-  singleKitaNotificationSignup // done
+  singleKitaNotificationSignup
 );
 
-router.get("/revoke-consent/:consentId", revokeConsentValidator, revokeConsent); // done
+router.get("/revoke-consent/:consentId", revokeConsentValidator, revokeConsent);
 router.post(
   "/signup/area",
   areaNotificationSignupValidator,
-  areaNotificationSignup // done
+  areaNotificationSignup
 );
 
 router.get("/health", getHealthStatus);
-router.get("/scrape", scrapeNewKitaData); // done
-
+router.get("/scrape", scrapeNewKitaData);
 router.post(
   "/save-child",
   isAuthenticated,
   isAuthorized,
   saveChildDataValidator,
   saveChildData
-); // done
+);
 router.get(
   "/get-child/:id",
   isAuthenticated,
   isAuthorized,
   getChildDataValidator,
   getChildData
-); // done
+);
 
-router.delete("/user/:email", isAuthenticated, isAuthorized, deleteUser); // done
+router.delete("/user/:email", isAuthenticated, isAuthorized, deleteUser);
 
-router.delete("/retention-period", deleteOutdatedUserData); // done
+router.delete("/retention-period", deleteOutdatedUserData);
 
-router.get("/confirm-consent/:consentId", confirmConsent); // done
+router.get("/confirm-consent/:consentId", confirmConsent);
 
 export = router;

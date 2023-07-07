@@ -41,12 +41,12 @@ const handler: RequestHandler = async (req, res, next) => {
 
     // const email = "test@example.com";
     const areaNotificationSignupStatus =
-      await EmailSignup.areaNotificationSignup(
+      await EmailSignup.areaNotificationSignup({
         email,
         areaDescription,
         revokedAt,
-        sendEmail
-      );
+        sendEmail,
+      });
     results.push({
       service: "areaNotificationSignup",
       status: areaNotificationSignupStatus?.email ? 200 : 500,
@@ -57,13 +57,13 @@ const handler: RequestHandler = async (req, res, next) => {
     const kitaDesiredAvailability = "June";
     const kitaName = "Sample Kita";
     const singleKitaNotificationSignupStatus =
-      await EmailSignup.singleKitaNotificationSignup(
+      await EmailSignup.singleKitaNotificationSignup({
         email,
         kitaId,
         kitaDesiredAvailability,
         kitaName,
-        sendEmail
-      );
+        sendEmail,
+      });
     results.push({
       service: "singleKitaNotificationSignup",
       status: singleKitaNotificationSignupStatus?.email ? 200 : 500,
@@ -74,14 +74,14 @@ const handler: RequestHandler = async (req, res, next) => {
     const desiredStartingMonth = "June";
     const actualOrExpectedBirthMonth = "May";
     const kitaFinderServiceSignupStatus =
-      await EmailSignup.kitaFinderServiceSignup(
+      await EmailSignup.kitaFinderServiceSignup({
         email,
         fullAddress,
         desiredStartingMonth,
         actualOrExpectedBirthMonth,
         revokedAt,
-        sendEmail
-      );
+        sendEmail,
+      });
     results.push({
       service: "kitaFinderServiceSignup",
       status: kitaFinderServiceSignupStatus?.email ? 200 : 500,

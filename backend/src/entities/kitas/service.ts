@@ -3,7 +3,21 @@ import { Kita } from "../../types";
 import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
 import logger from "../../logger";
 
+/**
+ * The KitaService class provides methods to interact with Kita data.
+ */
 class KitaService {
+  /**
+   * Retrieves a paginated list of Kitas within a specified radius from a given location.
+   *
+   * @param lat - The latitude of the location.
+   * @param lon - The longitude of the location.
+   * @param radius - The radius in meters to search for Kitas.
+   * @param page - The page number for pagination.
+   * @param limit - The maximum number of Kitas to retrieve per page.
+   * @returns A Promise that resolves to a paginated list of Kitas.
+   * @throws {Error} If an error occurs during the retrieval process.
+   */
   public static getKitasInRadius = async (
     lat: number,
     lon: number,

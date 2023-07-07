@@ -1,24 +1,16 @@
 import { RequestHandler } from "express";
 import logger from "../../../logger";
 import { EmailSignup } from "../service";
-
+/**
+ * Request handler for signing up for the Kita Finder service.
+ *
+ * @param req - The request object containing the signup details in the `req.body`.
+ * @param res - The response object.
+ * @returns A response indicating success or an error message.
+ */
 const handler: RequestHandler<IKitaFinderServiceSignup> = async (req, res) => {
   try {
-    const {
-      email,
-      fullAddress,
-      desiredStartingMonth,
-      actualOrExpectedBirthMonth,
-      revokedAt,
-    } = req.body;
-
-    await EmailSignup.kitaFinderServiceSignup(
-      email,
-      fullAddress,
-      desiredStartingMonth,
-      actualOrExpectedBirthMonth,
-      revokedAt
-    );
+    await EmailSignup.kitaFinderServiceSignup(req.body);
 
     return res.status(200).send();
   } catch (err: any) {

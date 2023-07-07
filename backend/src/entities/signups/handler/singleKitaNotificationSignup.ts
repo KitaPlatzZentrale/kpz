@@ -2,17 +2,17 @@ import { RequestHandler } from "express";
 import logger from "../../../logger";
 import { EmailSignup } from "../service";
 
+/**
+ * Request handler for performing signup for a single Kita notification.
+ *
+ * @param req - The request object containing the signup data.
+ * @param res - The response object used to send the response.
+ *
+ * @returns A response indicating the success or failure of the signup.
+ */
 const handler: RequestHandler<ISingleKitaNotification> = async (req, res) => {
   try {
-    const { email, kitaId, kitaDesiredAvailability, kitaName } = req.body;
-
-    await EmailSignup.singleKitaNotificationSignup(
-      email,
-      kitaId,
-      kitaDesiredAvailability,
-      kitaName
-    );
-
+    await EmailSignup.singleKitaNotificationSignup(req.body);
     return res.status(200).send();
   } catch (err: any) {
     logger.error(err);
