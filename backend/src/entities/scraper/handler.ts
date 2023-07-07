@@ -1,0 +1,34 @@
+import { Request, RequestHandler, Response } from "express";
+import {
+  checkIfKitaDetailVersionNeedsUpdate,
+  saveNewKitaDetailVersionToDB,
+} from "./service";
+import logger from "../../logger";
+
+export const handler: RequestHandler<any, any> = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    // check if x-api-key is set
+    if (!req.headers["x-api-key"]) {
+      return res.status(401).json({ message: "No API key provided" });
+    }
+    // check if x-api-key is correct
+    if (req.headers["x-api-key"] !== process.env.API_KEY) {
+      return res.status(401).json({ message: "Wrong API key provided" });
+    }
+    const updateForKitaDetailRequired =
+      await checkIfKitaDetailVersionNeedsUpdate();
+    if (updateForKitaDetailRequired) {
+      await saveNewKitaDetailVersionToDB();
+      return res.status(200).json({ message: "Kitas updated" });
+    }
+    return res.status(200).json({ message: "Kitas already up to date" });
+  } catch (err) {
+    logger.error("Something went wrong:", err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export default handler;
