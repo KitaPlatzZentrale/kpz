@@ -1,8 +1,5 @@
 import { Request, RequestHandler, Response } from "express";
-import {
-  checkIfKitaDetailVersionNeedsUpdate,
-  saveNewKitaDetailVersionToDB,
-} from "./service";
+import KitaScraper from "./service";
 import logger from "../../logger";
 
 export const handler: RequestHandler<any, any> = async (
@@ -19,9 +16,9 @@ export const handler: RequestHandler<any, any> = async (
       return res.status(401).json({ message: "Wrong API key provided" });
     }
     const updateForKitaDetailRequired =
-      await checkIfKitaDetailVersionNeedsUpdate();
+      await KitaScraper.checkIfKitaDetailVersionNeedsUpdate();
     if (updateForKitaDetailRequired) {
-      await saveNewKitaDetailVersionToDB();
+      await KitaScraper.saveNewKitaDetailVersionToDB();
       return res.status(200).json({ message: "Kitas updated" });
     }
     return res.status(200).json({ message: "Kitas already up to date" });
