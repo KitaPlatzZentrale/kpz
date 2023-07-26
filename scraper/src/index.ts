@@ -1,12 +1,18 @@
-import express from "express";
-import routes from "./routes";
 import { connectToDatabase } from "./database";
+import KitaScraper from "./service";
 
-const app = express();
-const PORT = 3000;
+async function runScraper() {
+  try {
+    // Ensure the database connection
+    await connectToDatabase();
 
-connectToDatabase();
-app.use(routes);
-app.listen(PORT, () => {
-  console.log(`Location service is running on port ${PORT}`);
-});
+    // Run the scraper logic
+    await KitaScraper.saveNewKitaDetailVersionToDB();
+    console.log("Scraper executed successfully!");
+  } catch (error) {
+    console.error("Error running scraper:", error);
+    process.exit(1); // Exit the process with an error code
+  }
+}
+
+runScraper();
