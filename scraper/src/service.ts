@@ -1,7 +1,7 @@
-import logger from "../../logger";
-import { KitaDetail } from "../../types";
-import KitaDetailModel from "../kitas/model";
-import BerlinDEService from "../berlin.de/service";
+import logger from "./logger";
+import { KitaDetail } from "./types";
+import KitaDetailModel from "./model";
+import BerlinDEService from "./berlin.de/service";
 import crypto from "crypto";
 
 class KitaScraper {

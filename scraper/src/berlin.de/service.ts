@@ -1,11 +1,12 @@
 import axios from "axios";
-import logger from "../../backend/src/logger";
+import logger from "../logger";
 import BerlinDEKitaModel, {
   BerlinDEKitaDetailedEntity,
   BerlinDEKitaSummaryEntity,
 } from "./model";
-import { Kita, KitaDetail } from "../../backend/src/types";
-
+import { Kita, KitaDetail } from "../types";
+import dotenv from "dotenv";
+dotenv.config();
 const KITA_API_URL = process.env.KITA_API_URL;
 if (!KITA_API_URL) throw new Error("No KITA_API_URL found in .env");
 

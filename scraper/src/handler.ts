@@ -1,6 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import KitaScraper from "./service";
-import logger from "../../logger";
+import logger from "./logger";
 
 /**
  * Request handler for updating kitas if required.
