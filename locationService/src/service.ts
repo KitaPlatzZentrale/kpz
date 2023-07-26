@@ -1,7 +1,7 @@
 import KitaDetailModel from "./model";
-import { Kita } from "../../types";
-import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
-import logger from "../../logger";
+import { Kita } from "./types";
+import paginate, { PaginatedResultsResponse } from "./paginate";
+import logger from "./logger";
 
 /**
  * The KitaService class provides methods to interact with Kita data.

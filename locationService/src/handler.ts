@@ -1,4 +1,4 @@
-import logger from "../../logger";
+import logger from "./logger";
 import KitaService from "./service";
 import { RequestHandler } from "express";
 import { IPaginatedKitasParams } from "./types";
