@@ -3,6 +3,8 @@ import {
   SNSClient,
   SNSClientConfig,
 } from "@aws-sdk/client-sns";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const setupSNS = () => {
   const snsClientConfig: SNSClientConfig = {

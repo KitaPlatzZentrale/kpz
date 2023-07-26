@@ -7,7 +7,7 @@ import {
 } from "class-validator";
 import { RequestHandler } from "express";
 import { IPaginatedKitasParams } from "./types";
-import logger from "../../logger";
+import logger from "../backend/src/logger";
 
 export class PaginatedKitasParams {
   @IsLatitude()
