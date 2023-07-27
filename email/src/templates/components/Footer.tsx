@@ -1,23 +1,16 @@
 import React from "react";
 
-import { Container, Hr, Link, Section } from "@react-email/components";
+import { Hr, Link, Section } from "@react-email/components";
 
 import styles from "../../styles";
-import dotenv from "dotenv";
-dotenv.config();
-
-const API_URL = process.env.API_URL;
-if (!API_URL) {
-  throw new Error("API_URL is not defined");
-}
-const revokeConsentUrl = (consentId: string) =>
-  `${API_URL}/revoke-consent/${consentId}`;
 
 type FooterProps = {
   consentId: string;
+  API_URL: string;
 };
 
-const Footer: React.FC<FooterProps> = ({ consentId }) => {
+const Footer: React.FC<FooterProps> = ({ consentId, API_URL }) => {
+  const revokeConsentUrl = `${API_URL}/revoke-consent/${consentId}`;
   return (
     <>
       <Section style={styles.footer}>
@@ -29,7 +22,7 @@ const Footer: React.FC<FooterProps> = ({ consentId }) => {
         </p>
         <p>
           Sie möchten keine Emails mehr erhalten?{" "}
-          <Link style={styles.anchor} href={revokeConsentUrl(consentId)}>
+          <Link style={styles.anchor} href={revokeConsentUrl}>
             Email Benachrichtigungen abmelden
           </Link>
         </p>

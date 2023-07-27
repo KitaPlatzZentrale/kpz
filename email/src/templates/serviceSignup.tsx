@@ -9,16 +9,19 @@ import styles from "../styles";
 
 export interface ServiceSignupEmailProps {
   consentId: string;
+  API_URL: string;
 }
 
 export const ServiceSignupEmail: React.FC<ServiceSignupEmailProps> = ({
   consentId,
+  API_URL,
 }) => (
   <Layout
     preview={`
     Anmeldungsbestätigung für den Kita-Finder Service
   `}
     consentId={consentId}
+    API_URL={API_URL}
   >
     <Section style={styles.box}>
       <Paragraph>

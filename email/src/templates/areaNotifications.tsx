@@ -12,17 +12,20 @@ import { BROWSE_KITAS_ENDPOINT } from "../variables";
 export interface AreaNotificationsEmailProps {
   areaDescription: string;
   consentId: string;
+  API_URL: string;
 }
 
 export const AreaNotificationsEmail: React.FC<AreaNotificationsEmailProps> = ({
   areaDescription,
   consentId,
+  API_URL,
 }) => (
   <Layout
     preview={`
     Sie erhalten ab nun Benachrichtigungen für die Region "${areaDescription}"
   `}
     consentId={consentId}
+    API_URL={API_URL}
   >
     <Section style={styles.box}>
       <Paragraph>

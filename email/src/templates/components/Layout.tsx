@@ -10,9 +10,15 @@ import styles, { tailwindConfig } from "../../styles";
 type LayoutProps = React.PropsWithChildren<{
   preview?: string | string[];
   consentId: string;
+  API_URL: string;
 }>;
 
-const Layout: React.FC<LayoutProps> = ({ preview, consentId, children }) => {
+const Layout: React.FC<LayoutProps> = ({
+  preview,
+  consentId,
+  children,
+  API_URL,
+}) => {
   return (
     <Html lang="de" dir="ltr">
       <Header preview={preview} />
@@ -20,7 +26,8 @@ const Layout: React.FC<LayoutProps> = ({ preview, consentId, children }) => {
         <Body style={styles.main}>
           <Container style={styles.container}>
             {children}
-            <Footer consentId={consentId} />
+            <Footer consentId={consentId} API_URL={API_URL} />{" "}
+            {/* Separate the props correctly */}
           </Container>
         </Body>
       </Tailwind>

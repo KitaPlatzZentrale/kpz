@@ -12,16 +12,18 @@ dotenv.config();
 export interface ConsentConfirmationEmailProps {
   consentId: string;
   serviceName: string;
+  API_URL: string;
 }
 
 export const ConsentConfirmationEmail: React.FC<
   ConsentConfirmationEmailProps
-> = ({ consentId, serviceName }) => (
+> = ({ consentId, serviceName, API_URL }) => (
   <Layout
     preview={`
     Einverständniserklärung für den ${serviceName} Service
   `}
     consentId={consentId}
+    API_URL={API_URL}
   >
     <Section style={styles.box}>
       <Paragraph>

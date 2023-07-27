@@ -12,16 +12,18 @@ import { BROWSE_KITAS_ENDPOINT } from "../variables";
 export interface SingleKitaNotificationsEmailProps {
   kitaName: string;
   consentId: string;
+  API_URL: string;
 }
 
 export const SingleKitaNotificationsEmail: React.FC<
   SingleKitaNotificationsEmailProps
-> = ({ kitaName, consentId }) => (
+> = ({ kitaName, consentId, API_URL }) => (
   <Layout
     preview={`
     Sie erhalten ab nun Benachrichtigungen zu der Tageseinrichtung "${kitaName}"
   `}
     consentId={consentId}
+    API_URL={API_URL}
   >
     <Section style={styles.box}>
       <Paragraph>

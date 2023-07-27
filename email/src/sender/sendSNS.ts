@@ -15,12 +15,16 @@ export const setupSNS = () => {
   return SNS;
 };
 
-export const sendSNS = async (SNS: SNSClient, topicArn: string) => {
+export const sendSNS = async (
+  SNS: SNSClient,
+  topicArn: string,
+  functionName: string
+) => {
   const eventParams = {
     detail: {
-      alarmName: process.env.AWS_LAMBDA_FUNCTION_NAME,
+      alarmName: functionName,
       resources: [
-        `arn:aws:lambda:eu-central-1:897331788878:function/${process.env.AWS_LAMBDA_FUNCTION_NAME}`,
+        `arn:aws:lambda:eu-central-1:897331788878:function/${functionName}`,
       ],
     },
   };

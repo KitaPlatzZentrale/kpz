@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Head, Preview } from "@react-email/components";
+import { Head } from "@react-email/components";
 
 type HeaderProps = {
   preview?: string | string[];

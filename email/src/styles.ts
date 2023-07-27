@@ -1,4 +1,4 @@
-import { tailwind } from "../tailwind.config";
+const tailwind = require("./tailwind.config");
 
 export const tailwindConfig = tailwind;
 

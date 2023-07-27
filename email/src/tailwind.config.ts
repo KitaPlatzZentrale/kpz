@@ -1,6 +1,4 @@
-/** @type {import('tailwindcss').Config} */
-
-import resolveConfig from "tailwindcss/resolveConfig";
+const resolveConfig = require("tailwindcss/resolveConfig");
 
 const config = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
@@ -45,6 +43,6 @@ const config = {
   },
 };
 
-export const tailwind = resolveConfig(config);
+const tailwind = resolveConfig(config);
 
-export default config;
+module.exports = tailwind;

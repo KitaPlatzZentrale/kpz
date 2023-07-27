@@ -3,76 +3,40 @@ import * as React from "react";
 import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
 
-import type { Handler } from "aws-lambda";
-
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
 import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
 import ConsentConfirmationEmail from "../templates/consentConfirmation";
+import { Handler } from "express";
 
 dotenv.config();
-/**
- * Lambda Function: SingleKitaNotificationsEmailHandler
- *
- * Description:
- * This Lambda function handles sending notification emails for a single Kita (childcare center) to recipients.
- * It receives an event object containing the details of the tracked Kita, including the email address, consent ID,
- * tracked Kita information, and other relevant data.
- * The function validates the required properties and generates the email body using the provided props.
- * Finally, it sends the email using the sendEmail function.
- *
- * ...
-
- * Sample Event:
- * {
- *   "detail": {
- *     "fullDocument": {
- *       "uuid": "12345",
- *       "email": "recipient@example.com",
- *       "consentId": "ABC123",
- *       "trackedKitas": [
- *         {
- *           "id": "kitaid123",
- *           "kitaName": "Example Kita",
- *           "kitaAvailability": "June"
- *         }
- *       ],
- *       "createdAt": "2023-06-08T12:00:00Z",
- *       "consentedAt": "2023-06-08T12:00:00Z",
- *       "revokedAt": null
- *     }
- *   }
- * }
- */
 
 interface EmailProps {
-  detail: {
-    fullDocument: {
-      uuid: string;
-      email: string;
-      consentId: string;
-      trackedKitas: [
-        {
-          id: string;
-          kitaName: string;
-          kitaAvailability: string | null;
-        }
-      ];
-      createdAt: string;
-      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
-      revokedAt?: string | null;
-    };
-  };
+  uuid: string;
+  email: string;
+  consentId: string;
+  trackedKitas: [
+    {
+      id: string;
+      kitaName: string;
+      kitaAvailability: string | null;
+    }
+  ];
+  createdAt: string;
+  consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+  revokedAt?: string | null;
 }
 
-export const handler: Handler = async (event: EmailProps, ctx) => {
+const handler: Handler = async (req, res) => {
+  const data: EmailProps = req.body;
   const SNS = setupSNS();
   if (!process.env.SNS_ERROR_ARN)
     throw new Error("No SNS_ERROR_ARN specified in environment variables");
   if (!process.env.SNS_SUCCESS_ARN)
     throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
+  if (!process.env.API_URL) throw new Error("No API_URL specified");
   try {
-    const { email, trackedKitas, consentId } = event.detail.fullDocument;
+    const { email, trackedKitas, consentId } = data;
     const { kitaName } = trackedKitas[trackedKitas.length - 1];
     const to = email;
 
@@ -84,11 +48,12 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
 
     // if consentedAt is null send confirmationEmail
     let body = "";
-    if (event.detail.fullDocument.consentedAt == null) {
+    if (data.consentedAt == null) {
       body = render(
         <ConsentConfirmationEmail
           consentId={consentId}
           serviceName={"Kita-Notification"}
+          API_URL={process.env.API_URL}
         />
       );
     } else {
@@ -96,6 +61,7 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
         <SingleKitaNotificationsEmail
           kitaName={kitaName}
           consentId={consentId}
+          API_URL={process.env.API_URL}
         />
       );
     }
@@ -105,10 +71,21 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
-    await sendSNS(SNS, process.env.SNS_SUCCESS_ARN);
+    await sendSNS(
+      SNS,
+      process.env.SNS_SUCCESS_ARN,
+      "signupToSingleKitaAvailableEmail"
+    );
+    res.status(200).send("Email sent");
   } catch (e) {
     console.error(e);
-    await sendSNS(SNS, process.env.SNS_ERROR_ARN);
-    throw e;
+    await sendSNS(
+      SNS,
+      process.env.SNS_ERROR_ARN,
+      "signupToSingleKitaAvailableEmail"
+    );
+    res.status(500).send("Something went wrong");
   }
 };
+
+export default handler;
