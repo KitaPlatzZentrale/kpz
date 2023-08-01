@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: emailservice-deployment
+spec:
+  replicas: 2 # Number of desired replicas (adjust as needed)
+  selector:
+    matchLabels:
+      app: emailservice
+  template:
+    metadata:
+      labels:
+        app: emailservice
+    spec:
+      containers:
+        - name: emailservice-container
+          image: public.ecr.aws/b2z0n9v4/kpz-email-k8ts:latest
+          ports:
+            - containerPort: 3000 # Replace with the port your API listens on
+          envFrom:
+            - secretRef:
+                name: my-secrets
+          # volumeMounts:  # If you need to mount volumes, add them here
+          #   - name: volume-name
+          #     mountPath: /path/to/mount
+          #     readOnly: true  # Optional, set to true if read-only
+          # Add more container settings if required
+      # Add init containers, volumes, etc. if necessary

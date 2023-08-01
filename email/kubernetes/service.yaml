@@ -1,0 +1,14 @@
+# api-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: emailservice-service
+spec:
+  selector:
+    app: emailservice
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+      nodePort: 30001 # Choose a NodePort value (e.g., 30000) or let Kubernetes allocate one automatically.
