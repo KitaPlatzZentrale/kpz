@@ -4,40 +4,40 @@ import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
 
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
-import { sendSNS, setupSNS } from "../sender/sendSNS";
+// import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
 import ConsentConfirmationEmail from "../templates/consentConfirmation";
-import { Handler } from "express";
 
 dotenv.config();
 
 interface EmailProps {
-  uuid: string;
-  email: string;
-  consentId: string;
-  trackedKitas: [
-    {
-      id: string;
-      kitaName: string;
-      kitaAvailability: string | null;
-    }
-  ];
-  createdAt: string;
-  consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
-  revokedAt?: string | null;
+  data: {
+    email: string;
+    kitaId: string;
+    kitaName: string;
+    kitaDesiredAvailability: string;
+    sendEmail?: Boolean;
+    consentId: string;
+    createdAt: string;
+    consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
+    revokedAt?: string | null;
+  };
 }
 
-const handler: Handler = async (req, res) => {
-  const data: EmailProps = req.body;
-  const SNS = setupSNS();
-  if (!process.env.SNS_ERROR_ARN)
-    throw new Error("No SNS_ERROR_ARN specified in environment variables");
-  if (!process.env.SNS_SUCCESS_ARN)
-    throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
+const sendSingleKitaNotificationSignupEmail = async (data: EmailProps) => {
+  // const SNS = setupSNS();
+  // if (!process.env.SNS_ERROR_ARN)
+  //   throw new Error("No SNS_ERROR_ARN specified in environment variables");
+  // if (!process.env.SNS_SUCCESS_ARN)
+  //   throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
+  console.log("sendSingleKitaNotificationSignupEmail", data);
   if (!process.env.API_URL) throw new Error("No API_URL specified");
   try {
-    const { email, trackedKitas, consentId } = data;
-    const { kitaName } = trackedKitas[trackedKitas.length - 1];
+    const { email, kitaName, consentId, consentedAt } = data.data;
+    console.log("process.env.API_URL", process.env.API_URL);
+    console.log("email", email);
+    console.log("kitaName", kitaName);
+    console.log("consentId", consentId);
     const to = email;
 
     if (!to) throw new Error("No recipient with `to` specified");
@@ -48,7 +48,7 @@ const handler: Handler = async (req, res) => {
 
     // if consentedAt is null send confirmationEmail
     let body = "";
-    if (data.consentedAt == null) {
+    if (consentedAt == null) {
       body = render(
         <ConsentConfirmationEmail
           consentId={consentId}
@@ -71,21 +71,19 @@ const handler: Handler = async (req, res) => {
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
-    await sendSNS(
-      SNS,
-      process.env.SNS_SUCCESS_ARN,
-      "signupToSingleKitaAvailableEmail"
-    );
-    res.status(200).send("Email sent");
+    // await sendSNS(
+    //   SNS,
+    //   process.env.SNS_SUCCESS_ARN,
+    //   "signupToSingleKitaAvailableEmail"
+    // );
   } catch (e) {
     console.error(e);
-    await sendSNS(
-      SNS,
-      process.env.SNS_ERROR_ARN,
-      "signupToSingleKitaAvailableEmail"
-    );
-    res.status(500).send("Something went wrong");
+    // await sendSNS(
+    //   SNS,
+    //   process.env.SNS_ERROR_ARN,
+    //   "signupToSingleKitaAvailableEmail"
+    // );
   }
 };
 
-export default handler;
+export default sendSingleKitaNotificationSignupEmail;
