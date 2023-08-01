@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import logger from "../../../logger";
 import { EmailSignup } from "../service";
+import sendMessageToRabbitMQ from "../../../rabbitmq";
 /**
  * Request handler for signing up for the Kita Finder service.
  *
@@ -11,7 +12,12 @@ import { EmailSignup } from "../service";
 const handler: RequestHandler<IKitaFinderServiceSignup> = async (req, res) => {
   try {
     await EmailSignup.kitaFinderServiceSignup(req.body);
-
+    req.body.type = "kitaFinderService";
+    req.body.createdAt = new Date();
+    req.body.consentedAt = new Date();
+    req.body.revokedAt = null;
+    req.body.consentId = "1234567890";
+    await sendMessageToRabbitMQ(req.body);
     return res.status(200).send();
   } catch (err: any) {
     logger.error(err);

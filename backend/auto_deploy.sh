@@ -4,7 +4,7 @@ set -e
 
 # Parameters
 DOCKER_IMAGE_NAME="kpz-api-k8ts"
-DOCKER_IMAGE_TAG="latest"
+DOCKER_IMAGE_TAG="v1.3"
 ECR_REPOSITORY="public.ecr.aws/b2z0n9v4"
 KUBERNETES_NAMESPACE="default"  # Change to your desired namespace
 DEPLOYMENT_FILE="./kubernetes/deployment.yaml"
@@ -25,11 +25,7 @@ docker tag "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}" "${ECR_REPOSITORY}/${DOCKE
 echo "Pushing the Docker image to ECR..."
 docker push "${ECR_REPOSITORY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
 
-# Step 5: Delete all pods in the Kubernetes cluster
-echo "Deleting all pods in the Kubernetes cluster..."
-kubectl delete pods --all -n "${KUBERNETES_NAMESPACE}"
-
-# Step 6: Apply the deployment manifest
+# Step 5: Apply the deployment manifest
 echo "Applying the deployment manifest..."
 kubectl apply -f "${DEPLOYMENT_FILE}" -n "${KUBERNETES_NAMESPACE}"
 
