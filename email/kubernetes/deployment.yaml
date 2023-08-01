@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: emailservice-deployment
 spec:
-  replicas: 2 # Number of desired replicas (adjust as needed)
+  replicas: 1 # Number of desired replicas (adjust as needed)
   selector:
     matchLabels:
       app: emailservice
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: emailservice-container
-          image: public.ecr.aws/b2z0n9v4/kpz-email-k8ts:latest
+          image: public.ecr.aws/b2z0n9v4/kpz-email-k8ts:v1.8
           ports:
             - containerPort: 3000 # Replace with the port your API listens on
           envFrom:
