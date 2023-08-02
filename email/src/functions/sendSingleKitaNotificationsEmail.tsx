@@ -4,9 +4,9 @@ import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
 
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
-// import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
 import ConsentConfirmationEmail from "../templates/consentConfirmation";
+import sendMessageToRabbitMQ from "../rabbitmqSender";
 
 dotenv.config();
 
@@ -25,11 +25,6 @@ interface EmailProps {
 }
 
 const sendSingleKitaNotificationSignupEmail = async (data: EmailProps) => {
-  // const SNS = setupSNS();
-  // if (!process.env.SNS_ERROR_ARN)
-  //   throw new Error("No SNS_ERROR_ARN specified in environment variables");
-  // if (!process.env.SNS_SUCCESS_ARN)
-  //   throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
   console.log("sendSingleKitaNotificationSignupEmail", data);
   if (!process.env.API_URL) throw new Error("No API_URL specified");
   try {
@@ -71,18 +66,18 @@ const sendSingleKitaNotificationSignupEmail = async (data: EmailProps) => {
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
-    // await sendSNS(
-    //   SNS,
-    //   process.env.SNS_SUCCESS_ARN,
-    //   "signupToSingleKitaAvailableEmail"
-    // );
+    const message = {
+      type: "signupSuccess",
+      event: "signupToSingleKitaAvailableEmail",
+    };
+    await sendMessageToRabbitMQ(message);
   } catch (e) {
     console.error(e);
-    // await sendSNS(
-    //   SNS,
-    //   process.env.SNS_ERROR_ARN,
-    //   "signupToSingleKitaAvailableEmail"
-    // );
+    const message = {
+      type: "error",
+      event: "signupToSingleKitaAvailableEmail",
+    };
+    await sendMessageToRabbitMQ(message);
   }
 };
 

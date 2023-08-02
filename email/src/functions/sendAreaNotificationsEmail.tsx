@@ -7,7 +7,7 @@ import AreaNotificationsEmail from "../templates/areaNotifications";
 import ConsentConfirmationEmail from "../templates/consentConfirmation";
 
 import dotenv from "dotenv";
-import { sendSNS, setupSNS } from "../sender/sendSNS";
+import sendMessageToRabbitMQ from "../rabbitmqSender";
 dotenv.config();
 
 interface EmailProps {
@@ -22,7 +22,6 @@ interface EmailProps {
 
 const sendAreaNotificationSingupEmail = async (data: EmailProps) => {
   if (!process.env.API_URL) throw new Error("No API_URL specified");
-  const SNS = setupSNS();
   try {
     const { email, areaDescription, consentId, consentedAt } = data.data;
     const to = email;
@@ -57,18 +56,17 @@ const sendAreaNotificationSingupEmail = async (data: EmailProps) => {
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
-    await sendSNS(
-      SNS,
-      process.env.SNS_SUCCESS_ARN,
-      "signupToAreaNotificationEmail"
-    );
+    const message = {
+      type: "signupSuccess",
+      event: "signupToAreaNotificationEmail",
+    };
+    await sendMessageToRabbitMQ(message);
   } catch (e) {
     console.error(e);
-    await sendSNS(
-      SNS,
-      process.env.SNS_ERROR_ARN,
-      "signupToAreaNotificationEmail"
-    );
+
+    const message = { type: "error", event: "signupToAreaNotificationEmail" };
+    await sendMessageToRabbitMQ(message);
+
     throw e;
   }
 };
