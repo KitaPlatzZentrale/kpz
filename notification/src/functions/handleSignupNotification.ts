@@ -1,32 +1,19 @@
-import { Handler } from "aws-lambda";
 import { sendSlackSignupNotification as sendSlackSingupNotification } from "../sender/sendSlackSignupNotification";
 
-interface ISNSSignupEvent {
-  Records: [
-    // This format is for our SNS lambda alarm
-    {
-      Sns: {
-        Message: string; // the message also contains the detail object
-      };
-    }
-  ];
+interface SignupEvent {
+  data: { eventType: string };
 }
 
 /**
- * Lambda Function Handler
- * @param event The MongoDB trigger event.
- * @param context The execution context of the Lambda function.
+ * Function to process RabbitMQ events based on the event type.
+ * @param event The RabbitMQ event data.
  */
-export const handler: Handler = async (event: ISNSSignupEvent, context) => {
+export const processSingupEvent = async (event: SignupEvent) => {
   try {
-    console.log("Received event:", JSON.stringify(event, null, 2));
-    const message = event.Records[0].Sns.Message;
-    const parsedEventMessage = JSON.parse(message);
-    // Extract event details
-    const eventType = parsedEventMessage.detail.alarmName;
+    console.log("Received RabbitMQ event:", event);
 
     // Process event based on event type
-    switch (eventType) {
+    switch (event.data.eventType) {
       case "signupToSingleKitaAvailableEmail":
         console.log("Sending notification for new User signup");
         await sendSlackSingupNotification({
@@ -46,10 +33,10 @@ export const handler: Handler = async (event: ISNSSignupEvent, context) => {
         });
         break;
       default:
-        console.log(`Unrecognized event type: ${eventType}`);
+        console.log(`Unrecognized event type: ${event.data.eventType}`);
         break;
     }
   } catch (error) {
-    console.error("Error sending notification:", error);
+    console.error("Error processing RabbitMQ event:", error);
   }
 };
