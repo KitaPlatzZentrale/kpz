@@ -3,11 +3,11 @@
 set -e
 
 # Parameters
-DOCKER_IMAGE_NAME="kpz-notification-k8ts"
-DOCKER_IMAGE_TAG="v2.0"
+DOCKER_IMAGE_NAME="kpz-retention-k8ts"
+DOCKER_IMAGE_TAG="v1.0"
 ECR_REPOSITORY="public.ecr.aws/b2z0n9v4"
 KUBERNETES_NAMESPACE="default"  # Change to your desired namespace
-DEPLOYMENT_FILE="./kubernetes/deployment.yaml"
+DEPLOYMENT_FILE="./kubernetes/cronjob.yaml"
 
 # Step 1: Log in to the ECR repository
 echo "Logging in to ECR..."

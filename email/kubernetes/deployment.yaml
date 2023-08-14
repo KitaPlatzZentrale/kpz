@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: emailservice-container
-          image: public.ecr.aws/b2z0n9v4/kpz-email-k8ts:v1.8
+          image: public.ecr.aws/b2z0n9v4/kpz-email-k8ts:v2.0
           ports:
             - containerPort: 3000 # Replace with the port your API listens on
           envFrom:

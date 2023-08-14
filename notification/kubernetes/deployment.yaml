@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: notificationservice-container
-          image: public.ecr.aws/b2z0n9v4/kpz-notification-k8ts:v1.0
+          image: public.ecr.aws/b2z0n9v4/kpz-notification-k8ts:v2.0
           ports:
             - containerPort: 3000 # Replace with the port your API listens on
           envFrom:

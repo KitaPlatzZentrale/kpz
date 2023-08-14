@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: locationservice-container
-          image: public.ecr.aws/b2z0n9v4/kpz-locationservice-k8ts:latest
+          image: public.ecr.aws/b2z0n9v4/kpz-locationservice-k8ts:v1.0
           ports:
             - containerPort: 3000 # Replace with the port your API listens on
           envFrom:

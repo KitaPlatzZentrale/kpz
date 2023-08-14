@@ -11,4 +11,4 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 3000
-      nodePort: 30001 # Choose a NodePort value (e.g., 30000) or let Kubernetes allocate one automatically.
+      nodePort: 30002 # Choose a NodePort value (e.g., 30000) or let Kubernetes allocate one automatically.

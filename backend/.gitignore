@@ -12,4 +12,5 @@ dist/**
 
 *.log
 
-create_secret.sh
+create_secret_prod.sh
+create_secret_dev.sh

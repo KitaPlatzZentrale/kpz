@@ -4,7 +4,7 @@ set -e
 
 # Parameters
 DOCKER_IMAGE_NAME="kpz-email-k8ts"
-DOCKER_IMAGE_TAG="v1.8"
+DOCKER_IMAGE_TAG="v2.0"
 ECR_REPOSITORY="public.ecr.aws/b2z0n9v4"
 KUBERNETES_NAMESPACE="default"  # Change to your desired namespace
 DEPLOYMENT_FILE="./kubernetes/deployment.yaml"

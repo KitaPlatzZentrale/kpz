@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: create-index-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: create-index
+          image: mongo:latest
+          command: ["mongo"]
+          args:
+            [
+              "mongo-service/kita_data",
+              "--eval",
+              "db.kitadetail.createIndex({ location: '2dsphere' })",
+            ]
+      restartPolicy: OnFailure
+  backoffLimit: 3 # The number of retries before considering the Job as failed
