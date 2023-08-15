@@ -1,0 +1,4 @@
+apiVersion: v2
+name: locationservice-chart
+description: A Helm chart for the Location Service
+version: 0.1.0

@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locationservice-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: locationservice
+  template:
+    metadata:
+      labels:
+        app: locationservice
+    spec:
+      containers:
+        - name: locationservice-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+          envFrom:
+            - secretRef:
+                name: {{ .Values.env.secretRefName }}
+      # Add init containers, volumes, etc. if necessary

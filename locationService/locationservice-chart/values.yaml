@@ -1,0 +1,14 @@
+replicaCount: 3
+
+image:
+  repository: public.ecr.aws/b2z0n9v4/kpz-locationservice-k8ts
+  tag: v1.0
+
+containerPort: 3000
+service:
+  port: 80
+  type: NodePort
+  # nodePort: 30002 # Uncomment if a specific NodePort is required.
+
+env:
+  secretRefName: my-secrets
