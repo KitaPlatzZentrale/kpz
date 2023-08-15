@@ -3,3 +3,4 @@ node_modules
 .react-email
 dist
 out
+*.tgz
