@@ -11,6 +11,8 @@ node_modules/
 dist/**
 
 *.log
+*.tgz
 
 create_secret_prod.sh
-create_secret_dev.sh
+create_secret_testing.sh
+create_secret_staging.sh
