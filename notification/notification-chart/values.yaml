@@ -1,0 +1,16 @@
+replicaCount: 1
+
+image:
+  repository: public.ecr.aws/b2z0n9v4/kpz-notification-k8ts
+  tag: v2.0
+
+service:
+  type: NodePort
+  port: 80
+  targetPort: 3000
+  # nodePort: 30003
+
+env:
+  secretRefName: my-secrets
+  slackWebhookErrorUrl: "https://hooks.slack.com/services/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"
+  slackWebhookSignupUrl: "https://hooks.slack.com/services/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"

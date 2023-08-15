@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificationservice-deployment
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: notificationservice
+  template:
+    metadata:
+      labels:
+        app: notificationservice
+    spec:
+      containers:
+        - name: notificationservice-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: {{ .Values.env.secretRefName }}
+          env:
+            - name: SLACK_WEBHOOK_ERROR_URL
+              value: "{{ .Values.env.slackWebhookErrorUrl }}"
+            - name: SLACK_WEBHOOK_SIGNUP_URL
+              value: "{{ .Values.env.slackWebhookSignupUrl }}"
