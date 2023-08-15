@@ -1,0 +1,20 @@
+# This is the configuration file that will allow you to customize your deployment
+replicaCount: 3
+image:
+  repository: public.ecr.aws/b2z0n9v4/kpz-api-k8ts
+  tag: v2.1
+containerPort: 3000
+secretRefName: my-secrets
+
+service:
+  type: NodePort
+  protocol: TCP
+  port: 80
+  targetPort: 3000
+  # nodePort: 30000
+# autoscaling:
+#   enabled: true # or false
+#   minReplicas: 1
+#   maxReplicas: 5
+#   targetCPUUtilizationPercentage: 80 # optional
+#   targetMemoryUtilizationPercentage: 70 # optional
