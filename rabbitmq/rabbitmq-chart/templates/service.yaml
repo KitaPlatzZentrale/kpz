@@ -7,6 +7,6 @@ spec:
     app: rabbitmq
   ports:
     - name: amqp
-      port: 5672
+      port: {{ .Values.ports.amqp }}
     - name: management
-      port: 15672
+      port: {{ .Values.ports.management }}

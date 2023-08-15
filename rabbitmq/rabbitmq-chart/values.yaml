@@ -1,0 +1,13 @@
+replicaCount: 1
+
+image:
+  repository: rabbitmq
+  tag: latest
+
+ports:
+  amqp: 5672
+  management: 15672
+
+env:
+  defaultUser: kpz-dev
+  defaultPass: kpz-dev

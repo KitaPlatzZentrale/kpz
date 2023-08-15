@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: rabbitmq
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: rabbitmq
@@ -14,12 +14,12 @@ spec:
     spec:
       containers:
         - name: rabbitmq
-          image: rabbitmq:latest
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: 5672
-            - containerPort: 15672
+            - containerPort: {{ .Values.ports.amqp }}
+            - containerPort: {{ .Values.ports.management }}
           env:
             - name: RABBITMQ_DEFAULT_USER
-              value: kpz-dev
+              value: {{ .Values.env.defaultUser }}
             - name: RABBITMQ_DEFAULT_PASS
-              value: kpz-dev
+              value: {{ .Values.env.defaultPass }}
