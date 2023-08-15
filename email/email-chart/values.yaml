@@ -1,0 +1,17 @@
+# Default values for email-chart
+replicaCount: 1
+
+image:
+  repository: public.ecr.aws/b2z0n9v4/kpz-email-k8ts
+  tag: v2.0
+
+service:
+  type: NodePort
+  protocol: TCP
+  port: 80
+  targetPort: 3000
+  # nodePort: 30001 # Uncomment and set if you need a specific NodePort
+
+containerPort: 3000
+
+secretRefName: my-secrets

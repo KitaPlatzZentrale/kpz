@@ -1,28 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: emailservice-deployment
+  name: {{ include "email-chart.fullname" . }}-deployment
 spec:
-  replicas: 1 # Number of desired replicas (adjust as needed)
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: emailservice
+      app: {{ include "email-chart.name" . }}
   template:
     metadata:
       labels:
-        app: emailservice
+        app: {{ include "email-chart.name" . }}
     spec:
       containers:
-        - name: emailservice-container
-          image: public.ecr.aws/b2z0n9v4/kpz-email-k8ts:v2.0
+        - name: {{ .Chart.Name }}-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: 3000 # Replace with the port your API listens on
+            - containerPort: {{ .Values.containerPort }}
           envFrom:
             - secretRef:
-                name: my-secrets
+                name: {{ .Values.secretRefName }}
           # volumeMounts:  # If you need to mount volumes, add them here
           #   - name: volume-name
           #     mountPath: /path/to/mount
           #     readOnly: true  # Optional, set to true if read-only
-          # Add more container settings if required
       # Add init containers, volumes, etc. if necessary
