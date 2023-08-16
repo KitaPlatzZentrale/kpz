@@ -1,10 +1,9 @@
-replicaCount: 3
-
 image:
   repository: public.ecr.aws/b2z0n9v4/kpz-locationservice-k8ts
   tag: v1.0
 
 containerPort: 3000
+
 service:
   port: 80
   type: NodePort
@@ -12,3 +11,10 @@ service:
 
 env:
   secretRefName: my-secrets
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 50

@@ -1,1 +1,3 @@
 secretRefName: my-secrets-staging
+autoscaling:
+  enabled: false

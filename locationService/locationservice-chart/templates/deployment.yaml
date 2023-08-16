@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: locationservice-deployment
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.autoscaling.minReplicas }}
   selector:
     matchLabels:
       app: locationservice
@@ -20,4 +20,9 @@ spec:
           envFrom:
             - secretRef:
                 name: {{ .Values.env.secretRefName }}
+
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
       # Add init containers, volumes, etc. if necessary
