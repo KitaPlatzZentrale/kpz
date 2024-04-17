@@ -29,7 +29,10 @@ Kindergarten will then be able to accept the children they want in a convenient 
 ## Setup
 
 You need env variables and [mongoDB setup for local development](https://www.mongodb.com/docs/manual/installation/).
-To get the env variables please contact one of the main contributor.
+In each sub-repo `backend`, `email`, `notification` you need to have a `.env` file for local development, to get the env
+variables please contact one of the main contributor.
+
+```bash
 
 ### Backend
 
@@ -48,8 +51,8 @@ npm run local
 ### Frontend
 
 ```bash
-yarn
-yarn dev
+npm i
+npm run dev
 ```
 
 ### Email
