@@ -90,3 +90,41 @@ export const getAppropriateZoomLevel = (
   // smaller zoom level win to ensure all markers are visible
   return Math.min(zoomLat, zoomLng);
 };
+
+export const generateMonthOptions = () => {
+  const months = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
+  ];
+
+  const currentMonthIndex: number = new Date().getMonth();
+  let startMonth: number = currentMonthIndex > 0 ? currentMonthIndex : 0;
+  const currentYear: number = new Date().getFullYear();
+  const startYear: number = currentYear;
+
+  const options: string[] = [];
+  for (let year = startYear; year <= startYear + 5; year++) {
+    for (let i = startMonth; i < months.length; i++) {
+      options.push(`${months[i]} ${year}`);
+    }
+    startMonth = 0;
+  }
+  return options;
+};
+
+export const getCurrentMonth = () => {
+  const now = new Date();
+  const month = now.toLocaleString("default", { month: "long" });
+  const year = now.getFullYear();
+  return `${month} ${year}`;
+};

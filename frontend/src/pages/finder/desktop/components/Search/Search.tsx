@@ -1,11 +1,12 @@
 import { DateRange } from "@mui/icons-material";
 import { Button, FormControl, FormLabel } from "@mui/joy";
 import clsx from "clsx";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import FormAutocomplete from "../../../../../components/FormAutocomplete";
 import { useSearchContext } from "../../../common/KitaSearchContext";
 import AddressLookup from "../../../../../components/AddressLookup";
 import { useKitaListContext } from "../../../common/KitaDataContext";
+import { generateMonthOptions, getCurrentMonth } from "../../../common/utils";
 
 type SearchProps = {
   id?: string;
@@ -14,6 +15,14 @@ type SearchProps = {
 };
 
 const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
+  const [currentMonth, setCurrentMonth] = useState<string>("");
+  const [monthOptions, setMonthOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCurrentMonth(getCurrentMonth());
+    setMonthOptions(generateMonthOptions());
+  }, []);
+
   const {
     setCoordinates,
     setAddress,
@@ -55,35 +64,10 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
               className: "w-full lg:w-1/4",
             }}
             label="Gewünschter Beginn"
-            placeholder="z.B. Mai 2023"
+            placeholder={`z.B. ${currentMonth || "loading..."}`}
             startDecorator={<DateRange />}
             value={desiredStartingMonth}
-            options={[
-              "Mai 2023",
-              "Juni 2023",
-              "Juli 2023",
-              "August 2023",
-              "September 2023",
-              "Oktober 2023",
-              "November 2023",
-              "Dezember 2023",
-              "Januar 2024",
-              "Februar 2024",
-              "März 2024",
-              "April 2024",
-              "Mai 2024",
-              "Juni 2024",
-              "Juli 2024",
-              "August 2024",
-              "September 2024",
-              "Oktober 2024",
-              "November 2024",
-              "Dezember 2024",
-              "Januar 2025",
-              "Februar 2025",
-              "März 2025",
-              "April 2025",
-            ]}
+            options={monthOptions}
             defaultValue={desiredStartingMonth}
             onChange={(event, value) => {
               setDesiredStartingMonth(value);
