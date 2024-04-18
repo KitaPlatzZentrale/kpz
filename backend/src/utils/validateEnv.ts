@@ -1,6 +1,5 @@
 const requiredEnvVariables = [
   "AWS_KMS_KEY_ID",
-  "CURRENT_KITA_DATA_VERSION",
   "API_KEY",
   "AUTH_KEY",
   "AWS_ACCESS_KEY_ID",

@@ -2,6 +2,7 @@ import KitaDetailModel from "./model";
 import { Kita } from "../../types";
 import paginate, { PaginatedResultsResponse } from "../../utils/paginate";
 import logger from "../../logger";
+import getLatestDataVersion from "../../utils/getLatestDataVersion";
 
 /**
  * The KitaService class provides methods to interact with Kita data.
@@ -26,6 +27,8 @@ class KitaService {
     limit: number
   ): Promise<PaginatedResultsResponse<Kita>> => {
     try {
+      const latestVersion = await getLatestDataVersion();
+
       const nearestSortedKitaList = await KitaDetailModel.find({
         location: {
           $nearSphere: {
@@ -36,7 +39,7 @@ class KitaService {
             $maxDistance: radius, // in meter
           },
         },
-        version: process.env.CURRENT_KITA_DATA_VERSION,
+        version: latestVersion,
       }).limit(50);
       const paginatedKitas = paginate(nearestSortedKitaList, page, limit);
 

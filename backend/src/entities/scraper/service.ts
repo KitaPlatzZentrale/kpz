@@ -3,6 +3,7 @@ import { KitaDetail } from "../../types";
 import KitaDetailModel from "../kitas/model";
 import BerlinDEService from "../berlin.de/service";
 import crypto from "crypto";
+import getLatestDataVersion from "../../utils/getLatestDataVersion";
 
 class KitaScraper {
   /**
@@ -83,10 +84,11 @@ class KitaScraper {
    */
   public static async checkIfKitaDetailVersionNeedsUpdate(): Promise<boolean> {
     try {
+      const latestVersion = await getLatestDataVersion();
       const kitaList = await BerlinDEService.getKitaList();
       const kitaListHash = this.generateHash(kitaList);
       const kitaFromCurrentVersion = await KitaDetailModel.findOne({
-        version: process.env.CURRENT_KITA_DATA_VERSION,
+        version: latestVersion,
       });
 
       if (
@@ -112,6 +114,7 @@ class KitaScraper {
     const session = await KitaDetailModel.startSession();
 
     try {
+      const latestVersion = await getLatestDataVersion();
       session.startTransaction();
       const kitaList = await BerlinDEService.getKitaList();
       const kitaIds = await BerlinDEService.getAllKitaUUIDs(kitaList);
@@ -119,7 +122,7 @@ class KitaScraper {
       const newKitas = await this.getKitasByUUIDs(kitaIds);
 
       newKitas.forEach((kita) => {
-        kita.version = process.env.CURRENT_KITA_DATA_VERSION;
+        kita.version = String(Number(latestVersion) + 1);
         kita.checkSum = kitaListHash;
       });
 
@@ -143,9 +146,9 @@ class KitaScraper {
     const session = await KitaDetailModel.startSession();
 
     try {
+      const latestVersion = await getLatestDataVersion();
       session.startTransaction();
-      const oldestValidKitaDetailVersion =
-        Number(process.env.CURRENT_KITA_DATA_VERSION) - 1;
+      const oldestValidKitaDetailVersion = Number(latestVersion) - 1;
 
       if (oldestValidKitaDetailVersion > 0) {
         await KitaDetailModel.deleteMany(
