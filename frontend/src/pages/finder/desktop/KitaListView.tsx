@@ -9,6 +9,17 @@ import { KitaListItemSkeleton } from "./components/KitaList/KitaListItem";
 
 type KitaListViewProps = React.PropsWithChildren<{}>;
 
+const MotionDiv = ({ children, ...props }) => {
+  return (
+    <motion.div
+      className="flex w-full items-center justify-center rounded-lg bg-slate-200 py-8"
+      {...props}
+    >
+      <span className="text-center">{children}</span>
+    </motion.div>
+  );
+};
+
 const StartKitaSearchListView = () => {
   return (
     <AnimatePresence>
@@ -19,40 +30,43 @@ const StartKitaSearchListView = () => {
           exit={{ height: 0, margin: 0 }}
         >
           <h3 className="mb-3 text-3xl font-black">
-            Starten Sie mit Ihrer Suche
+            Starten Sie mit uns Ihre Suche
           </h3>
-          <p className="w-2/3 text-base font-medium">
-            Natürlich ist es nicht immer einfach, einen passenden Text zu
-            finden. Es sollte aber schon ein wenig Text sein, damit die Seite
-            nicht leer aussieht. Daher bemühen sich die meisten Entwickler,
-            einen Text zu finden, der weder zu kurz noch zu lang ist.
+          <p className="text-base font-medium">
+            Entdecken Sie mit unserer innovativen Web-Applikation spielend leicht die 50 nächstgelegenen Kindergärten basierend auf Ihrer Adresse, sortiert nach Entfernung. Verfolgen Sie mühelos den Verfügbarkeitsstatus der Einrichtungen gemäß berlin.de. Und falls Ihre Wunsch-Kita keinen Platz hat, können Sie sich für Benachrichtigungen über neu verfügbare Plätze eintragen.
+            <br />
+            <br />
+            Kitaplatz, Kinderleicht.
           </p>
           <h5 className="mb-2 mt-8 text-sm font-black uppercase">So geht's</h5>
           <div className="flex flex-col gap-2">
-            <motion.div
+            <MotionDiv
               key="start-search-information-step-1"
               transition={{ type: "spring", bounce: 0 }}
-              className="flex w-full rounded-lg bg-slate-200 py-8"
               initial={{ opacity: 0, x: -75 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -75 }}
-            />
-            <motion.div
+            >
+              1. Geben Sie Ihre Adresse ein
+            </MotionDiv>
+            <MotionDiv
               key="start-search-information-step-2"
               transition={{ type: "spring", bounce: 0 }}
-              className="flex w-full rounded-lg bg-slate-200 py-8"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
-            />
-            <motion.div
+            >
+              2. Wählen Sie die Start-Monat aus
+            </MotionDiv>
+            <MotionDiv
               key="start-search-information-step-3"
               transition={{ type: "spring", bounce: 0 }}
-              className="flex w-full rounded-lg bg-slate-200 py-8"
               initial={{ opacity: 0, x: -25 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -25 }}
-            />
+            >
+              3. Erhalten Sie eine Liste von Kitas in Ihrer Nähe
+            </MotionDiv>
           </div>
         </motion.div>
       </div>
