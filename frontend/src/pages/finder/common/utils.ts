@@ -107,17 +107,16 @@ export const generateMonthOptions = () => {
     "Dezember",
   ];
 
-  const currentMonthIndex: number = new Date().getMonth();
-  let startMonth: number = currentMonthIndex > 0 ? currentMonthIndex : 0;
-  const currentYear: number = new Date().getFullYear();
-  const startYear: number = currentYear;
-
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+  const rangeOfMonth = 9;
   const options: string[] = [];
-  for (let year = startYear; year <= startYear + 5; year++) {
-    for (let i = startMonth; i < months.length; i++) {
-      options.push(`${months[i]} ${year}`);
-    }
-    startMonth = 0;
+
+  for (let i = 0; i < rangeOfMonth; i++) {
+    const month = months[(currentMonth + i) % 12];
+    const year = currentYear + Math.floor((currentMonth + i) / 12);
+    options.push(`${month} ${year}`);
+    console.log(`${month} ${year}`);
   }
   return options;
 };
