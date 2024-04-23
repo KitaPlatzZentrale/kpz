@@ -27,7 +27,7 @@ class KitaScraper {
    */
   private static async fetchKitaWithRetry(
     uuid: number,
-    retries = 6
+    retries = 1
   ): Promise<KitaDetail | null> {
     try {
       const response = await BerlinDEService.getKitaDetails(uuid);
@@ -40,9 +40,9 @@ class KitaScraper {
     } catch (error) {
       if (retries > 0 && error.code === "ECONNRESET") {
         logger.error(
-          `Error with uuid ${uuid}: ${error.message}. Retrying in 10 seconds...`
+          `Error with uuid ${uuid}: ${error.message}. Retrying in 5ms. Retries left: ${retries}`
         );
-        await new Promise((resolve) => setTimeout(resolve, 10000));
+        await new Promise((resolve) => setTimeout(resolve, 5));
         return await this.fetchKitaWithRetry(uuid, retries - 1);
       } else {
         return null;
@@ -67,7 +67,7 @@ class KitaScraper {
           kitas.push(kita);
         }
 
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 5));
       }
 
       return kitas;
@@ -116,17 +116,42 @@ class KitaScraper {
     try {
       const latestVersion = await getLatestDataVersion();
       session.startTransaction();
+      //  time getKitaList
+      let start = Date.now();
       const kitaList = await BerlinDEService.getKitaList();
+      let end = Date.now();
+      logger.info(`Time taken for getKitaList: ${end - start}ms`);
+      // time getAllKitaUUIDs
+      start = Date.now();
       const kitaIds = await BerlinDEService.getAllKitaUUIDs(kitaList);
+      end = Date.now();
+      logger.info(`Time taken for getAllKitaUUIDs: ${end - start}ms`);
+      // time generateHash
+      start = Date.now();
       const kitaListHash = this.generateHash(kitaList);
+      end = Date.now();
+      logger.info(`Time taken for generateHash: ${end - start}ms`);
+      // time getKitasByUUIDs
+      start = Date.now();
       const newKitas = await this.getKitasByUUIDs(kitaIds);
+      end = Date.now();
+      logger.info(`Time taken for getKitasByUUIDs: ${end - start}ms`);
 
+      // Set the version and checksum for the new kitas
+      start = Date.now();
       newKitas.forEach((kita) => {
         kita.version = String(Number(latestVersion) + 1);
         kita.checkSum = kitaListHash;
       });
-
+      end = Date.now();
+      logger.info(
+        `Time taken for setting version and checksum: ${end - start}ms`
+      );
+      // time insertMany
+      start = Date.now();
       await KitaDetailModel.insertMany(newKitas, { session });
+      end = Date.now();
+      logger.info(`Time taken for insertMany: ${end - start}ms`);
       await session.commitTransaction();
     } catch (err) {
       logger.error("Something went wrong:", err);
