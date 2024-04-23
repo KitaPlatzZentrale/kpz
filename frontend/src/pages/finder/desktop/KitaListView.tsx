@@ -33,7 +33,12 @@ const StartKitaSearchListView = () => {
             Starten Sie mit uns Ihre Suche
           </h3>
           <p className="text-base font-medium">
-            Entdecken Sie mit unserer innovativen Web-Applikation spielend leicht die 50 nächstgelegenen Kindergärten basierend auf Ihrer Adresse, sortiert nach Entfernung. Verfolgen Sie mühelos den Verfügbarkeitsstatus der Einrichtungen gemäß berlin.de. Und falls Ihre Wunsch-Kita keinen Platz hat, können Sie sich für Benachrichtigungen über neu verfügbare Plätze eintragen.
+            Entdecken Sie mit unserer innovativen Web-Applikation spielend
+            leicht die 50 nächstgelegenen Kindergärten basierend auf Ihrer
+            Adresse, sortiert nach Entfernung. Verfolgen Sie mühelos den
+            Verfügbarkeitsstatus der Einrichtungen gemäß berlin.de. Und falls
+            Ihre Wunsch-Kita keinen Platz hat, können Sie sich für
+            Benachrichtigungen über neu verfügbare Plätze eintragen.
             <br />
             <br />
             Kitaplatz, Kinderleicht.
@@ -56,7 +61,7 @@ const StartKitaSearchListView = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
             >
-              2. Wählen Sie die Start-Monat aus
+              2. Wählen Sie den Start-Monat aus
             </MotionDiv>
             <MotionDiv
               key="start-search-information-step-3"
