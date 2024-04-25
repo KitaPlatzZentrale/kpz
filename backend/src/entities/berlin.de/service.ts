@@ -41,19 +41,27 @@ class BerlinDEService {
 
   public static getKitaDetails = async (
     uuid: number
-  ): Promise<KitaDetail | void> => {
+  ): Promise<KitaDetail | null> => {
     try {
-      let kita = await axios.get(`${KITA_API_URL}/${uuid}`);
+      let response = await axios.get(`${KITA_API_URL}/${uuid}`);
+
+      // Check if response is empty and return null
+      if (!response.data) {
+        return null;
+      }
+
       const kitaDetails =
         KitaTransformer.transformBerlinDEKitaDetailedEntityToKitaDetail(
-          kita.data
+          response.data
         );
+
       return kitaDetails;
     } catch (error) {
       logger.error(`Error in getKitaDetails for uuid ${uuid}:`, error);
       throw error;
     }
   };
+
   /**
    * Finds nearby kita centers based on latitude and longitude
    * @param {number} lat - The latitude coordinate
