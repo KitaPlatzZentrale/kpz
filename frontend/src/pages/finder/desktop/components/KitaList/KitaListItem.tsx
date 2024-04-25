@@ -82,6 +82,8 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
           className="text-xl font-extrabold underline-offset-4"
           fontSize={20}
           underline="always"
+          target="_blank" // Add this line
+          rel="noopener noreferrer" // Add this line for security reasons
         >
           <Balancer>{kita.name}</Balancer>
         </Link>
