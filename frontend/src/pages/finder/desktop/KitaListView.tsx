@@ -15,10 +15,11 @@ const MotionDiv = ({ children, ...props }) => {
       className="flex w-full items-center justify-center rounded-lg bg-slate-200 py-8"
       {...props}
     >
-      <span className="text-center">{children}</span>
+      <span className="text-left w-96">{children}</span>
     </motion.div>
   );
 };
+
 
 const StartKitaSearchListView = () => {
   return (
