@@ -36,7 +36,8 @@ interface IKitaDetail extends Document {
   foundingDate: string;
   closingDate?: string;
   version: string;
-  checkSum: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const KitaDetailSchema = new Schema<IKitaDetail>(
@@ -79,8 +80,7 @@ const KitaDetailSchema = new Schema<IKitaDetail>(
     },
     foundingDate: { type: String, required: true },
     closingDate: { type: String },
-    version: { type: String, required: true },
-    checkSum: { type: String, required: true },
+    version: { type: String, required: false },
   },
   { timestamps: true }
 );
