@@ -25,9 +25,8 @@ export const handler: Handler = async (event, context) => {
     const users = await UserModel.find();
 
     for (const user of users) {
-      const userKitas = [];
-
-      for (const kita of user.trackedKitas.map((kita) => kita)) {
+      const userKitas: string[] = [];
+      for (const kita of user.trackedKitas) {
         const kitaDetails = await KitaDetailModel.findOne({
           uuid: kita.id,
         });
@@ -40,7 +39,6 @@ export const handler: Handler = async (event, context) => {
           if (
             isKitaAvailable(kitaDetails, newFormatDesiredKitaAvailabilityDate)
           ) {
-            //@ts-ignore
             userKitas.push(kitaDetails.name);
           }
         }
@@ -52,13 +50,16 @@ export const handler: Handler = async (event, context) => {
             consentId={user.consentId}
           />
         );
-
-        await sendEmail({
-          to: user.email,
-          body,
-          subject: "Neue Plätze verfügbar",
-        });
-        console.log(`Email sent successfully to ${user}, kitas: ${userKitas}`);
+        if (userKitas.length > 0) {
+          await sendEmail({
+            to: user.email,
+            body,
+            subject: "Neue Plätze verfügbar",
+          });
+          console.log(
+            `Email sent successfully to ${user}, kitas: ${userKitas}`
+          );
+        }
       } catch (error) {
         console.error(
           `Error sending email to ${user.email}, kitas: ${userKitas}:`,
@@ -81,31 +82,33 @@ export const handler: Handler = async (event, context) => {
 };
 
 const monthMap = {
-  Jan: "01",
-  Feb: "02",
-  Mär: "03",
-  Apr: "04",
+  Januar: "01",
+  Februar: "02",
+  März: "03",
+  April: "04",
   Mai: "05",
-  Jun: "06",
-  Jul: "07",
-  Aug: "08",
-  Sep: "09",
-  Okt: "10",
-  Nov: "11",
-  Dez: "12",
+  Juni: "06",
+  Juli: "07",
+  August: "08",
+  September: "09",
+  Oktober: "10",
+  November: "11",
+  Dezember: "12",
 };
-
 function convertMonth(monthString) {
   const [monthName, year] = monthString.split(" ");
   const month = monthMap[monthName];
+  if (!month) {
+    throw new Error(`Invalid month name: ${monthName}`);
+  }
   return `${year}-${month}-01`;
 }
 
 function isKitaAvailable(kitaDetails, desiredDate) {
   const desiredTimestamp = new Date(desiredDate).getTime();
-  for (const date in kitaDetails.availability) {
+  for (const [date, availability] of kitaDetails.availability) {
     const timestamp = new Date(date).getTime();
-    if (timestamp >= desiredTimestamp && kitaDetails.availability[date]) {
+    if (timestamp >= desiredTimestamp && availability) {
       return true;
     }
   }
