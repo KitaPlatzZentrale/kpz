@@ -36,7 +36,6 @@ class KitaService {
             $maxDistance: radius, // in meter
           },
         },
-        version: process.env.CURRENT_KITA_DATA_VERSION,
       }).limit(50);
       const paginatedKitas = paginate(nearestSortedKitaList, page, limit);
 

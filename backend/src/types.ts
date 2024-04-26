@@ -65,7 +65,6 @@ interface KitaDetail extends Kita {
   foundingDate: string;
   closingDate?: string;
   version?: string;
-  checkSum?: string;
 }
 
 export { Kita, KitaDetail, KitaResponse, Weekday };

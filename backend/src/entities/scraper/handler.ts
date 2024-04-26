@@ -23,13 +23,10 @@ export const handler: RequestHandler<any, any> = async (
     if (req.headers["x-api-key"] !== process.env.API_KEY) {
       return res.status(401).json({ message: "Wrong API key provided" });
     }
-    const updateForKitaDetailRequired =
-      await KitaScraper.checkIfKitaDetailVersionNeedsUpdate();
-    if (updateForKitaDetailRequired) {
-      await KitaScraper.saveNewKitaDetailVersionToDB();
-      return res.status(200).json({ message: "Kitas updated" });
-    }
-    return res.status(200).json({ message: "Kitas already up to date" });
+
+    await KitaScraper.updateKitaDetails();
+
+    return res.status(200).json({ message: "Kitas updated" });
   } catch (err) {
     logger.error("Something went wrong:", err);
     return res.status(500).json({ message: "Something went wrong" });

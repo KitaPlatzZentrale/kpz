@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Cake, DateRange, MailOutline } from "@mui/icons-material";
 import { Button, Divider } from "@mui/joy";
 
@@ -8,10 +8,22 @@ import FormField from "../../../FormField";
 import { useServiceSignupFormContext } from "../ServiceSignupFormContext";
 
 import { useWizardContext } from "../WizardContext";
+import {
+  generateMonthOptions,
+  getCurrentMonth,
+} from "../../../../pages/finder/common/utils";
 
 type ServiceSignupFormViewProps = {};
 
 const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
+  const [currentMonth, setCurrentMonth] = useState<string>("");
+  const [monthOptions, setMonthOptions] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCurrentMonth(getCurrentMonth());
+    setMonthOptions(generateMonthOptions());
+  }, []);
+
   const { goToPrevious, goToNext } = useWizardContext();
   const {
     register,
@@ -77,7 +89,7 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
             error: desiredStartMonthError,
           }}
           label="Gewünschter Beginn"
-          placeholder="z.B. Mai 2023"
+          placeholder={`z.B. ${currentMonth || "loading..."}`}
           slotProps={{
             listbox: {
               sx: { zIndex: 9999 },
@@ -98,32 +110,7 @@ const ServiceSignupFormView: React.FC<ServiceSignupFormViewProps> = () => {
           }
           startDecorator={<DateRange />}
           disabled={isLoading}
-          options={[
-            "Mai 2023",
-            "Juni 2023",
-            "Juli 2023",
-            "August 2023",
-            "September 2023",
-            "Oktober 2023",
-            "November 2023",
-            "Dezember 2023",
-            "Januar 2024",
-            "Februar 2024",
-            "März 2024",
-            "April 2024",
-            "Mai 2024",
-            "Juni 2024",
-            "Juli 2024",
-            "August 2024",
-            "September 2024",
-            "Oktober 2024",
-            "November 2024",
-            "Dezember 2024",
-            "Januar 2025",
-            "Februar 2025",
-            "März 2025",
-            "April 2025",
-          ]}
+          options={monthOptions}
         />
         <FormAutocomplete
           formControlProps={{
