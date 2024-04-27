@@ -19,4 +19,3 @@ docker build -t goodbuy/kpz-prod-frontend .
 ```bash
 docker run --rm -d -p 5173:5173 --name kpz-frontend goodbuy/kpz-prod-frontend
 ```
-
