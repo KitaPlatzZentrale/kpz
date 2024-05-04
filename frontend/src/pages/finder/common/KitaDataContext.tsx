@@ -16,12 +16,22 @@ const loader = async ({
   page = 1,
   limit = 500,
 }: LoaderParams) => {
+  console.log(
+    "Fetching kitas -> URL is",
+    `${import.meta.env.VITE_BACKEND_URL}/location-service`
+  );
+
   const response = await fetch(
-    `${
-      import.meta.env.VITE_BACKEND_URL
-    }/location-service/${lat}/${lng}/${distanceInMeters}/${page}/${limit}`,
+    `${import.meta.env.VITE_BACKEND_URL}/location-service`,
     {
-      method: "GET",
+      method: "POST",
+      body: JSON.stringify({
+        lat: lat.toString(),
+        lng: lng.toString(),
+        radius: distanceInMeters.toString(),
+        page: page.toString(),
+        limit: limit.toString(),
+      }),
     }
   );
 
