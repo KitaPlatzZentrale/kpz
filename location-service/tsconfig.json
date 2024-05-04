@@ -13,5 +13,12 @@
     "resolveJsonModule": true
   },
   "compileOnSave": true,
-  "include": ["src"]
+  "include": [
+    "database.ts",
+    "index.ts",
+    "model.ts",
+    "paginate.ts",
+    "service.ts",
+    "types.ts"
+  ]
 }
