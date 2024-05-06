@@ -5,6 +5,10 @@ on:
     branches: [develop]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: frontend
+
 jobs:
   build:
     runs-on: ubuntu-latest
