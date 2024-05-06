@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -20,6 +22,7 @@
     "clsx": "^1.2.1",
     "dotenv": "^16.0.3",
     "framer-motion": "^10.12.4",
+    "gh-pages": "^6.1.1",
     "haversine-distance": "^1.2.1",
     "localforage": "^1.10.0",
     "mapbox-gl": "^2.14.1",
