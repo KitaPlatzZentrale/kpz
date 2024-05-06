@@ -1,10 +1,3 @@
-interface IAreaNotificationSignup {
-  email: string;
-  areaDescription: string; // this makes no fucking sense so this will be iterated on
-  revokedAt?: string | null;
-  sendEmail?: Boolean;
-}
-
 interface IKitaFinderServiceSignup {
   email: string;
   fullAddress: string;
