@@ -1,6 +1,5 @@
 import logger from "../../logger";
-import { createDataKey } from "../child/encryption";
-import { UserModel, EmailServiceSignupModel, AreaModel } from "./model";
+import { UserModel, EmailServiceSignupModel } from "./model";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -8,40 +7,6 @@ import { v4 as uuidv4 } from "uuid";
  */
 
 export class EmailSignup {
-  /**
-   * Perform signup for an area notification.
-   *
-   * @param data - An object containing the signup data.
-   * @property email - The email address of the user.
-   * @property areaDescription - The description of the area to sign up for.
-   * @property revokedAt - The date when the signup was revoked (optional).
-   * @property sendEmail - A boolean indicating whether to send an email (optional, default: true).
-   *
-   * @returns The created document if the signup is successful, otherwise an error is logged.
-   */
-  public static areaNotificationSignup = async (
-    data: IAreaNotificationSignup
-  ) => {
-    try {
-      const existingUser = await AreaModel.findOne({
-        email: data.email,
-      });
-      if (existingUser) {
-        return;
-      }
-      const createdDocument = await AreaModel.create({
-        email: data.email,
-        areaDescription: data.areaDescription,
-        revokedAt: data.revokedAt || null,
-        sendEmail: data.sendEmail || true,
-      });
-      logger.info(`User ${data.email} signed up for ${data.areaDescription}`);
-      return createdDocument;
-    } catch (e) {
-      logger.error(e);
-      return e;
-    }
-  };
   /**
    * Perform signup for a single Kita notification.
    *
@@ -131,7 +96,6 @@ export class EmailSignup {
         revokedAt: data.revokedAt || null,
         sendEmail: data.sendEmail || true,
       });
-      await createDataKey(id);
       logger.info(`User ${data.email} signed up for kita finder service`);
       return createdDocument;
     } catch (e) {
@@ -147,7 +111,6 @@ export class EmailSignup {
   public static revokeConsent = async (consentId: string) => {
     try {
       await EmailServiceSignupModel.deleteOne({ consentId });
-      await AreaModel.deleteOne({ consentId });
       await UserModel.deleteOne({ consentId });
       logger.info(`Consent ${consentId} revoked and User deleted`);
       return;
