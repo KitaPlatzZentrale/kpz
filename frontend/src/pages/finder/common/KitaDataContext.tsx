@@ -16,11 +16,6 @@ const loader = async ({
   page = 1,
   limit = 500,
 }: LoaderParams) => {
-  console.log(
-    "Fetching kitas -> URL is",
-    `${import.meta.env.VITE_BACKEND_URL}/location-service`
-  );
-
   const response = await fetch(
     `${import.meta.env.VITE_BACKEND_URL}/location-service`,
     {
