@@ -23,8 +23,14 @@ jobs:
       - name: Set homepage in package.json
         run: jq '.homepage = "https://KitaPlatzZentrale.github.io/frontend"' package.json > temp.json && mv temp.json package.json
 
-      - name: Install dependencies
-        run: npm install
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      - name: Retry npm install with legacy peer deps
+        run: npm install --legacy-peer-deps
+
+      - name: Update dependencies
+        run: npm update
 
       - name: Build
         run: npm run build
