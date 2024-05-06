@@ -21,7 +21,7 @@ jobs:
         run: sudo apt-get install jq
 
       - name: Set homepage in package.json
-        run: jq '.homepage = "https://KitaPlatzZentrale.github.io/frontend"' package.json > temp.json && mv temp.json package.json
+        run: jq '.homepage = "https://kitaplatzzentrale.github.io/"' package.json > temp.json && mv temp.json package.json
 
       - name: Clear npm cache
         run: npm cache clean --force
