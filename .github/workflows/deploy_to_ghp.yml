@@ -10,7 +10,7 @@ defaults:
     working-directory: frontend
 
 jobs:
-  build:
+  install_build_deploy:
     runs-on: ubuntu-latest
 
     steps:
