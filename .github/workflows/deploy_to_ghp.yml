@@ -5,22 +5,29 @@ on:
     branches: [develop]
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: frontend
+
 jobs:
-  build:
+  install_build_deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install jq
         run: sudo apt-get install jq
 
-      - name: Set homepage in package.json
-        run: jq '.homepage = "https://KitaPlatzZentrale.github.io/frontend"' package.json > temp.json && mv temp.json package.json
+      - name: Clear npm cache
+        run: npm cache clean --force
 
-      - name: Install dependencies
-        run: npm install
+      - name: Retry npm install with legacy peer deps
+        run: npm install --legacy-peer-deps
+
+      - name: Update dependencies
+        run: npm update
 
       - name: Build
         run: npm run build
@@ -29,6 +36,7 @@ jobs:
         run: |
           git config --global user.name $user_name
           git config --global user.email $user_email
+          echo "Set remote to: https://${github_token}@github.com/${repository}"
           git remote set-url origin https://${github_token}@github.com/${repository}
           npm run deploy
         env:
