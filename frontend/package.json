@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://kitaplatzzentrale.github.io/kpz",
+  "homepage": "https://kitaplatzzentrale.github.io/kpz/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
