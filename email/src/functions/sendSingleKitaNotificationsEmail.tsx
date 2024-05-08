@@ -1,93 +1,84 @@
 import * as React from "react";
-
 import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
-
 import type { Handler } from "aws-lambda";
-
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
-import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
 import ConsentConfirmationEmail from "../templates/consentConfirmation";
+import { UserModel } from "../models/user";
+import { v4 as uuidv4 } from "uuid";
+import mongoose, { ConnectOptions } from "mongoose";
 
 dotenv.config();
-/**
- * Lambda Function: SingleKitaNotificationsEmailHandler
- *
- * Description:
- * This Lambda function handles sending notification emails for a single Kita (childcare center) to recipients.
- * It receives an event object containing the details of the tracked Kita, including the email address, consent ID,
- * tracked Kita information, and other relevant data.
- * The function validates the required properties and generates the email body using the provided props.
- * Finally, it sends the email using the sendEmail function.
- *
- * ...
 
- * Sample Event:
- * {
- *   "detail": {
- *     "fullDocument": {
- *       "uuid": "12345",
- *       "email": "recipient@example.com",
- *       "consentId": "ABC123",
- *       "trackedKitas": [
- *         {
- *           "id": "kitaid123",
- *           "kitaName": "Example Kita",
- *           "kitaAvailability": "June"
- *         }
- *       ],
- *       "createdAt": "2023-06-08T12:00:00Z",
- *       "consentedAt": "2023-06-08T12:00:00Z",
- *       "revokedAt": null
- *     }
- *   }
- * }
- */
-
-interface EmailProps {
-  detail: {
-    fullDocument: {
-      uuid: string;
-      email: string;
-      consentId: string;
-      trackedKitas: [
-        {
-          id: string;
-          kitaName: string;
-          kitaAvailability: string | null;
-        }
-      ];
-      createdAt: string;
-      consentedAt: string; // same as createdAt, important to track this separately for GDPR reasons
-      revokedAt?: string | null;
-    };
-  };
+if (!process.env.MONGODB_URI) {
+  throw new Error("MONGODB_URI environment variable not found");
 }
 
-export const handler: Handler = async (event: EmailProps, ctx) => {
-  const SNS = setupSNS();
-  if (!process.env.SNS_ERROR_ARN)
-    throw new Error("No SNS_ERROR_ARN specified in environment variables");
-  if (!process.env.SNS_SUCCESS_ARN)
-    throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
+mongoose.connect(process.env.MONGODB_URI, {
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+} as ConnectOptions);
+
+export const handler: Handler = async (event: any, ctx) => {
   try {
-    const { email, trackedKitas, consentId } = event.detail.fullDocument;
-    const { kitaName } = trackedKitas[trackedKitas.length - 1];
+    console.log("Event body: ", event.body);
+    let consentId = "";
+    let existingUser = await UserModel.findOne({ email: event.body.email });
+    console.log("Existing user: ", existingUser);
+
+    if (existingUser) {
+      consentId = existingUser.consentId;
+      const isKitaAlreadySignedUp = existingUser.trackedKitas.some(
+        (kita) => kita.id === event.body.kitaId
+      );
+      if (!isKitaAlreadySignedUp) {
+        existingUser.trackedKitas.push({
+          id: event.body.kitaId,
+          kitaName: event.body.kitaName,
+          kitaAvailability: event.body.kitaDesiredAvailability,
+        });
+        await existingUser.save();
+      }
+    } else {
+      existingUser = await UserModel.create({
+        id: uuidv4(),
+        email: event.body.email,
+        trackedKitas: [
+          {
+            id: event.body.kitaId,
+            kitaName: event.body.kitaName,
+            kitaAvailability: event.body.kitaDesiredAvailability,
+          },
+        ],
+        sendEmail: event.body.sendEmail || true,
+        consentId: uuidv4(),
+      });
+      consentId = existingUser.consentId;
+    }
+
+    console.info(
+      `User ${event.body.email} signed up for ${event.body.kitaName} with id ${event.body.kitaId}`
+    );
+
+    const { email, kitaName } = event.body;
     const to = email;
 
-    if (!to) throw new Error("No recipient with `to` specified");
-    if (!kitaName)
+    if (!to) {
+      throw new Error("No recipient with `to` specified");
+    }
+
+    if (!kitaName) {
       throw new Error(
         "No kita name with `kitaName` specified. Aborting. This will otherwise result in messy copy."
       );
+    }
 
-    // if consentedAt is null send confirmationEmail
     let body = "";
-    if (event.detail.fullDocument.consentedAt == null) {
+    if (existingUser && existingUser.consentedAt == null) {
       body = render(
         <ConsentConfirmationEmail
-          consentId={consentId}
+          consentId={existingUser.consentId}
           serviceName={"Kita-Notification"}
         />
       );
@@ -99,16 +90,20 @@ export const handler: Handler = async (event: EmailProps, ctx) => {
         />
       );
     }
-    if (!body) throw new Error("Something went wrong");
+
+    if (!body) {
+      throw new Error("Something went wrong");
+    }
+
     await sendEmail({
       to,
       body,
       subject: "Neue Anmeldungen für deine Kita",
     });
-    await sendSNS(SNS, process.env.SNS_SUCCESS_ARN);
+
+    return "Email sent";
   } catch (e) {
     console.error(e);
-    await sendSNS(SNS, process.env.SNS_ERROR_ARN);
-    throw e;
+    return e;
   }
 };

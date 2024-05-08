@@ -10,13 +10,15 @@ import type { Handler } from "aws-lambda";
  * @returns A response containing the paginated kitas or an error message.
  */
 
-interface IRequestData {
-  lat: string;
-  lng: string;
-  radius?: string;
-  page?: string;
-  limit?: string;
-}
+// interface IRequestData {
+//   body: {
+//     lat: string;
+//     lng: string;
+//     radius?: string;
+//     page?: string;
+//     limit?: string;
+//   };
+// }
 
 export const handler: Handler = async (event: any, ctx) => {
   try {
