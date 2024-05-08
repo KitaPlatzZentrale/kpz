@@ -17,8 +17,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 export const handler: Handler = async (event: any, ctx) => {
   try {
     console.log("Event", event);
-    console.log("ctx", ctx);
-    const consentId = event.body.consentId;
+    const consentId = event.pathParameters.consentId;
     await EmailServiceSignupModel.deleteOne({ consentId });
     await UserModel.deleteOne({ consentId });
     console.info(`Consent ${consentId} revoked and User deleted`);

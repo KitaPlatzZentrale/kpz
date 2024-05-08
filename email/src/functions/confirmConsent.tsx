@@ -17,18 +17,17 @@ mongoose.connect(process.env.MONGODB_URI, {
 export const handler: Handler = async (event: any, ctx) => {
   try {
     console.log("Event", event);
-    console.log("ctx", ctx);
     await EmailServiceSignupModel.updateOne(
-      { consentId: event.body.consentId },
+      { consentId: event.pathParameters.consentId },
       { $set: { consentedAt: Date.now() } }
     );
     await UserModel.updateOne(
-      { consentId: event.body.consentId },
+      { consentId: event.pathParameters.consentId },
       { $set: { consentedAt: Date.now() } }
     );
     console.log(
-      "event.body confirmed for event.body ID: ",
-      event.body.consentId
+      "event.pathParameters confirmed for event.pathParameters ID: ",
+      event.pathParameters.consentId
     );
     return "Consent confirmed";
   } catch (error) {
