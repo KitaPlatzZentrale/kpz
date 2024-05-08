@@ -1,5 +1,4 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { v4 as uuidv4 } from "uuid";
 
 interface IUser extends Document {
   id: string;
@@ -54,7 +53,7 @@ const EmailServiceSignupSchema: Schema = new Schema({
     type: String,
     required: true,
   },
-  consentId: { type: String, default: uuidv4(), required: true },
+  consentId: { type: String, required: true },
   fullAddress: {
     type: String,
     required: true,
