@@ -44,42 +44,43 @@ export const handler: Handler = async (event: any, ctx) => {
   try {
     console.log("Event", event);
     console.log("Event body: ", event.body);
+    console.log("JSON.parse(event.body);", JSON.parse(event.body));
+    // Access properties directly from the event body
+    const {
+      email,
+      fullAddress,
+      desiredStartingMonth,
+      actualOrExpectedBirthMonth,
+      revokedAt,
+    } = JSON.parse(event.body);
+
+    // Log the extracted properties
+    console.log("Email:", email);
+    console.log("Full Address:", fullAddress);
+    console.log("Desired Starting Month:", desiredStartingMonth);
+    console.log("Actual or Expected Birth Month:", actualOrExpectedBirthMonth);
+    console.log("Revoked At:", revokedAt);
     const existingUser = await EmailServiceSignupModel.findOne({
-      email: event.body.email,
+      email: email,
     });
     if (existingUser) {
       return "User already signed up";
     }
-    console.log("Event.body.email: ", event.body.email);
-    // log everything
-    console.log("Event.body.fullAddress: ", event.body.fullAddress);
-    console.log(
-      "Event.body.desiredStartingMonth: ",
-      event.body.desiredStartingMonth
-    );
-    console.log(
-      "Event.body.actualOrExpectedBirthMonth: ",
-      event.body.actualOrExpectedBirthMonth
-    );
-    console.log("Event.body.revokedAt: ", event.body.revokedAt);
-    console.log("Event.body.sendEmail: ", event.body.sendEmail);
-    console.log("Event.body.consentId: ", event.body.consentId);
 
     const id = uuidv4();
     const consentId = uuidv4();
     const createdDocument = await EmailServiceSignupModel.create({
       id: id,
-      email: event.body.email,
-      fullAddress: event.body.fullAddress,
-      desiredStartingMonth: event.body.desiredStartingMonth,
-      actualOrExpectedBirthMonth: event.body.actualOrExpectedBirthMonth,
-      revokedAt: event.body.revokedAt || null,
-      sendEmail: event.body.sendEmail || true,
+      email: email,
+      fullAddress: fullAddress,
+      desiredStartingMonth: desiredStartingMonth,
+      actualOrExpectedBirthMonth: actualOrExpectedBirthMonth,
+      revokedAt: revokedAt || null,
+      sendEmail: true,
       consentId: consentId,
     });
-    console.info(`User ${event.body.email} signed up for kita finder service`);
+    console.info(`User ${email} signed up for kita finder service`);
 
-    const email = event.body.email;
     const to = email;
 
     if (!to) throw new Error("No recipient with `to` specified");
@@ -89,23 +90,24 @@ export const handler: Handler = async (event: any, ctx) => {
       );
 
     // if consentedAt is null send confirmationEmail
-    let body = "";
+    let bodyContent = "";
     console.log("createdDocument: ", createdDocument);
     console.log("createdDocument.consentedAt: ", createdDocument.consentedAt);
     if (createdDocument.consentedAt == null) {
-      body = render(
+      console.log("not consented yet");
+      bodyContent = render(
         <ConsentConfirmationEmail
           consentId={consentId}
           serviceName={"Kita-Finder"}
         />
       );
     } else {
-      body = render(<ServiceSignupEmail consentId={consentId} />);
+      bodyContent = render(<ServiceSignupEmail consentId={consentId} />);
     }
-    if (!body) throw new Error("Something went wrong");
+    if (!bodyContent) throw new Error("Something went wrong");
     await sendEmail({
       to,
-      body,
+      body: bodyContent,
       subject: "Neue Anmeldungen für deine Kita",
     });
     // await sendSNS(SNS, process.env.SNS_SUCCESS_ARN);

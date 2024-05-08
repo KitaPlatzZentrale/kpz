@@ -22,46 +22,47 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 export const handler: Handler = async (event: any, ctx) => {
   try {
-    console.log("Event body: ", event.body);
+    const eventData = JSON.parse(event.body); // Parse the event body
+    console.log("Event body: ", eventData);
     let consentId = "";
-    let existingUser = await UserModel.findOne({ email: event.body.email });
+    let existingUser = await UserModel.findOne({ email: eventData.email }); // Access properties from parsed event data
     console.log("Existing user: ", existingUser);
 
     if (existingUser) {
       consentId = existingUser.consentId;
       const isKitaAlreadySignedUp = existingUser.trackedKitas.some(
-        (kita) => kita.id === event.body.kitaId
+        (kita) => kita.id === eventData.kitaId
       );
       if (!isKitaAlreadySignedUp) {
         existingUser.trackedKitas.push({
-          id: event.body.kitaId,
-          kitaName: event.body.kitaName,
-          kitaAvailability: event.body.kitaDesiredAvailability,
+          id: eventData.kitaId,
+          kitaName: eventData.kitaName,
+          kitaAvailability: eventData.kitaDesiredAvailability,
         });
         await existingUser.save();
       }
     } else {
       existingUser = await UserModel.create({
         id: uuidv4(),
-        email: event.body.email,
+        email: eventData.email,
         trackedKitas: [
           {
-            id: event.body.kitaId,
-            kitaName: event.body.kitaName,
-            kitaAvailability: event.body.kitaDesiredAvailability,
+            id: eventData.kitaId,
+            kitaName: eventData.kitaName,
+            kitaAvailability: eventData.kitaDesiredAvailability,
           },
         ],
-        sendEmail: event.body.sendEmail || true,
+        sendEmail: eventData.sendEmail || true,
         consentId: uuidv4(),
       });
       consentId = existingUser.consentId;
     }
 
     console.info(
-      `User ${event.body.email} signed up for ${event.body.kitaName} with id ${event.body.kitaId}`
+      `User ${eventData.email} signed up for ${eventData.kitaName} with id ${eventData.kitaId}`
     );
 
-    const { email, kitaName } = event.body;
+    const { email, kitaName } = eventData;
     const to = email;
 
     if (!to) {
