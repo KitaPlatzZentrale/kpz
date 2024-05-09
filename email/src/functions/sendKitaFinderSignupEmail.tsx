@@ -4,7 +4,7 @@ import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
 import { v4 as uuidv4 } from "uuid";
 
-import type { Handler } from "aws-lambda";
+import type { APIGatewayEvent, Handler } from "aws-lambda";
 import ServiceSignupEmail from "../templates/Kitafinder";
 // import { sendSNS, setupSNS } from "../sender/sendSNS";
 import dotenv from "dotenv";
@@ -35,7 +35,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
 } as ConnectOptions);
 
-export const handler: Handler = async (event: any, ctx) => {
+export const handler: Handler<APIGatewayEvent> = async (event) => {
   // const SNS = setupSNS();
   // if (!process.env.SNS_ERROR_ARN)
   //   throw new Error("No SNS_ERROR_ARN specified in environment variables");
@@ -43,8 +43,10 @@ export const handler: Handler = async (event: any, ctx) => {
   //   throw new Error("No SNS_SUCCESS_ARN specified in environment variables");
   try {
     console.log("Event", event);
-    console.log("Event body: ", event.body);
-    console.log("JSON.parse(event.body);", JSON.parse(event.body));
+
+    if (!event.body) {
+      throw new Error("No event body found");
+    }
     // Access properties directly from the event body
     const {
       email,

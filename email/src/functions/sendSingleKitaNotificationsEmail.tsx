@@ -1,7 +1,7 @@
 import * as React from "react";
 import sendEmail from "../sender/sendEmail";
 import { render } from "@react-email/render";
-import type { Handler } from "aws-lambda";
+import type { APIGatewayEvent, Handler } from "aws-lambda";
 import SingleKitaNotificationsEmail from "../templates/singleKitaNotifications";
 import dotenv from "dotenv";
 import ConsentConfirmationEmail from "../templates/consentConfirmation";
@@ -20,10 +20,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
 } as ConnectOptions);
 
-export const handler: Handler = async (event: any, ctx) => {
+export const handler: Handler<APIGatewayEvent> = async (event) => {
   try {
+    console.log("Event", event);
+    if (!event.body) {
+      throw new Error("No event body found");
+    }
     const eventData = JSON.parse(event.body); // Parse the event body
-    console.log("Event body: ", eventData);
     let consentId = "";
     let existingUser = await UserModel.findOne({ email: eventData.email }); // Access properties from parsed event data
     console.log("Existing user: ", existingUser);

@@ -1,4 +1,4 @@
-import type { Handler } from "aws-lambda";
+import type { APIGatewayEvent, Handler } from "aws-lambda";
 import dotenv from "dotenv";
 import { EmailServiceSignupModel, UserModel } from "../models/user";
 import mongoose, { ConnectOptions } from "mongoose";
@@ -14,9 +14,12 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
 } as ConnectOptions);
 
-export const handler: Handler = async (event: any, ctx) => {
+export const handler: Handler<APIGatewayEvent> = async (event) => {
   try {
     console.log("Event", event);
+    if (!event.pathParameters?.consentId) {
+      throw new Error("consentId not found in path parameters");
+    }
     const consentId = event.pathParameters.consentId;
     await EmailServiceSignupModel.deleteOne({ consentId });
     await UserModel.deleteOne({ consentId });
