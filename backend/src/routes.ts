@@ -11,7 +11,7 @@ import confirmConsent from "./entities/user/handler/confirmConsent";
 const router = express.Router();
 
 router.post(
-  "/signup/service",
+  "/signup/kita-finder",
   kitaFinderServiceSignupValidator,
   kitaFinderServiceSignup
 );

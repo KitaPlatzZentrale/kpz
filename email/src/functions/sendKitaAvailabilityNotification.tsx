@@ -1,4 +1,4 @@
-import { Handler } from "aws-lambda";
+import { APIGatewayEvent, Handler } from "aws-lambda";
 import dotenv from "dotenv";
 import mongoose, { ConnectOptions } from "mongoose";
 import { UserModel } from "../models/user";
@@ -20,7 +20,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 //** Check new availability of Kitas that User signed up for - Send a Email if they are available */
 
-export const handler: Handler = async (event, context) => {
+export const handler: Handler<APIGatewayEvent> = async (event) => {
   try {
     const users = await UserModel.find();
 

@@ -20,7 +20,7 @@ const submitServiceSignupAction = async ({
   expectedBirthDate,
 }: ServiceSignupActionPayload) => {
   const res = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/signup/service`,
+    `${import.meta.env.VITE_BACKEND_URL}/signup/kita-finder`,
     {
       method: "POST",
       headers: {
