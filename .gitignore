@@ -3,4 +3,21 @@ frontend/.env
 notification/node_modules
 notification/dist
 notification/.env
+
+# macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Wiki backups
+wiki-backup/
+wiki-temp/
+*.tar.gz
