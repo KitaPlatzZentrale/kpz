@@ -15,8 +15,8 @@ const handler: RequestHandler<IRevokeConsent> = async (req, res) => {
     const consentId = req.params.consentId;
     await EmailSignup.revokeConsent(consentId);
     return res.status(200).send("Consent revoked");
-  } catch (e) {
-    logger.error(e);
+  } catch (e: any) {
+    logger.error(`Error in revokeConsent: ${e.message || e}`);
     return res.status(500).send("Something went wrong");
   }
 };

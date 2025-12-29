@@ -15,7 +15,7 @@ const handler: RequestHandler<ISingleKitaNotification> = async (req, res) => {
     await EmailSignup.singleKitaNotificationSignup(req.body);
     return res.status(200).send();
   } catch (err: any) {
-    logger.error(err);
+    logger.error(`Error in singleKitaNotificationSignup: ${err.message || err}`);
     return res.status(500).json({ error: "Something went wrong" });
   }
 };

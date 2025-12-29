@@ -14,7 +14,7 @@ const handler: RequestHandler<IKitaFinderServiceSignup> = async (req, res) => {
 
     return res.status(200).send();
   } catch (err: any) {
-    logger.error(err);
+    logger.error(`Error in kitaFinderServiceSignup: ${err.message || err}`);
     return res.status(500).json({ error: "Something went wrong" });
   }
 };

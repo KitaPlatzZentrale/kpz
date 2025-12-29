@@ -15,8 +15,8 @@ const handler: RequestHandler<any, any, IConsentParams> = async (req, res) => {
     const { consentId } = req.params;
     await User.confirmConsent({ consentId });
     return res.status(200).send("Consent confirmed");
-  } catch (e) {
-    logger.error(e);
+  } catch (e: any) {
+    logger.error(`Error in confirmConsent: ${e.message || e}`);
     return res.status(500).send("Something went wrong");
   }
 };

@@ -31,7 +31,7 @@ export class EmailSignup {
         );
         if (isKitaAlreadySignedUp) {
           // Kita is already signed up for by the user, return
-          return;
+          return undefined;
         }
         // Add the kita to the trackedKitas array
         existingUser.trackedKitas.push({
@@ -40,7 +40,7 @@ export class EmailSignup {
           kitaAvailability: data.kitaDesiredAvailability,
         });
         await existingUser.save();
-        return;
+        return undefined;
       }
       const createdDocument = await UserModel.create({
         id: uuidv4(),
@@ -58,9 +58,9 @@ export class EmailSignup {
         `User ${data.email} signed up for ${data.kitaName} with id ${data.kitaId}`
       );
       return createdDocument;
-    } catch (e) {
-      logger.error(e);
-      return e;
+    } catch (e: any) {
+      logger.error(`Error in singleKitaNotificationSignup service: ${e.message || e}`);
+      throw e;
     }
   };
   /**
@@ -84,7 +84,7 @@ export class EmailSignup {
         email: data.email,
       });
       if (existingUser) {
-        return;
+        return undefined;
       }
       const id = uuidv4();
       const createdDocument = await EmailServiceSignupModel.create({
@@ -98,9 +98,9 @@ export class EmailSignup {
       });
       logger.info(`User ${data.email} signed up for kita finder service`);
       return createdDocument;
-    } catch (e) {
-      logger.error(e);
-      return e;
+    } catch (e: any) {
+      logger.error(`Error in kitaFinderServiceSignup service: ${e.message || e}`);
+      throw e;
     }
   };
   /**
@@ -114,9 +114,9 @@ export class EmailSignup {
       await UserModel.deleteOne({ consentId });
       logger.info(`Consent ${consentId} revoked and User deleted`);
       return;
-    } catch (e) {
-      logger.error(e);
-      return e;
+    } catch (e: any) {
+      logger.error(`Error in revokeConsent service: ${e.message || e}`);
+      throw e;
     }
   };
 }
