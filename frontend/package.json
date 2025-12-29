@@ -18,7 +18,6 @@
     "@hookform/resolvers": "^3.0.1",
     "@mui/icons-material": "^5.11.16",
     "@mui/joy": "^5.0.0-alpha.73",
-    "@mui/material": "npm:@mui/joy@latest",
     "clsx": "^1.2.1",
     "dotenv": "^16.0.3",
     "framer-motion": "^10.12.4",
@@ -39,9 +38,6 @@
     "react-wrap-balancer": "^0.4.0",
     "sort-by": "^1.2.0",
     "yup": "^1.0.2"
-  },
-  "resolutions": {
-    "@mui/material": "npm:@mui/joy@latest"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
