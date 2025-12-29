@@ -258,7 +258,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
         loading={isLoading}
         loadingText={
           <span className="flex flex-row items-center gap-3">
-            <CircularProgress color="neutral" size="sm" />
+            <CircularProgress size="sm" />
             <span className="ml-2">Lade Adressen...</span>
           </span>
         }
@@ -277,7 +277,6 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
         <Link
           component="button"
           mt={1}
-          color="info"
           fontWeight={"bold"}
           fontSize="sm"
           underline="always"
@@ -287,7 +286,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
           }
           startDecorator={
             isLoadingUserLocation ? (
-              <CircularProgress color="info" size="sm" />
+              <CircularProgress size="sm" />
             ) : (
               <LocationOn />
             )

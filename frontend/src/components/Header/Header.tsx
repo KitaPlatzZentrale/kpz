@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({ headerRef }) => {
               setHeaderMobileOverlayOpen(!isHeaderMobileOverlayOpen)
             }
             strokeWidth="3"
-            color={theme.palette.primary[600]}
+            color={theme.vars.palette.primary[600]}
             lineProps={{ strokeLinecap: "round" }}
             transition={{ type: "spring", stiffness: 260, damping: 20 }}
             width="24"

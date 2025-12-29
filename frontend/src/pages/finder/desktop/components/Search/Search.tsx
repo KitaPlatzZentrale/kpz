@@ -78,7 +78,6 @@ const Search: React.FC<SearchProps> = ({ id, className, rootRef }) => {
             <Button
               style={{ padding: "20px 40px" }}
               className="w-full lg:w-fit"
-              color="info"
               size="lg"
               variant="solid"
               loading={isFetching}

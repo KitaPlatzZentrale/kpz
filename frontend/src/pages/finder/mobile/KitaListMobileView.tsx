@@ -72,7 +72,7 @@ const KitaListMobileView: React.FC<KitaListMobileViewProps> = ({
           <StartKitaSearchListView />
         ) : isFetching ? (
           <div className="mt-6 flex w-full flex-col items-center justify-center gap-4">
-            <CircularProgress color="info" size="lg" />
+            <CircularProgress size="lg" />
             <p className="text-sm">Tageseinrichtungen werden ermittelt</p>
           </div>
         ) : (
