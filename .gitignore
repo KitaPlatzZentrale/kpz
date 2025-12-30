@@ -7,6 +7,9 @@ notification/node_modules
 notification/dist
 notification/.env
 
+# Test coverage
+coverage/
+
 # macOS
 .DS_Store
 .AppleDouble
