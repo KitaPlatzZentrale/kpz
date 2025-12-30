@@ -1,5 +1,8 @@
 
 frontend/.env
+frontend/.env.development
+frontend/.env.production
+frontend/.env.local
 notification/node_modules
 notification/dist
 notification/.env
