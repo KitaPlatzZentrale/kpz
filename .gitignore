@@ -28,3 +28,9 @@ wiki-backup/
 wiki-temp/
 *.tar.gz
 backend/dist/lambda.zip
+
+# Terraform
+terraform/environments/**/terraform.tfvars
+terraform/environments/**/.terraform/
+terraform/environments/**/.terraform.lock.hcl
+terraform/environments/**/terraform.tfstate*

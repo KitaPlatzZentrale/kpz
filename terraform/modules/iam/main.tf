@@ -1,0 +1,211 @@
+# IAM Module
+# Creates IAM roles and policies for GitHub Actions and Lambda functions
+
+# GitHub Actions OIDC Provider
+resource "aws_iam_openid_connect_provider" "github_actions" {
+  url = "https://token.actions.githubusercontent.com"
+
+  client_id_list = [
+    "sts.amazonaws.com"
+  ]
+
+  thumbprint_list = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1",  # GitHub Actions OIDC thumbprint
+    "1c58a3a8518e8759bf075b76b750d4f2df264fcd"   # Backup thumbprint
+  ]
+
+  tags = {
+    Name        = "github-actions-oidc-provider"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+# GitHub Actions Role for Lambda Deployment
+resource "aws_iam_role" "github_actions" {
+  name = "github-actions-lambda-deploy-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = aws_iam_openid_connect_provider.github_actions.arn
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+          }
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:ref:refs/heads/${var.github_branch}"
+          }
+        }
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "github-actions-lambda-deploy-${var.environment}"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+# GitHub Actions Policy - Lambda Deployment
+resource "aws_iam_role_policy" "github_actions_lambda" {
+  name = "lambda-deployment-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:UpdateFunctionCode",
+          "lambda:UpdateFunctionConfiguration",
+          "lambda:GetFunction",
+          "lambda:GetFunctionConfiguration",
+          "lambda:InvokeFunction"
+        ]
+        Resource = "arn:aws:lambda:${var.aws_region}:*:function:kpz-*-${var.environment}"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:ListFunctions"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Lambda Execution Role - Backend API
+resource "aws_iam_role" "lambda_backend_api" {
+  name = "lambda-backend-api-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "lambda-backend-api-${var.environment}"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+# Attach AWS managed policy for basic Lambda execution
+resource "aws_iam_role_policy_attachment" "lambda_backend_api_basic" {
+  role       = aws_iam_role.lambda_backend_api.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# Lambda Execution Role - Email Service
+resource "aws_iam_role" "lambda_email_service" {
+  name = "lambda-email-service-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "lambda-email-service-${var.environment}"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_email_service_basic" {
+  role       = aws_iam_role.lambda_email_service.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# Email service needs SES permissions
+resource "aws_iam_role_policy" "lambda_email_service_ses" {
+  name = "ses-send-email-policy"
+  role = aws_iam_role.lambda_email_service.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Lambda Execution Role - Notification Service
+resource "aws_iam_role" "lambda_notification_service" {
+  name = "lambda-notification-service-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "lambda-notification-service-${var.environment}"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_notification_service_basic" {
+  role       = aws_iam_role.lambda_notification_service.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# Notification service needs SNS permissions
+resource "aws_iam_role_policy" "lambda_notification_service_sns" {
+  name = "sns-publish-policy"
+  role = aws_iam_role.lambda_notification_service.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "sns:Publish"
+        ]
+        Resource = "arn:aws:sns:${var.aws_region}:*:kpz-*-${var.environment}"
+      }
+    ]
+  })
+}
