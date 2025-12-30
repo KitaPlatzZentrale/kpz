@@ -1,0 +1,43 @@
+name: Backend Tests (Dev Branch)
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'backend/**'
+      - '.github/workflows/test_backend_dev.yml'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.0'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Run tests
+        run: |
+          cd backend
+          npm test
+
+      - name: Upload coverage report (optional)
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report-dev
+          path: backend/coverage/
+          retention-days: 7
