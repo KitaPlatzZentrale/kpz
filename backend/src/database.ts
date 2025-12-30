@@ -3,6 +3,13 @@ import mongoose, { ConnectOptions } from "mongoose";
 
 export async function connectToDatabase() {
   try {
+    // Reuse existing connection in Lambda warm starts
+    // Mongoose maintains connection state internally
+    if (mongoose.connection.readyState === 1) {
+      logger.info("MongoDB connection already established (reusing existing connection)");
+      return;
+    }
+
     const dbUrl = process.env.MONGO_DB_CONNECTION;
     if (!dbUrl) {
       throw "\n\n\nYOU NEED TO ADD THE MONGO_DB_CONNECTION STRING INTO YOUR .env FILE IN THE ROOT DIRECTORY\n\n\n";

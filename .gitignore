@@ -27,3 +27,4 @@ coverage/
 wiki-backup/
 wiki-temp/
 *.tar.gz
+backend/dist/lambda.zip

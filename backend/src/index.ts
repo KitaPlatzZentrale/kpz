@@ -66,6 +66,14 @@ app.use("", routes);
 
 connectToDatabase();
 
-app.listen(3000, () => {
-  logger.info("Server started on port 3000");
-});
+// Only start the server if not running in AWS Lambda environment
+// In Lambda, the server is started by the lambda.ts handler
+if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    logger.info(`Server started on port ${PORT}`);
+  });
+}
+
+// Export the app for Lambda handler
+export default app;
