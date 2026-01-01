@@ -1,0 +1,9 @@
+# Development Environment Configuration
+# Copy this file to terraform.tfvars and fill in your values
+
+aws_region     = "eu-central-1"
+github_repo    = "KitaPlatzZentrale/kpz"
+
+# MongoDB Atlas connection string
+# Format: mongodb+srv://username:password@cluster.mongodb.net/database?retryWrites=true&w=majority
+mongodb_connection_string = "mongodb+srv://..."

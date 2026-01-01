@@ -43,12 +43,10 @@ const ServiceBanner: React.FC<ServiceBannerProps> = ({ open, className }) => {
                 Wir sind für dich da.
               </h4>
             </div>
-            <p className="font-semibold">
-              <p className="text-center 2xl:text-start">
-                Unser PlatzFinder Service nimmt den Stress aus Ihrem
-                Elternalltag. Ganz unverbindlich —{" "}
-                <p className="font-extrabold">Sie bezahlen nur bei Erfolg.</p>
-              </p>
+            <p className="text-center font-semibold 2xl:text-start">
+              Unser PlatzFinder Service nimmt den Stress aus Ihrem
+              Elternalltag. Ganz unverbindlich —{" "}
+              <span className="font-extrabold">Sie bezahlen nur bei Erfolg.</span>
             </p>
           </div>
         </div>

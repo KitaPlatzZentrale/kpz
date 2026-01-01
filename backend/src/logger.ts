@@ -18,20 +18,28 @@ const jsonFormat = winston.format.combine(
 );
 
 // create a new logger instance
+const transports: winston.transport[] = [
+  new winston.transports.Console({
+    format: consoleFormat,
+    level: "info",
+    handleExceptions: true,
+    stderrLevels: ["error"],
+  }),
+];
+
+// Only add file transports when not in Lambda environment
+if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
+  transports.push(
+    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
+    new winston.transports.File({ filename: "logs/combined.log" })
+  );
+}
+
 const logger = winston.createLogger({
   level: "info",
   format: jsonFormat,
   defaultMeta: { service: `kpz-${process.env.NODE_ENV}-backend` },
-  transports: [
-    new winston.transports.File({ filename: "logs/error.log", level: "error" }),
-    new winston.transports.File({ filename: "logs/combined.log" }),
-    new winston.transports.Console({
-      format: consoleFormat,
-      level: "info",
-      handleExceptions: true,
-      stderrLevels: ["error"],
-    }),
-  ],
+  transports,
   exitOnError: false,
 });
 
