@@ -58,13 +58,13 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
             />
             <defs>
               <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="35%" stop-color="#fff" />
-                <stop offset="60%" stop-color="rgba(255,255,255,0)" />
+                <stop offset="35%" stopColor="#fff" />
+                <stop offset="60%" stopColor="rgba(255,255,255,0)" />
               </linearGradient>
 
               <linearGradient id="grad2" x1="90%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="rgba(255,255,255,0)" />
-                <stop offset="100%" stop-color="rgba(255,255,255,0.75)" />
+                <stop offset="0%" stopColor="rgba(255,255,255,0)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0.75)" />
               </linearGradient>
 
               <linearGradient
@@ -74,8 +74,8 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
                 x2="0%"
                 y2="100%"
               >
-                <stop offset="0%" stop-color="rgba(255,255,255,0)" />
-                <stop offset="100%" stop-color="rgba(255,255,255,0.75)" />
+                <stop offset="0%" stopColor="rgba(255,255,255,0)" />
+                <stop offset="100%" stopColor="rgba(255,255,255,0.75)" />
               </linearGradient>
             </defs>
 
@@ -194,8 +194,8 @@ const IndexPage: React.FC<IndexPageProps> = ({}) => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M23.2918 2.52523L3.48992 3.55795L12.6525 11.0812C13.1614 11.4991 13.902 11.4718 14.3788 11.0175L23.2918 2.52523ZM2.57806 4.69921L3.17342 16.115L7.43748 8.68924L2.57806 4.69921ZM4.0759 17.4767L24.5713 16.4078L18.9259 8.70259L15.3864 12.075C14.3754 13.0383 12.8048 13.0963 11.7255 12.2101L8.58215 9.62912L4.0759 17.4767ZM26.548 16.6343C26.6685 16.3558 26.7282 16.0459 26.7113 15.7223L26.0455 2.95555C25.987 1.83382 25.0302 0.971899 23.9085 1.0304L3.01747 2.11992C1.89574 2.17842 1.03382 3.13519 1.09232 4.25692L1.75814 17.0237C1.81664 18.1454 2.7734 19.0073 3.89514 18.9488L24.7862 17.8593C25.456 17.8244 26.0332 17.4691 26.3771 16.9497L26.6387 16.7581L26.548 16.6343ZM25.2003 14.7949L19.9923 7.68656L24.6006 3.29576L25.2003 14.7949Z"
                   fill="#318DB5"
                 />

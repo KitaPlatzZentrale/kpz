@@ -27,19 +27,18 @@ const HeaderNavigationLink: React.FC<HeaderNavigationLinkProps> = ({
         )
       }
     >
-      <NavLink
-        to={to}
-        className={({ isActive }) =>
-          clsx(
+      {({ isActive }) => (
+        <span
+          className={clsx(
             "h-full text-4xl sm:text-5xl xl:text-base",
             isActive
               ? `font-extrabold text-primary-dark`
               : `font-bold text-[#966657]`
-          )
-        }
-      >
-        {children}
-      </NavLink>
+          )}
+        >
+          {children}
+        </span>
+      )}
     </NavLink>
   );
 };

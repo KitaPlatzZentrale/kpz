@@ -17,7 +17,7 @@ const FooterNavigationSegmentSection: React.FC<
       </div>
       <div className="flex flex-col gap-2">
         {links.map((link) => (
-          <FooterNavigationSegmentSectionLink to={link.to}>
+          <FooterNavigationSegmentSectionLink key={link.to} to={link.to}>
             {link.title}
           </FooterNavigationSegmentSectionLink>
         ))}
