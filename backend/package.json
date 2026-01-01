@@ -9,7 +9,7 @@
     "test:coverage": "jest --coverage",
     "local": "npx tsc --watch & nodemon dist/index.js",
     "build": "tsc -p .",
-    "build:lambda": "tsc -p . && cd dist && zip -r lambda.zip . && cd ..",
+    "build:lambda": "tsc -p . && rm -rf dist/lambda.zip && cp package.json package-lock.json dist/ && cd dist && npm ci --production && zip -r lambda.zip . && cd ..",
     "docker-dev": "docker-compose -f docker-compose.dev.yml up -d",
     "docker-down": "docker-compose down",
     "docker-local": "docker-compose -f docker-compose.local.yml up -d",
@@ -33,6 +33,7 @@
     "hpp": "^0.2.3",
     "mongodb-client-encryption": "^2.8.0",
     "mongoose": "^7.0.3",
+    "uuid": "^9.0.0",
     "winston": "^3.8.2"
   },
   "devDependencies": {
@@ -50,8 +51,7 @@
     "nodemon": "^3.1.11",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "^5.4.5",
-    "uuid": "^9.0.0"
+    "typescript": "^5.4.5"
   },
   "engines": {
     "node": "18.16.0"

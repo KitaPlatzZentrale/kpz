@@ -25,7 +25,7 @@ app.use(
       scriptSrc: ["'self'", "'unsafe-inline'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       frameAncestors: ["'none'"],
-      imgSrc: ["self"],
+      imgSrc: ["'self'"],
     },
   })
 );
