@@ -21,9 +21,52 @@ cd kpz
 
 ### 2. Environment Variables
 
-Each service requires a `.env` file. Contact the repository maintainers for the required values.
+Each service requires environment configuration. The frontend uses Vite's environment file hierarchy, while backend and Lambda services use standard `.env` files.
+
+#### Frontend Environment Configuration
+
+The frontend uses **multiple environment files** that Vite loads in priority order (for development mode):
+
+1. **`.env.development.local`** - Local development overrides (highest priority, **not committed to git**)
+2. **`.env.development`** - Development/staging deployment settings (committed to git)
+3. **`.env.local`** - General local overrides (lower priority)
+4. **`.env.production`** - Production deployment settings (committed to git)
+
+**For Local Development Setup:**
+
+```bash
+cd frontend
+
+# Create .env.development.local for local development (this overrides .env.development)
+cat > .env.development.local << 'EOF'
+# Local Development Environment
+# This file is NOT committed to git
+
+# Point to local backend
+VITE_BACKEND_URL=http://localhost:3000
+
+# Optionally override HERE Maps API key for testing
+# VITE_PUBLIC_HERE_API_KEY=your-test-key
+EOF
+```
+
+**How it works:**
+- `.env.development` contains the AWS API Gateway URL for deployed dev environment
+- `.env.development.local` overrides it with `http://localhost:3000` for local development
+- Vite automatically uses `.env.development.local` when running `npm run dev`
+- **Never commit `.env.development.local`** - it's already in `.gitignore`
+
+**Why this approach?**
+- No need to manually switch URLs between local and deployed environments
+- Each developer can have their own local configuration
+- Deployed environments use committed `.env.development` and `.env.production`
+
+**Frontend Environment Variables:**
+- `VITE_BACKEND_URL` - Backend API endpoint (`http://localhost:3000` locally, AWS API Gateway when deployed)
+- `VITE_PUBLIC_HERE_API_KEY` - HERE Maps API key for geocoding and maps
 
 #### Backend `.env`
+
 ```bash
 cd backend
 touch .env
@@ -34,19 +77,12 @@ Required variables:
 - AWS credentials (if not using IAM roles)
 - Datadog API key
 
-#### Frontend `.env`
-```bash
-cd frontend
-touch .env
-```
-
-Required variables:
-- `VITE_BACKEND_URL` - Backend API endpoint
-- `VITE_PUBLIC_HERE_API_KEY` - HERE Maps API key
-
 #### Lambda Services `.env`
 
-Each Lambda service (email, notification, scraper, location-service) needs its own `.env` file.
+Each Lambda service (email, notification, scraper, location-service) needs its own `.env` file with:
+- MongoDB connection string
+- AWS service credentials (SES, SNS, etc.)
+- Service-specific configuration
 
 ### 3. MongoDB Setup
 
