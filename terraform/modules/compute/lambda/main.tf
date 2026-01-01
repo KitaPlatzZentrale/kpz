@@ -18,8 +18,7 @@ resource "aws_lambda_function" "backend_api" {
   environment {
     variables = merge(
       {
-        NODE_ENV                 = var.environment
-        AWS_LAMBDA_FUNCTION_NAME = "kpz-backend-api-${var.environment}"
+        NODE_ENV = var.environment
       },
       var.environment_variables
     )
@@ -33,20 +32,6 @@ resource "aws_lambda_function" "backend_api" {
   }
 }
 
-# Lambda Function URL (replaces API Gateway)
-resource "aws_lambda_function_url" "backend_api" {
-  function_name      = aws_lambda_function.backend_api.function_name
-  authorization_type = "NONE"  # Public access (add auth later if needed)
-
-  cors {
-    allow_credentials = true
-    allow_origins     = var.cors_allow_origins
-    allow_methods     = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    allow_headers     = ["content-type", "authorization"]
-    max_age           = 86400
-  }
-}
-
 # CloudWatch Log Group
 resource "aws_cloudwatch_log_group" "backend_api" {
   name              = "/aws/lambda/kpz-backend-api-${var.environment}"
@@ -57,13 +42,4 @@ resource "aws_cloudwatch_log_group" "backend_api" {
     Environment = var.environment
     ManagedBy   = "terraform"
   }
-}
-
-# Lambda Permission for Function URL
-resource "aws_lambda_permission" "backend_api_url" {
-  statement_id           = "AllowFunctionURLInvoke"
-  action                 = "lambda:InvokeFunctionUrl"
-  function_name          = aws_lambda_function.backend_api.function_name
-  principal              = "*"
-  function_url_auth_type = "NONE"
 }

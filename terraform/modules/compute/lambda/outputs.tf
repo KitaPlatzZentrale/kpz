@@ -10,12 +10,12 @@ output "function_arn" {
   value       = aws_lambda_function.backend_api.arn
 }
 
-output "function_url" {
-  description = "Function URL for invoking the Lambda"
-  value       = aws_lambda_function_url.backend_api.function_url
+output "invoke_arn" {
+  description = "ARN to invoke the Lambda function"
+  value       = aws_lambda_function.backend_api.invoke_arn
 }
 
-output "function_url_id" {
-  description = "ID of the Function URL"
-  value       = aws_lambda_function_url.backend_api.url_id
+output "log_group_arn" {
+  description = "CloudWatch Log Group ARN"
+  value       = aws_cloudwatch_log_group.backend_api.arn
 }

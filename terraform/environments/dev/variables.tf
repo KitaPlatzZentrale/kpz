@@ -17,3 +17,20 @@ variable "mongodb_connection_string" {
   type        = string
   sensitive   = true
 }
+
+variable "api_key" {
+  description = "API key for backend services"
+  type        = string
+  sensitive   = true
+}
+
+variable "auth_key" {
+  description = "Authentication key for backend"
+  type        = string
+  sensitive   = true
+}
+
+variable "kita_api_url" {
+  description = "URL for Kita API"
+  type        = string
+}

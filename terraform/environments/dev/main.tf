@@ -2,7 +2,7 @@
 # Deploys Lambda-based infrastructure to kpz-dev AWS account
 
 terraform {
-  required_version = "= 1.14.3"
+  required_version = "= 1.13.1"
 
   required_providers {
     aws = {
@@ -17,11 +17,13 @@ terraform {
     region         = "eu-central-1"
     encrypt        = true
     use_lockfile   = true
+    profile        = "kpz-dev"
   }
 }
 
 provider "aws" {
-  region = var.aws_region
+  region  = var.aws_region
+  profile = "kpz-dev"
 
   default_tags {
     tags = {
@@ -52,6 +54,9 @@ module "lambda_backend_api" {
 
   environment_variables = {
     MONGO_DB_CONNECTION = var.mongodb_connection_string
+    API_KEY             = var.api_key
+    AUTH_KEY            = var.auth_key
+    KITA_API_URL        = var.kita_api_url
   }
 
   cors_allow_origins = [
@@ -61,9 +66,32 @@ module "lambda_backend_api" {
   log_retention_days = 7
 }
 
+# API Gateway Module - HTTP API for Lambda
+module "api_gateway" {
+  source = "../../modules/api-gateway"
+
+  environment          = "dev"
+  lambda_function_name = module.lambda_backend_api.function_name
+  lambda_invoke_arn    = module.lambda_backend_api.invoke_arn
+  log_group_arn        = module.lambda_backend_api.log_group_arn
+
+  cors_allow_origins = [
+    "*"  # Allow all origins for dev
+  ]
+}
+
 # S3 Module - Frontend
 module "s3_frontend" {
   source = "../../modules/storage/s3"
 
   environment = "dev"
+}
+
+# CloudFront CDN - HTTPS support for frontend
+module "cloudfront" {
+  source = "../../modules/cdn"
+
+  environment          = "dev"
+  s3_bucket_name       = module.s3_frontend.bucket_name
+  s3_website_endpoint  = module.s3_frontend.website_endpoint
 }
