@@ -262,7 +262,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
             <span className="ml-2">Lade Adressen...</span>
           </span>
         }
-        value={selectedAddress || undefined}
+        value={selectedAddress || ""}
         noOptionsText="Keine Adressen gefunden"
         startDecorator={<Home />}
         inputProps={{

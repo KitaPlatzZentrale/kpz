@@ -45,17 +45,18 @@ const KitaList: React.FC<KitaListProps> = ({ kitas, className }) => {
           kitas.map((kita, index) => {
             if (advertisementIndex === index) {
               return (
-                <>
+                <React.Fragment key={kita.uuid}>
                   <ServiceBanner />
                   <KitaListItem
                     id={generateElementScrollAnchor(kita.uuid)}
                     kita={kita}
                   />
-                </>
+                </React.Fragment>
               );
             } else
               return (
                 <KitaListItem
+                  key={kita.uuid}
                   id={generateElementScrollAnchor(kita.uuid)}
                   kita={kita}
                 />
