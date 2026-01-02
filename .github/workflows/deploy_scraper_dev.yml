@@ -1,0 +1,124 @@
+name: Deploy Scraper to AWS Lambda (Dev)
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'scraper/**'
+      - '.github/workflows/deploy_scraper_dev.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.0'
+          cache: 'npm'
+          cache-dependency-path: scraper/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd scraper
+          npm ci
+
+      - name: Build scraper
+        run: |
+          cd scraper
+          npm run build
+
+      - name: Verify deployment package
+        run: |
+          cd scraper
+          echo "Scraper package details:"
+          ls -lh dist/index.zip
+          unzip -l dist/index.zip | head -20
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-central-1
+
+      - name: Upload Lambda package to S3
+        run: |
+          # Upload to S3 with timestamp
+          aws s3 cp scraper/dist/index.zip s3://kpz-terraform-state/lambda-deployments/kpz-scraper-dev-$(date +%Y%m%d-%H%M%S).zip \
+            --region eu-central-1
+
+          # Upload as "latest" for the update command
+          aws s3 cp scraper/dist/index.zip s3://kpz-terraform-state/lambda-deployments/kpz-scraper-dev-latest.zip \
+            --region eu-central-1
+
+      - name: Update Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name kpz-scraper-dev \
+            --s3-bucket kpz-terraform-state \
+            --s3-key lambda-deployments/kpz-scraper-dev-latest.zip \
+            --region eu-central-1
+
+      - name: Wait for Lambda update to complete
+        run: |
+          aws lambda wait function-updated \
+            --function-name kpz-scraper-dev \
+            --region eu-central-1
+
+      - name: Verify deployment
+        run: |
+          echo "## Lambda Function Details" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          aws lambda get-function \
+            --function-name kpz-scraper-dev \
+            --region eu-central-1 \
+            --query 'Configuration.[FunctionName,Runtime,Handler,MemorySize,Timeout,LastModified,State]' \
+            --output table >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Get EventBridge schedule status
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## EventBridge Schedule Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          aws scheduler get-schedule \
+            --name kpz-dev-scraper-daily \
+            --region eu-central-1 \
+            --query '{Name:Name,State:State,ScheduleExpression:ScheduleExpression,Target:Target.Arn}' \
+            --output json >> $GITHUB_STEP_SUMMARY || echo "Schedule not found (will be created by Terraform)" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Deployment summary
+        if: success()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **Scraper deployed to AWS Lambda (dev)**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Function: **kpz-scraper-dev**" >> $GITHUB_STEP_SUMMARY
+          echo "- Region: **eu-central-1**" >> $GITHUB_STEP_SUMMARY
+          echo "- Runtime: **nodejs18.x**" >> $GITHUB_STEP_SUMMARY
+          echo "- Schedule: **Daily at 2 AM UTC**" >> $GITHUB_STEP_SUMMARY
+          echo "- Next run: Check EventBridge schedule above" >> $GITHUB_STEP_SUMMARY
+
+      - name: Failure summary
+        if: failure()
+        run: |
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "❌ **Scraper deployment failed**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Check the logs above for error details." >> $GITHUB_STEP_SUMMARY

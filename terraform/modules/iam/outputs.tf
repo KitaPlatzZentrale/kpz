@@ -19,3 +19,8 @@ output "lambda_notification_service_role_arn" {
   description = "ARN of the Lambda notification service execution role"
   value       = aws_iam_role.lambda_notification_service.arn
 }
+
+output "lambda_scraper_service_role_arn" {
+  description = "ARN of the Lambda scraper service execution role"
+  value       = aws_iam_role.lambda_scraper_service.arn
+}

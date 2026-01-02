@@ -51,7 +51,12 @@ module "iam" {
 module "lambda_backend_api" {
   source = "../../modules/compute/lambda"
 
-  environment   = "dev"
+  environment     = "dev"
+  function_name   = "backend-api"
+  handler         = "lambda.handler"
+  runtime         = "nodejs18.x"
+  timeout         = 30
+  memory_size     = 512
   lambda_role_arn = module.iam.lambda_backend_api_role_arn
   lambda_zip_path = "${path.module}/../../../backend/dist/lambda.zip"
 
@@ -62,9 +67,25 @@ module "lambda_backend_api" {
     KITA_API_URL        = var.kita_api_url
   }
 
-  cors_allow_origins = [
-    "*"  # Allow all origins for dev
-  ]
+  log_retention_days = 7
+}
+
+# Lambda Module - Scraper Service
+module "lambda_scraper" {
+  source = "../../modules/compute/lambda"
+
+  environment     = "dev"
+  function_name   = "scraper"
+  handler         = "index.handler"
+  runtime         = "nodejs18.x"
+  timeout         = 300 # 5 minutes for scraping operations
+  memory_size     = 512
+  lambda_role_arn = module.iam.lambda_scraper_service_role_arn
+  lambda_zip_path = "${path.module}/../../../scraper/dist/index.zip"
+
+  environment_variables = {
+    MONGO_DB_CONNECTION = var.mongodb_connection_string
+  }
 
   log_retention_days = 7
 }
@@ -97,4 +118,20 @@ module "cloudfront" {
   environment          = "dev"
   s3_bucket_name       = module.s3_frontend.bucket_name
   s3_website_endpoint  = module.s3_frontend.website_endpoint
+}
+
+# EventBridge Schedule - Scraper (Daily at 2 AM UTC)
+module "eventbridge_scraper" {
+  source = "../../modules/messaging/eventbridge"
+
+  environment                  = "dev"
+  schedule_name                = "kpz-dev-scraper-daily"
+  schedule_description         = "Triggers Kita data scraper daily at 2 AM UTC"
+  schedule_expression          = "cron(0 2 * * ? *)" # Daily at 2 AM UTC
+  schedule_timezone            = "UTC"
+  schedule_enabled             = true
+  target_lambda_arn            = module.lambda_scraper.function_arn
+  target_lambda_function_name  = module.lambda_scraper.function_name
+  max_event_age_seconds        = 3600  # 1 hour
+  max_retry_attempts           = 2
 }

@@ -385,3 +385,32 @@ resource "aws_iam_role_policy" "lambda_notification_service_sns" {
     ]
   })
 }
+
+# Lambda Execution Role - Scraper Service
+resource "aws_iam_role" "lambda_scraper_service" {
+  name = "lambda-scraper-service-${var.environment}"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  tags = {
+    Name        = "lambda-scraper-service-${var.environment}"
+    Environment = var.environment
+    ManagedBy   = "terraform"
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_scraper_service_basic" {
+  role       = aws_iam_role.lambda_scraper_service.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}

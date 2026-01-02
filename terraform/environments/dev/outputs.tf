@@ -29,3 +29,25 @@ output "cloudfront_distribution_id" {
   description = "CloudFront distribution ID"
   value       = module.cloudfront.distribution_id
 }
+
+# Lambda Function Outputs
+output "lambda_backend_api_name" {
+  description = "Backend API Lambda function name"
+  value       = module.lambda_backend_api.function_name
+}
+
+output "lambda_scraper_name" {
+  description = "Scraper Lambda function name"
+  value       = module.lambda_scraper.function_name
+}
+
+# EventBridge Schedule Outputs
+output "scraper_schedule_arn" {
+  description = "EventBridge schedule ARN for scraper"
+  value       = module.eventbridge_scraper.schedule_arn
+}
+
+output "scraper_schedule_state" {
+  description = "EventBridge schedule state (ENABLED or DISABLED)"
+  value       = module.eventbridge_scraper.schedule_state
+}
