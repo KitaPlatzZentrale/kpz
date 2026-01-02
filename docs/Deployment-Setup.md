@@ -246,6 +246,136 @@ AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform apply
 
 This allows the same configuration to work in both environments without modification.
 
+### When to Run Terraform Locally vs CI/CD
+
+Understanding when to run Terraform locally versus letting GitHub Actions handle it is crucial for efficient development.
+
+#### ✅ Run Terraform Locally When:
+
+1. **Initial Setup / Bootstrapping**
+   - Creating the IAM role for GitHub Actions (chicken-and-egg problem)
+   - Setting up the Terraform state bucket and DynamoDB lock table
+   - First-time infrastructure deployment before CI/CD is configured
+
+   ```bash
+   # Example: Bootstrap IAM role for GitHub Actions
+   cd terraform/environments/dev
+   AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform apply
+   ```
+
+2. **Testing Infrastructure Changes**
+   - Running `terraform plan` to preview changes before committing
+   - Validating Terraform syntax and configuration
+   - Debugging infrastructure issues
+
+   ```bash
+   # Test your changes locally first
+   AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform plan
+   ```
+
+3. **Emergency Fixes**
+   - Critical infrastructure issues that can't wait for CI/CD
+   - Unlocking stuck Terraform state
+   - Rolling back problematic changes quickly
+
+   ```bash
+   # Example: Force unlock stuck state
+   terraform force-unlock <LOCK_ID>
+   ```
+
+4. **Development Iteration**
+   - Rapid iteration on complex infrastructure changes
+   - When you need immediate feedback without committing
+   - Testing changes to Terraform modules
+
+#### 🤖 Let CI/CD Run Terraform When:
+
+1. **Normal Development Workflow** ✅ Preferred
+   - Making infrastructure changes during regular development
+   - Changes are reviewed and ready to apply
+   - Part of the standard git workflow
+
+   ```bash
+   # Make changes to Terraform files
+   git add terraform/
+   git commit -m "feat: Add new Lambda function"
+   git push origin dev  # CI/CD automatically runs terraform apply
+   ```
+
+2. **Production Deployments**
+   - Merging to main branch (requires PR approval)
+   - Ensures infrastructure changes are reviewed
+   - Provides audit trail via GitHub Actions logs
+
+   ```bash
+   # Create PR to main branch
+   gh pr create --base main --head dev
+   # Terraform runs plan on PR, apply on merge
+   ```
+
+3. **Collaborative Development**
+   - Multiple developers working on infrastructure
+   - Prevents conflicting manual changes
+   - Ensures consistent deployment process
+
+#### Workflow Recommendation
+
+**Standard Development Flow:**
+
+```bash
+# 1. Make infrastructure changes
+vim terraform/environments/dev/main.tf
+
+# 2. Test locally (optional but recommended)
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform plan
+
+# 3. Commit and push (triggers CI/CD)
+git add terraform/
+git commit -m "feat: Add CloudWatch alarm"
+git push origin dev
+
+# 4. Monitor GitHub Actions workflow
+gh run watch
+
+# 5. Verify deployment
+aws lambda list-functions --profile kpz-dev
+```
+
+**Emergency/Bootstrap Flow:**
+
+```bash
+# 1. Login to AWS
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev aws sso login --profile kpz-dev
+
+# 2. Apply immediately
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform apply
+
+# 3. Commit changes afterward for audit trail
+git add terraform/
+git commit -m "fix: Emergency infrastructure fix"
+git push origin dev
+```
+
+#### Key Differences
+
+| Aspect | Local Execution | CI/CD Execution |
+|--------|----------------|-----------------|
+| **Trigger** | Manual command | Git push to dev/main |
+| **Authentication** | AWS SSO profile | OIDC (automated) |
+| **State Lock** | Manual unlock if stuck | Auto-managed |
+| **Audit Trail** | Local only | GitHub Actions logs |
+| **Approval** | None | Production requires PR review |
+| **Variables** | From terraform.tfvars | From GitHub Secrets |
+| **Use Case** | Bootstrap, testing, emergency | Normal development, production |
+
+#### Best Practices
+
+1. **Always run `terraform plan` locally before pushing** to catch errors early
+2. **Use CI/CD for production** to ensure review and audit trail
+3. **Document emergency local runs** with commit messages explaining why
+4. **Keep terraform.tfvars in sync** with GitHub Environment secrets
+5. **Avoid running local apply on production** unless absolutely necessary
+
 ## Troubleshooting
 
 ### Deployment fails with "Access Denied"
