@@ -44,6 +44,13 @@ jobs:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-central-1
 
+      - name: Set Terraform Variables
+        run: |
+          echo "TF_VAR_mongodb_connection_string=${{ secrets.MONGODB_CONNECTION_STRING }}" >> $GITHUB_ENV
+          echo "TF_VAR_api_key=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_auth_key=${{ secrets.AUTH_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_kita_api_url=${{ secrets.KITA_API_URL }}" >> $GITHUB_ENV
+
       - name: Terraform Init
         run: terraform init
 
@@ -113,6 +120,13 @@ jobs:
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: eu-central-1
+
+      - name: Set Terraform Variables
+        run: |
+          echo "TF_VAR_mongodb_connection_string=${{ secrets.MONGODB_CONNECTION_STRING }}" >> $GITHUB_ENV
+          echo "TF_VAR_api_key=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_auth_key=${{ secrets.AUTH_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_kita_api_url=${{ secrets.KITA_API_URL }}" >> $GITHUB_ENV
 
       - name: Terraform Init
         run: terraform init
