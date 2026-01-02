@@ -216,6 +216,36 @@ aws cloudfront create-invalidation \
   --region eu-central-1
 ```
 
+## Local Terraform Development
+
+The Terraform configuration in `terraform/environments/dev/` is designed to work in both local development and GitHub Actions environments.
+
+### Local Development Setup
+
+When running Terraform locally, use the `AWS_PROFILE` and `AWS_CONFIG_FILE` environment variables:
+
+```bash
+cd terraform/environments/dev
+
+# Login to AWS SSO
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev aws sso login --profile kpz-dev
+
+# Initialize Terraform
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform init
+
+# Plan changes
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform plan
+
+# Apply changes
+AWS_CONFIG_FILE=~/.aws/config-personal AWS_PROFILE=kpz-dev terraform apply
+```
+
+**Note:** The Terraform configuration no longer includes hardcoded `profile` parameters. Instead:
+- **Local development**: Use `AWS_PROFILE` environment variable
+- **GitHub Actions**: Uses OIDC authentication (credentials provided automatically)
+
+This allows the same configuration to work in both environments without modification.
+
 ## Troubleshooting
 
 ### Deployment fails with "Access Denied"

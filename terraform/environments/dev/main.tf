@@ -18,13 +18,15 @@ terraform {
     region         = "eu-central-1"
     encrypt        = true
     use_lockfile   = true
-    profile        = "kpz-dev"
+    # profile is set via AWS_PROFILE environment variable for local development
+    # GitHub Actions uses OIDC authentication (no profile needed)
   }
 }
 
 provider "aws" {
   region  = var.aws_region
-  profile = "kpz-dev"
+  # profile is set via AWS_PROFILE environment variable for local development
+  # GitHub Actions uses OIDC authentication (no profile needed)
 
   default_tags {
     tags = {
