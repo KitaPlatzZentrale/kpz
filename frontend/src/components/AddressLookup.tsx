@@ -88,6 +88,10 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
         }
       );
 
+      if (!response.ok) {
+        throw Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const responseJson = await response.json();
 
       if (!responseJson.items) {
@@ -105,7 +109,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     }
   };
 
-  const fetchAddressByLatLng = async (lat: number, lng: number) => {
+  const fetchAddressByLatLng = async (lat: number, lng: number): Promise<string> => {
     setHasFetchingError(false);
 
     try {
@@ -117,6 +121,10 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
           method: "GET",
         }
       );
+
+      if (!response.ok) {
+        throw Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const responseJson = await response.json();
 
@@ -130,6 +138,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
     } catch (error) {
       console.error("Error fetching address:", error);
       setHasFetchingError(true);
+      return ""; // Always return a string, even on error
     }
   };
 
@@ -144,6 +153,10 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
           method: "GET",
         }
       );
+
+      if (!response.ok) {
+        throw Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const responseJson = await response.json();
 
