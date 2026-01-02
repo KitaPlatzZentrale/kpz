@@ -17,19 +17,34 @@ The project uses GitHub Actions for automated deployments:
 - **Frontend**: S3 static hosting with CloudFront CDN
 - **Infrastructure**: Managed by Terraform in `terraform/environments/dev/`
 
-## GitHub Secrets Configuration
+## GitHub Environments and Secrets Configuration
 
-To enable automated deployments, configure these secrets in GitHub:
+To enable automated deployments, configure GitHub Environments with their secrets.
 
-### Required Secrets
+### Setup GitHub Environments
 
-Navigate to: **Repository Settings → Secrets and variables → Actions**
+Navigate to: **Repository Settings → Environments**
 
-#### 1. `AWS_DEPLOY_ROLE_ARN_DEV`
+#### Create Two Environments:
+
+1. **dev** - Development environment
+2. **prod** - Production environment (with approval gates)
+
+### Environment Secrets
+
+For **each environment**, add these secrets:
+
+Navigate to: **Repository Settings → Environments → [env name] → Secrets**
+
+#### 1. `AWS_DEPLOY_ROLE_ARN`
 
 IAM role ARN for OIDC authentication (recommended approach).
 
 **Value format**: `arn:aws:iam::ACCOUNT_ID:role/GitHubActionsDeployRole`
+
+**Important:** Same secret name for both environments, different values:
+- **dev environment**: Points to dev AWS account role
+- **prod environment**: Points to prod AWS account role
 
 **How to create this role:**
 
@@ -205,7 +220,7 @@ aws cloudfront create-invalidation \
 
 ### Deployment fails with "Access Denied"
 
-- Check that `AWS_DEPLOY_ROLE_ARN_DEV` secret is correct
+- Check that `AWS_DEPLOY_ROLE_ARN` secret is correct in the "dev" environment
 - Verify the IAM role has the required permissions
 - Ensure the trust policy allows the GitHub repository
 
