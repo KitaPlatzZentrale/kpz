@@ -172,6 +172,79 @@ resource "aws_iam_role_policy" "github_actions_terraform" {
   })
 }
 
+# GitHub Actions Policy - Terraform Infrastructure Management
+resource "aws_iam_role_policy" "github_actions_terraform_infra" {
+  name = "terraform-infrastructure-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      # Lambda permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "lambda:*"
+        ]
+        Resource = "arn:aws:lambda:${var.aws_region}:*:function:kpz-*-${var.environment}"
+      },
+      # API Gateway permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "apigateway:*"
+        ]
+        Resource = [
+          "arn:aws:apigateway:${var.aws_region}::/apis",
+          "arn:aws:apigateway:${var.aws_region}::/apis/*"
+        ]
+      },
+      # S3 permissions for all operations
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:*"
+        ]
+        Resource = [
+          "arn:aws:s3:::kpz-*-${var.environment}",
+          "arn:aws:s3:::kpz-*-${var.environment}/*"
+        ]
+      },
+      # CloudFront permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudfront:*"
+        ]
+        Resource = "*"
+      },
+      # CloudWatch Logs permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:*"
+        ]
+        Resource = "arn:aws:logs:${var.aws_region}:*:log-group:/aws/lambda/kpz-*-${var.environment}*"
+      },
+      # IAM role attachments
+      {
+        Effect = "Allow"
+        Action = [
+          "iam:AttachRolePolicy",
+          "iam:DetachRolePolicy",
+          "iam:CreateRole",
+          "iam:DeleteRole",
+          "iam:PassRole"
+        ]
+        Resource = [
+          "arn:aws:iam::*:role/lambda-*-${var.environment}",
+          "arn:aws:iam::*:role/github-actions-*-${var.environment}"
+        ]
+      }
+    ]
+  })
+}
+
 # Lambda Execution Role - Backend API
 resource "aws_iam_role" "lambda_backend_api" {
   name = "lambda-backend-api-${var.environment}"
