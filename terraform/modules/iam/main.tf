@@ -119,6 +119,59 @@ resource "aws_iam_role_policy" "github_actions_frontend" {
   })
 }
 
+# GitHub Actions Policy - Terraform State Management
+resource "aws_iam_role_policy" "github_actions_terraform" {
+  name = "terraform-state-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "arn:aws:s3:::kpz-terraform-state",
+          "arn:aws:s3:::kpz-terraform-state/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "dynamodb:PutItem",
+          "dynamodb:GetItem",
+          "dynamodb:DeleteItem",
+          "dynamodb:DescribeTable"
+        ]
+        Resource = "arn:aws:dynamodb:${var.aws_region}:*:table/kpz-terraform-state-lock"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "iam:GetRole",
+          "iam:GetRolePolicy",
+          "iam:ListRolePolicies",
+          "iam:ListAttachedRolePolicies",
+          "iam:PutRolePolicy",
+          "iam:DeleteRolePolicy",
+          "iam:UpdateAssumeRolePolicy",
+          "iam:GetOpenIDConnectProvider"
+        ]
+        Resource = [
+          "arn:aws:iam::*:role/github-actions-*",
+          "arn:aws:iam::*:role/lambda-*",
+          "arn:aws:iam::*:oidc-provider/token.actions.githubusercontent.com"
+        ]
+      }
+    ]
+  })
+}
+
 # Lambda Execution Role - Backend API
 resource "aws_iam_role" "lambda_backend_api" {
   name = "lambda-backend-api-${var.environment}"
