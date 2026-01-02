@@ -10,7 +10,7 @@ resource "aws_lambda_function" "backend_api" {
 
   # Deployment package (will be updated via CI/CD)
   filename         = var.lambda_zip_path
-  source_code_hash = filebase64sha256(var.lambda_zip_path)
+  source_code_hash = fileexists(var.lambda_zip_path) ? filebase64sha256(var.lambda_zip_path) : null
 
   timeout     = 30  # seconds
   memory_size = 512 # MB
@@ -29,6 +29,15 @@ resource "aws_lambda_function" "backend_api" {
     Environment = var.environment
     ManagedBy   = "terraform"
     Service     = "backend-api"
+  }
+
+  # Ignore changes to deployment package
+  # Code is deployed separately via backend deployment workflow
+  lifecycle {
+    ignore_changes = [
+      filename,
+      source_code_hash
+    ]
   }
 }
 

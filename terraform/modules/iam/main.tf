@@ -222,9 +222,22 @@ resource "aws_iam_role_policy" "github_actions_terraform_infra" {
       {
         Effect = "Allow"
         Action = [
-          "logs:*"
+          "logs:CreateLogGroup",
+          "logs:DeleteLogGroup",
+          "logs:PutRetentionPolicy",
+          "logs:TagLogGroup",
+          "logs:UntagLogGroup"
         ]
         Resource = "arn:aws:logs:${var.aws_region}:*:log-group:/aws/lambda/kpz-*-${var.environment}*"
+      },
+      # CloudWatch Logs list operations (require * resource)
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:DescribeLogGroups",
+          "logs:ListTagsLogGroup"
+        ]
+        Resource = "*"
       },
       # IAM role attachments
       {
