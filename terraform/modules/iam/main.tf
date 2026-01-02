@@ -83,6 +83,42 @@ resource "aws_iam_role_policy" "github_actions_lambda" {
   })
 }
 
+# GitHub Actions Policy - S3 and CloudFront Deployment
+resource "aws_iam_role_policy" "github_actions_frontend" {
+  name = "frontend-deployment-policy"
+  role = aws_iam_role.github_actions.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:PutObjectAcl",
+          "s3:GetObject",
+          "s3:DeleteObject",
+          "s3:ListBucket"
+        ]
+        Resource = [
+          "arn:aws:s3:::kpz-${var.environment}-frontend",
+          "arn:aws:s3:::kpz-${var.environment}-frontend/*"
+        ]
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "cloudfront:CreateInvalidation",
+          "cloudfront:GetInvalidation",
+          "cloudfront:ListInvalidations",
+          "cloudfront:ListDistributions"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 # Lambda Execution Role - Backend API
 resource "aws_iam_role" "lambda_backend_api" {
   name = "lambda-backend-api-${var.environment}"
