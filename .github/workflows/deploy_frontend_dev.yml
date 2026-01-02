@@ -69,7 +69,7 @@ jobs:
         id: cloudfront
         run: |
           DISTRIBUTION_ID=$(aws cloudfront list-distributions \
-            --query "DistributionList.Items[?Origins.Items[?DomainName=='kpz-frontend-dev.s3.eu-central-1.amazonaws.com']].Id | [0]" \
+            --query "DistributionList.Items[?Origins.Items[?DomainName=='kpz-frontend-dev.s3-website.eu-central-1.amazonaws.com']].Id | [0]" \
             --output text \
             --region eu-central-1)
           echo "distribution_id=$DISTRIBUTION_ID" >> $GITHUB_OUTPUT
