@@ -61,12 +61,8 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Request Payload Limiting
-// Note: In Lambda, body parsing is handled by the lambda.ts middleware
-// Only use Express body-parser when running locally
-if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
-  app.use(express.json({ limit: "100kb" }));
-  app.use(express.urlencoded({ extended: true, limit: "100kb" }));
-}
+app.use(express.json({ limit: "100kb" }));
+app.use(express.urlencoded({ extended: true, limit: "100kb" }));
 
 app.use(cors());
 
