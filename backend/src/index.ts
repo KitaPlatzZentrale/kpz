@@ -55,8 +55,8 @@ const limiter = rateLimit({
   statusCode: 429, // Too Many Requests (RFC 6585)
   standardHeaders: true, // Return rate limit info in the "Rate-Limit-*" header
   legacyHeaders: false, // Disable the "X-RateLimit-*" headers
-  // Skip rate limiting validation for API Gateway proxy
-  validate: { trustProxy: false },
+  // Skip validation warnings for API Gateway proxy
+  validate: false,
 });
 app.use(limiter);
 
