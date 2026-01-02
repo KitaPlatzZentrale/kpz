@@ -65,15 +65,23 @@ jobs:
             --cache-control "public,max-age=0,must-revalidate" \
             --region eu-central-1
 
-      - name: Get CloudFront distribution ID
+      - name: Get CloudFront distribution ID and URL
         id: cloudfront
         run: |
           DISTRIBUTION_ID=$(aws cloudfront list-distributions \
             --query "DistributionList.Items[?Origins.Items[?DomainName=='kpz-frontend-dev.s3-website.eu-central-1.amazonaws.com']].Id | [0]" \
             --output text \
             --region eu-central-1)
+
+          DISTRIBUTION_URL=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Origins.Items[?DomainName=='kpz-frontend-dev.s3-website.eu-central-1.amazonaws.com']].DomainName | [0]" \
+            --output text \
+            --region eu-central-1)
+
           echo "distribution_id=$DISTRIBUTION_ID" >> $GITHUB_OUTPUT
+          echo "distribution_url=https://$DISTRIBUTION_URL" >> $GITHUB_OUTPUT
           echo "CloudFront Distribution ID: $DISTRIBUTION_ID"
+          echo "CloudFront URL: https://$DISTRIBUTION_URL"
 
       - name: Invalidate CloudFront cache
         run: |
@@ -87,6 +95,7 @@ jobs:
           echo "✅ Frontend deployed to S3/CloudFront (dev)"
           echo "S3 Bucket: kpz-frontend-dev"
           echo "CloudFront Distribution: ${{ steps.cloudfront.outputs.distribution_id }}"
+          echo "CloudFront URL: ${{ steps.cloudfront.outputs.distribution_url }}"
           echo "Region: eu-central-1"
           echo ""
           echo "Note: CloudFront cache invalidation may take a few minutes to propagate globally."
