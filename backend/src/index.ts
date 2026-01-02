@@ -61,8 +61,12 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Request Payload Limiting
-app.use(express.json({ limit: "100kb" }));
-app.use(express.urlencoded({ extended: true, limit: "100kb" }));
+// Note: serverless-express handles body parsing automatically in Lambda
+// Only apply these middlewares when running locally
+if (!process.env.AWS_LAMBDA_FUNCTION_NAME) {
+  app.use(express.json({ limit: "100kb" }));
+  app.use(express.urlencoded({ extended: true, limit: "100kb" }));
+}
 
 app.use(cors());
 
