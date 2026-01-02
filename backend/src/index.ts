@@ -15,6 +15,9 @@ checkIfAllEnvVariablesAreSet();
 
 const app = express();
 
+// Trust proxy headers from API Gateway (required for rate limiting and security)
+app.set('trust proxy', true);
+
 // Base Helmet utilization
 app.use(helmet()); // Helmpflicht.
 app.use(helmet.hsts({ maxAge: 31536000 })); // Helmpflicht.
