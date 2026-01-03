@@ -8,6 +8,9 @@ resource "aws_cloudfront_distribution" "frontend" {
   default_root_object = "index.html"
   price_class         = "PriceClass_100"  # US, Canada, Europe
 
+  # Custom domain names (aliases)
+  aliases = var.domain_name != null ? concat([var.domain_name], var.alternate_domain_names) : []
+
   origin {
     domain_name = var.s3_website_endpoint
     origin_id   = "S3-${var.s3_bucket_name}"
@@ -46,7 +49,11 @@ resource "aws_cloudfront_distribution" "frontend" {
   }
 
   viewer_certificate {
-    cloudfront_default_certificate = true
+    # Use custom certificate if domain_name is provided
+    cloudfront_default_certificate = var.domain_name == null ? true : false
+    acm_certificate_arn            = var.acm_certificate_arn
+    ssl_support_method             = var.domain_name != null ? "sni-only" : null
+    minimum_protocol_version       = var.domain_name != null ? "TLSv1.2_2021" : null
   }
 
   # Custom error response for SPA routing

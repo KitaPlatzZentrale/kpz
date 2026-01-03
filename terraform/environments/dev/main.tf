@@ -37,6 +37,22 @@ provider "aws" {
   }
 }
 
+# Additional provider for ACM certificates (CloudFront requires us-east-1)
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+  # profile is set via AWS_PROFILE environment variable for local development
+  # GitHub Actions uses OIDC authentication (no profile needed)
+
+  default_tags {
+    tags = {
+      Project     = "KPZ"
+      Environment = "dev"
+      ManagedBy   = "Terraform"
+    }
+  }
+}
+
 # IAM Module
 module "iam" {
   source = "../../modules/iam"
@@ -119,6 +135,22 @@ module "s3_lambda_artifacts" {
   environment = "dev"
 }
 
+# ACM Certificate - SSL/TLS for CloudFront
+module "acm_certificate" {
+  source = "../../modules/acm-certificate"
+
+  providers = {
+    aws.us-east-1 = aws.us-east-1
+  }
+
+  environment               = "dev"
+  domain_name               = "kitaplatz-zentrale.de"
+  subject_alternative_names = ["www.kitaplatz-zentrale.de"]
+
+  # Set to false since DNS validation is in management account
+  auto_validate = false
+}
+
 # CloudFront CDN - HTTPS support for frontend
 module "cloudfront" {
   source = "../../modules/cdn"
@@ -126,6 +158,11 @@ module "cloudfront" {
   environment          = "dev"
   s3_bucket_name       = module.s3_frontend.bucket_name
   s3_website_endpoint  = module.s3_frontend.website_endpoint
+
+  # Custom domain configuration
+  domain_name            = "kitaplatz-zentrale.de"
+  alternate_domain_names = ["www.kitaplatz-zentrale.de"]
+  acm_certificate_arn    = module.acm_certificate.certificate_arn
 }
 
 # EventBridge Schedule - Scraper (Daily at 2 AM UTC)
