@@ -37,6 +37,22 @@ provider "aws" {
   }
 }
 
+# Additional provider for ACM certificates (CloudFront requires us-east-1)
+provider "aws" {
+  alias  = "us-east-1"
+  region = "us-east-1"
+  # profile is set via AWS_PROFILE environment variable for local development
+  # GitHub Actions uses OIDC authentication (no profile needed)
+
+  default_tags {
+    tags = {
+      Project     = "KPZ"
+      Environment = "dev"
+      ManagedBy   = "Terraform"
+    }
+  }
+}
+
 # IAM Module
 module "iam" {
   source = "../../modules/iam"
