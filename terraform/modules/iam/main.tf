@@ -218,6 +218,20 @@ resource "aws_iam_role_policy" "github_actions_terraform_infra" {
         ]
         Resource = "*"
       },
+      # ACM permissions (required for CloudFront certificates in us-east-1)
+      {
+        Effect = "Allow"
+        Action = [
+          "acm:RequestCertificate",
+          "acm:DescribeCertificate",
+          "acm:DeleteCertificate",
+          "acm:ListCertificates",
+          "acm:AddTagsToCertificate",
+          "acm:RemoveTagsFromCertificate",
+          "acm:ListTagsForCertificate"
+        ]
+        Resource = "*"
+      },
       # CloudWatch Logs permissions
       {
         Effect = "Allow"
