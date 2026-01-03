@@ -266,7 +266,8 @@ resource "aws_iam_role_policy" "github_actions_terraform_infra" {
         Action = [
           "iam:PutRolePolicy",
           "iam:DeleteRolePolicy",
-          "iam:GetRolePolicy"
+          "iam:GetRolePolicy",
+          "iam:ListRolePolicies"
         ]
         Resource = [
           "arn:aws:iam::*:role/lambda-*-${var.environment}",
