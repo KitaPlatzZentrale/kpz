@@ -54,20 +54,20 @@ jobs:
 
       - name: Upload Lambda package to S3
         run: |
-          # Upload to S3 with timestamp
-          aws s3 cp scraper/dist/index.zip s3://kpz-terraform-state/lambda-deployments/kpz-scraper-dev-$(date +%Y%m%d-%H%M%S).zip \
+          # Upload to S3 with timestamp (versioned)
+          aws s3 cp scraper/dist/index.zip s3://kpz-lambda-artifacts-dev/scraper/kpz-scraper-dev-$(date +%Y%m%d-%H%M%S).zip \
             --region eu-central-1
 
           # Upload as "latest" for the update command
-          aws s3 cp scraper/dist/index.zip s3://kpz-terraform-state/lambda-deployments/kpz-scraper-dev-latest.zip \
+          aws s3 cp scraper/dist/index.zip s3://kpz-lambda-artifacts-dev/scraper/kpz-scraper-dev-latest.zip \
             --region eu-central-1
 
       - name: Update Lambda function
         run: |
           aws lambda update-function-code \
             --function-name kpz-scraper-dev \
-            --s3-bucket kpz-terraform-state \
-            --s3-key lambda-deployments/kpz-scraper-dev-latest.zip \
+            --s3-bucket kpz-lambda-artifacts-dev \
+            --s3-key scraper/kpz-scraper-dev-latest.zip \
             --region eu-central-1
 
       - name: Wait for Lambda update to complete

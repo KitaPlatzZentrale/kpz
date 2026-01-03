@@ -72,20 +72,20 @@ jobs:
 
       - name: Upload Lambda package to S3
         run: |
-          # Upload to S3 (package is too large for direct Lambda upload)
-          aws s3 cp backend/lambda.zip s3://kpz-terraform-state/lambda-deployments/kpz-backend-api-dev-$(date +%Y%m%d-%H%M%S).zip \
+          # Upload to S3 with timestamp (versioned)
+          aws s3 cp backend/lambda.zip s3://kpz-lambda-artifacts-dev/backend-api/kpz-backend-api-dev-$(date +%Y%m%d-%H%M%S).zip \
             --region eu-central-1
 
-          # Also upload as "latest" for the update command
-          aws s3 cp backend/lambda.zip s3://kpz-terraform-state/lambda-deployments/kpz-backend-api-dev-latest.zip \
+          # Upload as "latest" for the update command
+          aws s3 cp backend/lambda.zip s3://kpz-lambda-artifacts-dev/backend-api/kpz-backend-api-dev-latest.zip \
             --region eu-central-1
 
       - name: Update Lambda function
         run: |
           aws lambda update-function-code \
             --function-name kpz-backend-api-dev \
-            --s3-bucket kpz-terraform-state \
-            --s3-key lambda-deployments/kpz-backend-api-dev-latest.zip \
+            --s3-bucket kpz-lambda-artifacts-dev \
+            --s3-key backend-api/kpz-backend-api-dev-latest.zip \
             --region eu-central-1
 
       - name: Wait for Lambda update to complete
