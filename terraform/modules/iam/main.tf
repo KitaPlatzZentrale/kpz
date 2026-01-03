@@ -248,12 +248,44 @@ resource "aws_iam_role_policy" "github_actions_terraform_infra" {
           "iam:DetachRolePolicy",
           "iam:CreateRole",
           "iam:DeleteRole",
-          "iam:PassRole"
+          "iam:PassRole",
+          "iam:GetRole",
+          "iam:TagRole",
+          "iam:UntagRole",
+          "iam:ListRoleTags"
         ]
         Resource = [
           "arn:aws:iam::*:role/lambda-*-${var.environment}",
-          "arn:aws:iam::*:role/github-actions-*-${var.environment}"
+          "arn:aws:iam::*:role/github-actions-*-${var.environment}",
+          "arn:aws:iam::*:role/kpz-${var.environment}-*"
         ]
+      },
+      # IAM role policy permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "iam:PutRolePolicy",
+          "iam:DeleteRolePolicy",
+          "iam:GetRolePolicy"
+        ]
+        Resource = [
+          "arn:aws:iam::*:role/lambda-*-${var.environment}",
+          "arn:aws:iam::*:role/kpz-${var.environment}-*"
+        ]
+      },
+      # EventBridge Scheduler permissions
+      {
+        Effect = "Allow"
+        Action = [
+          "scheduler:CreateSchedule",
+          "scheduler:DeleteSchedule",
+          "scheduler:GetSchedule",
+          "scheduler:UpdateSchedule",
+          "scheduler:TagResource",
+          "scheduler:UntagResource",
+          "scheduler:ListTagsForResource"
+        ]
+        Resource = "arn:aws:scheduler:${var.aws_region}:*:schedule/default/kpz-${var.environment}-*"
       }
     ]
   })
