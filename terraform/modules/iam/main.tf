@@ -240,7 +240,7 @@ resource "aws_iam_role_policy" "github_actions_terraform_infra" {
         ]
         Resource = "*"
       },
-      # IAM role attachments
+      # IAM role management permissions
       {
         Effect = "Allow"
         Action = [
@@ -252,25 +252,17 @@ resource "aws_iam_role_policy" "github_actions_terraform_infra" {
           "iam:GetRole",
           "iam:TagRole",
           "iam:UntagRole",
-          "iam:ListRoleTags"
+          "iam:ListRoleTags",
+          "iam:ListAttachedRolePolicies",
+          "iam:PutRolePolicy",
+          "iam:DeleteRolePolicy",
+          "iam:GetRolePolicy",
+          "iam:ListRolePolicies",
+          "iam:UpdateAssumeRolePolicy"
         ]
         Resource = [
           "arn:aws:iam::*:role/lambda-*-${var.environment}",
           "arn:aws:iam::*:role/github-actions-*-${var.environment}",
-          "arn:aws:iam::*:role/kpz-${var.environment}-*"
-        ]
-      },
-      # IAM role policy permissions
-      {
-        Effect = "Allow"
-        Action = [
-          "iam:PutRolePolicy",
-          "iam:DeleteRolePolicy",
-          "iam:GetRolePolicy",
-          "iam:ListRolePolicies"
-        ]
-        Resource = [
-          "arn:aws:iam::*:role/lambda-*-${var.environment}",
           "arn:aws:iam::*:role/kpz-${var.environment}-*"
         ]
       },
