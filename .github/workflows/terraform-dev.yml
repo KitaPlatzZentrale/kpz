@@ -1,6 +1,12 @@
 name: Terraform Deploy (Dev)
 
 on:
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/terraform-dev.yml'
   push:
     branches:
       - dev
@@ -15,8 +21,95 @@ permissions:
   pull-requests: write
 
 jobs:
-  terraform:
+  terraform-plan:
+    name: Terraform Plan
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    environment: dev
+
+    defaults:
+      run:
+        working-directory: terraform/environments/dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.13.1
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-central-1
+
+      - name: Set Terraform Variables
+        run: |
+          echo "TF_VAR_mongodb_connection_string=${{ secrets.MONGODB_CONNECTION_STRING }}" >> $GITHUB_ENV
+          echo "TF_VAR_api_key=${{ secrets.API_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_auth_key=${{ secrets.AUTH_KEY }}" >> $GITHUB_ENV
+          echo "TF_VAR_kita_api_url=${{ secrets.KITA_API_URL }}" >> $GITHUB_ENV
+
+      - name: Terraform Format Check
+        id: fmt
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color
+        continue-on-error: true
+
+      - name: Comment PR with Plan
+        uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: ${{ steps.plan.outputs.stdout }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
+            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`terraform
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pusher: @${{ github.actor }}, Action: \`${{ github.event_name }}\`, Workflow: \`${{ github.workflow }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/dev'
     environment: dev
 
     defaults:
