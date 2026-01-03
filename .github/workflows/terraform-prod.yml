@@ -23,7 +23,9 @@ jobs:
   terraform-plan:
     runs-on: ubuntu-latest
     environment: prod
-    if: github.event_name == 'pull_request'
+    # Skip this job until production environment is configured
+    # Remove this condition when terraform/environments/prod/main.tf exists
+    if: false && github.event_name == 'pull_request'
 
     defaults:
       run:
@@ -100,7 +102,9 @@ jobs:
     environment:
       name: prod
       # Requires manual approval before deployment
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    # Skip this job until production environment is configured
+    # Remove this condition when terraform/environments/prod/main.tf exists
+    if: false && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
 
     defaults:
       run:
