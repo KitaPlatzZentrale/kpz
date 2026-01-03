@@ -33,6 +33,7 @@
     "hpp": "^0.2.3",
     "mongodb-client-encryption": "^2.8.0",
     "mongoose": "^7.0.3",
+    "serverless-http": "^4.0.0",
     "uuid": "^9.0.0",
     "winston": "^3.8.2"
   },

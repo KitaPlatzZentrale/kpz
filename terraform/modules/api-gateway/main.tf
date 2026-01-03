@@ -28,7 +28,7 @@ resource "aws_apigatewayv2_integration" "lambda" {
   integration_type       = "AWS_PROXY"
   integration_uri        = var.lambda_invoke_arn
   integration_method     = "POST"
-  payload_format_version = "2.0"
+  payload_format_version = "1.0"  # Changed from 2.0 - v1.0 format works better with serverless-express + body-parser
 }
 
 # Default Route (catches all paths)

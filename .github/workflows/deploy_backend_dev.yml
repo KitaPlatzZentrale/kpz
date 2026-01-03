@@ -1,0 +1,110 @@
+name: Deploy Backend to AWS Lambda (Dev)
+# Trigger deployment
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - 'backend/**'
+      - '.github/workflows/deploy_backend_dev.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.16.0'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Build backend
+        run: |
+          cd backend
+          npm run build
+
+      - name: Create Lambda deployment package
+        run: |
+          cd backend
+
+          # Create deployment directory
+          mkdir -p lambda-package
+
+          # Copy compiled code
+          cp -r dist/* lambda-package/
+
+          # Copy node_modules (production only)
+          cp -r node_modules lambda-package/
+
+          # Copy package.json
+          cp package.json lambda-package/
+
+          # Create zip file
+          cd lambda-package
+          zip -r ../lambda.zip .
+          cd ..
+
+          echo "Lambda package size:"
+          ls -lh lambda.zip
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: eu-central-1
+
+      - name: Upload Lambda package to S3
+        run: |
+          # Upload to S3 with timestamp (versioned)
+          aws s3 cp backend/lambda.zip s3://kpz-lambda-artifacts-dev/backend-api/kpz-backend-api-dev-$(date +%Y%m%d-%H%M%S).zip \
+            --region eu-central-1
+
+          # Upload as "latest" for the update command
+          aws s3 cp backend/lambda.zip s3://kpz-lambda-artifacts-dev/backend-api/kpz-backend-api-dev-latest.zip \
+            --region eu-central-1
+
+      - name: Update Lambda function
+        run: |
+          aws lambda update-function-code \
+            --function-name kpz-backend-api-dev \
+            --s3-bucket kpz-lambda-artifacts-dev \
+            --s3-key backend-api/kpz-backend-api-dev-latest.zip \
+            --region eu-central-1
+
+      - name: Wait for Lambda update to complete
+        run: |
+          aws lambda wait function-updated \
+            --function-name kpz-backend-api-dev \
+            --region eu-central-1
+
+      - name: Verify deployment
+        run: |
+          aws lambda get-function \
+            --function-name kpz-backend-api-dev \
+            --region eu-central-1 \
+            --query 'Configuration.[FunctionName,LastModified,State]' \
+            --output table
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Backend deployed to AWS Lambda (dev)"
+          echo "Function: kpz-backend-api-dev"
+          echo "Region: eu-central-1"
+          echo "API Gateway: https://q53a8x2xfl.execute-api.eu-central-1.amazonaws.com"

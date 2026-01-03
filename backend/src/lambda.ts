@@ -1,14 +1,9 @@
-import serverlessExpress from '@vendia/serverless-express';
-import { Handler } from 'aws-lambda';
+import serverless from 'serverless-http';
 import app from './index';
-
-// Create the serverless-express handler once and reuse it
-const serverlessExpressHandler = serverlessExpress({ app });
 
 /**
  * AWS Lambda handler for the Express application
- * Uses serverless-express to adapt Express for Lambda Function URLs
+ * Uses serverless-http which has better compatibility with Express middleware
+ * than @vendia/serverless-express for API Gateway integrations
  */
-export const handler: Handler = (event, context, callback) => {
-  return serverlessExpressHandler(event, context, callback);
-};
+export const handler = serverless(app);
