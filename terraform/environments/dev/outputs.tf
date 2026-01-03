@@ -25,6 +25,11 @@ output "s3_bucket_name" {
   value       = module.s3_frontend.bucket_name
 }
 
+output "lambda_artifacts_bucket_name" {
+  description = "S3 bucket name for Lambda deployment artifacts"
+  value       = module.s3_lambda_artifacts.bucket_name
+}
+
 output "cloudfront_distribution_id" {
   description = "CloudFront distribution ID"
   value       = module.cloudfront.distribution_id

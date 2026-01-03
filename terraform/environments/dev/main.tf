@@ -111,6 +111,13 @@ module "s3_frontend" {
   environment = "dev"
 }
 
+# S3 Module - Lambda Artifacts
+module "s3_lambda_artifacts" {
+  source = "../../modules/storage/lambda-artifacts"
+
+  environment = "dev"
+}
+
 # CloudFront CDN - HTTPS support for frontend
 module "cloudfront" {
   source = "../../modules/cdn"

@@ -48,8 +48,31 @@ variable "lambda_role_arn" {
 }
 
 variable "lambda_zip_path" {
-  description = "Path to the Lambda deployment package (.zip file)"
+  description = "Path to the Lambda deployment package (.zip file). Use for local deployment. Mutually exclusive with s3_bucket."
   type        = string
+  default     = null
+  validation {
+    condition     = var.lambda_zip_path == null || var.s3_bucket == null
+    error_message = "Cannot specify both lambda_zip_path and s3_bucket. Choose one deployment method."
+  }
+}
+
+variable "s3_bucket" {
+  description = "S3 bucket containing the Lambda deployment package. Use for CI/CD deployment. Mutually exclusive with lambda_zip_path."
+  type        = string
+  default     = null
+}
+
+variable "s3_key" {
+  description = "S3 key (path) to the Lambda deployment package. Required if s3_bucket is set."
+  type        = string
+  default     = null
+}
+
+variable "s3_object_version" {
+  description = "S3 object version of the Lambda deployment package. Optional, enables versioned deployments."
+  type        = string
+  default     = null
 }
 
 variable "environment_variables" {

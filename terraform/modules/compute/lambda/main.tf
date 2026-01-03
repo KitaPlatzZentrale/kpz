@@ -8,9 +8,15 @@ resource "aws_lambda_function" "function" {
   handler       = var.handler
   runtime       = var.runtime
 
-  # Deployment package (will be updated via CI/CD)
-  filename         = var.lambda_zip_path
-  source_code_hash = fileexists(var.lambda_zip_path) ? filebase64sha256(var.lambda_zip_path) : null
+  # Deployment package - supports both local files and S3
+  # Local deployment (for development)
+  filename         = var.s3_bucket == null ? var.lambda_zip_path : null
+  source_code_hash = var.s3_bucket == null && var.lambda_zip_path != null ? (fileexists(var.lambda_zip_path) ? filebase64sha256(var.lambda_zip_path) : null) : null
+
+  # S3 deployment (for CI/CD)
+  s3_bucket         = var.s3_bucket
+  s3_key            = var.s3_key
+  s3_object_version = var.s3_object_version
 
   timeout     = var.timeout
   memory_size = var.memory_size
@@ -36,7 +42,10 @@ resource "aws_lambda_function" "function" {
   lifecycle {
     ignore_changes = [
       filename,
-      source_code_hash
+      source_code_hash,
+      s3_key,
+      s3_object_version,
+      last_modified
     ]
   }
 }
