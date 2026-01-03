@@ -85,6 +85,7 @@ module "lambda_scraper" {
 
   environment_variables = {
     MONGO_DB_CONNECTION = var.mongodb_connection_string
+    KITA_API_URL        = var.kita_api_url
   }
 
   log_retention_days = 7
