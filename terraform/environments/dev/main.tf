@@ -1,6 +1,6 @@
 # KPZ Development Environment
 # Deploys Lambda-based infrastructure to kpz-dev AWS account
-# Trigger Terraform workflow to apply IAM role updates
+# CloudFront custom domain deployment after DNS propagation
 
 terraform {
   required_version = "= 1.13.1"
