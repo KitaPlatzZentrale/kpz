@@ -1,6 +1,6 @@
 # KPZ Development Environment
 # Deploys Lambda-based infrastructure to kpz-dev AWS account
-# CloudFront custom domain deployment after DNS propagation
+# CloudFront with dev.kitaplatz-zentrale.de custom domain
 
 terraform {
   required_version = "= 1.13.1"
