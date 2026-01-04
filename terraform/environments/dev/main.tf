@@ -1,6 +1,6 @@
 # KPZ Development Environment
 # Deploys Lambda-based infrastructure to kpz-dev AWS account
-# Trigger Terraform workflow to apply IAM role updates
+# CloudFront with dev.kitaplatz-zentrale.de custom domain
 
 terraform {
   required_version = "= 1.13.1"
@@ -144,8 +144,8 @@ module "acm_certificate" {
   }
 
   environment               = "dev"
-  domain_name               = "kitaplatz-zentrale.de"
-  subject_alternative_names = ["www.kitaplatz-zentrale.de"]
+  domain_name               = "dev.kitaplatz-zentrale.de"
+  subject_alternative_names = []
 
   # Set to false since DNS validation is in management account
   auto_validate = false
@@ -159,9 +159,9 @@ module "cloudfront" {
   s3_bucket_name       = module.s3_frontend.bucket_name
   s3_website_endpoint  = module.s3_frontend.website_endpoint
 
-  # Custom domain configuration
-  domain_name            = "kitaplatz-zentrale.de"
-  alternate_domain_names = ["www.kitaplatz-zentrale.de"]
+  # Custom domain configuration - dev subdomain
+  domain_name            = "dev.kitaplatz-zentrale.de"
+  alternate_domain_names = []
   acm_certificate_arn    = module.acm_certificate.certificate_arn
 }
 
