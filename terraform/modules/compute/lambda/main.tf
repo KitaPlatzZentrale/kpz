@@ -44,8 +44,7 @@ resource "aws_lambda_function" "function" {
       filename,
       source_code_hash,
       s3_key,
-      s3_object_version,
-      last_modified
+      s3_object_version
     ]
   }
 }
