@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source                = "hashicorp/aws"
+      version               = "~> 5.0"
+      configuration_aliases = [aws.us-east-1]
+    }
+  }
+}
+
 # ACM Certificate Module for CloudFront
 # Creates SSL/TLS certificate in us-east-1 (required for CloudFront)
 
