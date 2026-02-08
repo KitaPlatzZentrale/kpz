@@ -2,7 +2,10 @@
 
 ## Getting Started
 
-To explore the features of Kitaplatz-Zentrale, simply visit our website at <https://kitaplatz-zentrale.de/>.
+To explore the features of Kitaplatz-Zentrale:
+
+- **Production**: <https://kitaplatz-zentrale.de/> (Coming soon)
+- **Dev Environment**: <https://dev.kitaplatz-zentrale.de/> (Currently active)
 
 ## Introduction
 
@@ -12,63 +15,160 @@ The Kindergarten also not just accepts any child that comes but rather picks chi
 This process is tedious and not optimal. We want to solve it by building a Kitaplatz-zentrale, an online platform that lets parents search for Kindergarten that match their requirements and apply there in the fastest way possible.
 Kindergarten will then be able to accept the children they want in a convenient way.
 
-## Architectural design
+## Architecture
 
 ![KPZ-Cloud Architecture + CD _ CD - CI _ CD   Current Design (5)](https://github.com/KitaPlatzZentrale/kpz/assets/32839416/73f30d25-c62b-45ae-9042-7b057787632c)
 
-- API: This Service acts as a Gateway, handles incoming requests, writes and fetches data from and to the MongoDB. It also handles the logic of the location-service. ( Can be decoupled in the future )
+### Core Services
 
-- AWS EventBridge: This Service consumes events emitted by the MongoDB and triggers various Lambda functions based on different event types.
+- **Backend API**: Node.js/Express service deployed as AWS Lambda function behind API Gateway. Handles incoming requests, writes and fetches data from MongoDB. Includes location-service logic.
 
-- EmailSignup: This Service integrates with AWS Simple Email Service (SES) and consists of multiple Lambda functions responsible for sending different types of emails like signupForAreaService.
+- **Frontend**: React/Vite SPA deployed to S3 and served via CloudFront with HTTPS custom domain support (`dev.kitaplatz-zentrale.de`).
 
-- SlackNotificationService: This Service handles the SNS (Simple Notification Service) integration. It includes two Lambda function triggered by SNS notifications one for errors and one for signups and sends messages to Slack.
+- **AWS EventBridge**: Consumes events emitted by MongoDB change streams and triggers various Lambda functions based on different event types.
 
-- Health Check Service: This Service is a scheduled Lambda function that periodically calls the /health endpoint of the API. In case of a 503 response, it sends an SNS event, triggering the Lambda function responsible for sending a Slack message.
+- **Email Service**: Integrates with AWS SES and consists of multiple Lambda functions responsible for sending different types of emails (signup confirmations, notifications, etc.).
 
-## Setup
+- **Slack Notification Service**: Handles SNS integration with Lambda functions triggered by SNS notifications for errors and signups, sending messages to Slack.
 
-You need env variables and [mongoDB setup for local development](https://www.mongodb.com/docs/manual/installation/).
-In each sub-repo `backend`, `email`, `notification` you need to have a `.env` file for local development, to get the env
-variables please contact one of the main contributor.
+- **Scraper Service**: Scheduled Lambda function (runs daily at 2 AM UTC via EventBridge) that scrapes Kita data from berlin.de and updates MongoDB.
 
-```bash
+- **Location Service**: Lambda function providing geospatial search using MongoDB geoNear for finding Kitas within a specified radius.
+
+### Infrastructure
+
+- **Terraform**: Infrastructure as Code managing all AWS resources (Lambda, API Gateway, S3, CloudFront, ACM certificates, IAM roles, EventBridge)
+- **HTTPS/SSL**: ACM certificates provisioned in us-east-1 for CloudFront integration
+- **Custom Domains**: DNS managed in management account with cross-account validation
+- **CI/CD**: GitHub Actions workflows for automated deployment to dev environment
+
+For detailed architecture documentation, see `docs/Deployment-Architecture.md` and `docs/Architecture.md`.
+
+## Development Setup
+
+### Prerequisites
+
+- Node.js v18.16.0 (backend requirement)
+- Terraform 1.13.1
+- [MongoDB setup for local development](https://www.mongodb.com/docs/manual/installation/)
+- AWS CLI configured with profile from `/Users/anthonysherrill/.aws/config-personal`
+
+### Environment Variables
+
+Each service (`backend`, `email`, `notification`) requires a `.env` file for local development. Contact a main contributor for environment variable values.
 
 ### Backend
 
 ```bash
 cd backend
-npm i
+npm install
+
+# Compile TypeScript (watch mode)
 npx tsc --watch
-```
 
-Run the following command in a new terminal window to start the server:
-
-```bash
+# In a new terminal, run the server
 npm run local
+
+# Build Lambda deployment package
+npm run build:lambda
 ```
 
 ### Frontend
 
 ```bash
-npm i
-npm run dev
+cd frontend
+npm install    # or: yarn install
+npm run dev    # or: yarn dev
+
+# Production build
+npm run build
 ```
 
-### Email
+### Email Service (Lambda)
 
 ```bash
-yarn 
-yarn build
+cd email
+yarn install
+yarn build    # Creates dist/ and zips each function
+
+# Local email development
+yarn dev      # React Email dev server
 ```
 
-### Notification
+### Notification Service (Lambda)
 
 ```bash
-yarn
-yarn build
+cd notification
+yarn install
+yarn build    # Creates dist/ and zips functions
 ```
+
+### Scraper Service (Lambda)
+
+```bash
+cd scraper
+npm install
+npm run build # Creates dist/index.zip for Lambda deployment
+```
+
+### Location Service (Lambda)
+
+```bash
+cd location-service
+npm install
+# Build using esbuild (check package.json for specific commands)
+```
+
+### Terraform Infrastructure
+
+```bash
+cd terraform/environments/dev  # or prod
+
+# Initialize Terraform
+terraform init
+
+# Plan infrastructure changes
+terraform plan
+
+# Apply infrastructure changes
+terraform apply
+```
+
+## AWS Configuration for Local Development
+
+When running Terraform or AWS CLI commands locally, use:
+
+**Config file**: `/Users/anthonysherrill/.aws/config-personal`
+
+**Profiles**:
+- `anthony-management` - Management account
+- `kpz-dev` - KPZ development environment
+- `kpz-prod` - KPZ production environment
+
+**Usage**:
+```bash
+# Terraform
+export AWS_CONFIG_FILE=/Users/anthonysherrill/.aws/config-personal
+export AWS_PROFILE=kpz-dev
+terraform plan
+
+# AWS CLI
+AWS_CONFIG_FILE=/Users/anthonysherrill/.aws/config-personal AWS_PROFILE=kpz-dev aws s3 ls
+```
+
+**Important**: Always verify which profile to use based on the target AWS account.
+
+## Documentation
+
+Comprehensive documentation is available in the `docs/` directory:
+
+- **[Deployment-Setup.md](docs/Deployment-Setup.md)** - Step-by-step deployment workflow
+- **[Deployment-Architecture.md](docs/Deployment-Architecture.md)** - Complete infrastructure overview
+- **[Domain-Setup-Guide.md](docs/Domain-Setup-Guide.md)** - Custom domain and HTTPS setup
+- **[Development-Guide.md](docs/Development-Guide.md)** - Local development best practices
+- **[Architecture.md](docs/Architecture.md)** - System architecture and design decisions
+- **[API-Reference.md](docs/API-Reference.md)** - API endpoint documentation
 
 ## API Documentation
 
-Find [here](https://app.swaggerhub.com/apis/Darjusch/KPZ_API_DOC/1.0.0) the API documentation on swaggerhub.
+Swagger/OpenAPI documentation: <https://app.swaggerhub.com/apis/Darjusch/KPZ_API_DOC/1.0.0>
