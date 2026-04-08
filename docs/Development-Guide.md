@@ -262,6 +262,14 @@ Then create a Pull Request on GitHub.
 
 ## Docker Development
 
+### Platform Flag (`--platform=linux/amd64`)
+
+The backend Dockerfile uses `--platform=linux/amd64` on both stages. This is intentional.
+
+**Why**: Development machines (Apple Silicon Macs) run on ARM architecture, but AWS EKS nodes run on AMD64 (x86_64). Without this flag, Docker builds a native ARM image that won't run correctly on AWS infrastructure.
+
+**Why `node:18-slim` instead of `node:18`**: The full `node:18` image is ~900MB. `node:18-slim` is a Debian-based image stripped of non-essential packages, significantly smaller while retaining the `glibc` compatibility required by native Node.js addons like `mongodb-client-encryption`.
+
 ### Backend with Docker
 
 ```bash
