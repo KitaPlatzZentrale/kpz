@@ -136,24 +136,29 @@ terraform apply
 
 ## AWS Configuration for Local Development
 
-When running Terraform or AWS CLI commands locally, use:
-
-**Config file**: `/Users/anthonysherrill/.aws/config-personal`
+When running Terraform or AWS CLI commands locally, set the appropriate AWS profile for the target environment.
 
 **Profiles**:
-- `anthony-management` - Management account
-- `kpz-dev` - KPZ development environment
-- `kpz-prod` - KPZ production environment
+- `<your-dev-profile>` - KPZ development environment
+- `<your-prod-profile>` - KPZ production environment
 
 **Usage**:
 ```bash
 # Terraform
-export AWS_CONFIG_FILE=/Users/anthonysherrill/.aws/config-personal
-export AWS_PROFILE=kpz-dev
+export AWS_PROFILE=<your-dev-profile>
 terraform plan
 
 # AWS CLI
-AWS_CONFIG_FILE=/Users/anthonysherrill/.aws/config-personal AWS_PROFILE=kpz-dev aws s3 ls
+AWS_PROFILE=<your-dev-profile> aws s3 ls
+
+# If using a non-default AWS config file location, also set:
+export AWS_CONFIG_FILE=/path/to/your/aws/config
+```
+
+**Example** (values will differ per developer):
+```bash
+export AWS_PROFILE=kpz-dev
+terraform plan
 ```
 
 **Important**: Always verify which profile to use based on the target AWS account.
