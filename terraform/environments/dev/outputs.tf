@@ -56,3 +56,8 @@ output "scraper_schedule_state" {
   description = "EventBridge schedule state (ENABLED or DISABLED)"
   value       = module.eventbridge_scraper.schedule_state
 }
+
+output "ecr_repository_url" {
+  description = "ECR repository URL for backend images"
+  value       = module.container_registry.repository_url
+}
