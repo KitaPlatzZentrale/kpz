@@ -34,3 +34,4 @@ terraform/environments/**/terraform.tfvars
 terraform/environments/**/.terraform/
 terraform/environments/**/.terraform.lock.hcl
 terraform/environments/**/terraform.tfstate*
+.github/ISSUE_TEMPLATE/devops-learning-task.md
