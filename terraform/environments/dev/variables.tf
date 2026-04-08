@@ -34,3 +34,9 @@ variable "kita_api_url" {
   description = "URL for Kita API"
   type        = string
 }
+
+variable "environment" {
+  description = "Deployment environment (e.g., dev, staging, prod)"
+  type        = string
+  default     = "dev"
+}

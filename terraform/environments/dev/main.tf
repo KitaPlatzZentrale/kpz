@@ -67,7 +67,7 @@ module "iam" {
 module "lambda_backend_api" {
   source = "../../modules/compute/lambda"
 
-  environment     = "dev"
+  environment     = var.environment
   function_name   = "backend-api"
   handler         = "lambda.handler"
   runtime         = "nodejs18.x"
@@ -90,7 +90,7 @@ module "lambda_backend_api" {
 module "lambda_scraper" {
   source = "../../modules/compute/lambda"
 
-  environment     = "dev"
+  environment     = var.environment
   function_name   = "scraper"
   handler         = "index.handler"
   runtime         = "nodejs18.x"
@@ -111,7 +111,7 @@ module "lambda_scraper" {
 module "api_gateway" {
   source = "../../modules/api-gateway"
 
-  environment          = "dev"
+  environment          = var.environment
   lambda_function_name = module.lambda_backend_api.function_name
   lambda_invoke_arn    = module.lambda_backend_api.invoke_arn
   log_group_arn        = module.lambda_backend_api.log_group_arn
@@ -125,14 +125,14 @@ module "api_gateway" {
 module "s3_frontend" {
   source = "../../modules/storage/s3"
 
-  environment = "dev"
+  environment = var.environment
 }
 
 # S3 Module - Lambda Artifacts
 module "s3_lambda_artifacts" {
   source = "../../modules/storage/lambda-artifacts"
 
-  environment = "dev"
+  environment = var.environment
 }
 
 # ACM Certificate - SSL/TLS for CloudFront
@@ -143,7 +143,7 @@ module "acm_certificate" {
     aws.us-east-1 = aws.us-east-1
   }
 
-  environment               = "dev"
+  environment               = var.environment
   domain_name               = "dev.kitaplatz-zentrale.de"
   subject_alternative_names = []
 
@@ -155,7 +155,7 @@ module "acm_certificate" {
 module "cloudfront" {
   source = "../../modules/cdn"
 
-  environment          = "dev"
+  environment          = var.environment
   s3_bucket_name       = module.s3_frontend.bucket_name
   s3_website_endpoint  = module.s3_frontend.website_endpoint
 
@@ -169,7 +169,7 @@ module "cloudfront" {
 module "eventbridge_scraper" {
   source = "../../modules/messaging/eventbridge"
 
-  environment                  = "dev"
+  environment                  = var.environment
   schedule_name                = "kpz-dev-scraper-daily"
   schedule_description         = "Triggers Kita data scraper daily at 2 AM UTC"
   schedule_expression          = "cron(0 2 * * ? *)" # Daily at 2 AM UTC
@@ -179,4 +179,11 @@ module "eventbridge_scraper" {
   target_lambda_function_name  = module.lambda_scraper.function_name
   max_event_age_seconds        = 3600  # 1 hour
   max_retry_attempts           = 2
+}
+
+# ECR Repository - Container Registry for Backend Service
+module "container_registry" {
+  source = "../../modules/container-registry"
+
+  environment = var.environment
 }
