@@ -10,3 +10,5 @@ docker*.yml
 node_modules
 
 README.md
+
+.env
