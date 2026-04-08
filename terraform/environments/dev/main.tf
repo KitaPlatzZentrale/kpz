@@ -32,7 +32,7 @@ provider "aws" {
     tags = {
       Project     = "KPZ"
       Environment = "dev"
-      ManagedBy   = "Terraform"
+      ManagedBy   = "terraform"
     }
   }
 }
@@ -47,8 +47,8 @@ provider "aws" {
   default_tags {
     tags = {
       Project     = "KPZ"
-      Environment = "dev"
-      ManagedBy   = "Terraform"
+      Environment = var.environment
+      ManagedBy   = "terraform"
     }
   }
 }
