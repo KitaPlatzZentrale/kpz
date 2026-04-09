@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kpz-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kpz-backend
+  template:
+    metadata:
+      labels:
+        app: kpz-backend
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: kpz-backend
+          image: 441104482452.dkr.ecr.eu-central-1.amazonaws.com/kpz-backend-dev:latest
+          envFrom:
+            - configMapRef:
+                name: kpz-backend-config
+            - secretRef:
+                name: kpz-backend-secret
+          ports:
+            - containerPort: 3000
+          resources:
+            limits:
+              memory: "256Mi"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"

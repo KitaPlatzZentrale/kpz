@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kpz-backend-config
+data:
+  KITA_API_URL: https://kita-navigator.berlin.de/api/v1/kitas
+  NODE_ENV: production
