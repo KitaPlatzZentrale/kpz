@@ -1,8 +1,8 @@
-ARG TARGETARCH=linux/amd64
+ARG TARGET_PLATFORM=linux/amd64
 ###################
 ### Build Stage ###
 ###################
-FROM --platform=${TARGETARCH} node:18-slim AS builder
+FROM --platform=${TARGET_PLATFORM} node:18-slim AS builder
 
 WORKDIR /usr/src/app
 
@@ -17,7 +17,7 @@ RUN npx tsc -p ./
 ########################
 ### Production Stage ###
 ########################
-FROM --platform=${TARGETARCH} node:18-slim AS production
+FROM --platform=${TARGET_PLATFORM} node:18-slim AS production
 
 WORKDIR /usr/src/app
 
