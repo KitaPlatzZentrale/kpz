@@ -115,3 +115,24 @@ resource "aws_eks_access_policy_association" "admin" {
       type = "cluster"                                                                                       
   }                                                                                                       
 }
+
+resource "aws_iam_openid_connect_provider" "eks" {
+  client_id_list = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.eks.certificates[0].sha1_fingerprint]
+  url = aws_eks_cluster.main.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_role" "aws_lbc" {
+  name = "${var.environment}-aws-lbc-role"
+  assume_role_policy = data.aws_iam_policy_document.aws_lbc_assume_role.json
+}
+
+resource "aws_iam_policy" "aws_lbc" {
+  name = "${var.environment}-aws-lbc-policy"
+  policy = file("${path.module}/lbc-iam-policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "aws_lbc" {
+  policy_arn = aws_iam_policy.aws_lbc.arn
+  role       = aws_iam_role.aws_lbc.name
+}
