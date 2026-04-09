@@ -47,7 +47,7 @@ provider "aws" {
   default_tags {
     tags = {
       Project     = "KPZ"
-      Environment = var.environment
+      Environment = "dev"
       ManagedBy   = "terraform"
     }
   }
