@@ -15,4 +15,5 @@ module "eks" {
   max_size            = 2
   min_size            = 1
   eks_cluster_version = "1.31"
+  admin_principal_arn = "arn:aws:iam::441104482452:role/aws-reserved/sso.amazonaws.com/eu-central-1/AWSReservedSSO_AdministratorAccess_174737496b56e352"
 }

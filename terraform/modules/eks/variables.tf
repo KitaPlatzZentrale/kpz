@@ -52,3 +52,8 @@ variable "eks_cluster_version" {
   type        = string
   default     = "1.31"
 }
+
+variable "admin_principal_arn" {
+  description = "ARN of the IAM principal to be added to the EKS cluster's aws-auth ConfigMap for admin access"
+  type        = string
+}

@@ -100,3 +100,18 @@ resource "aws_iam_role_policy_attachment" "worker_AmazonEC2ContainerRegistryRead
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.worker.name
 }
+
+resource "aws_eks_access_entry" "admin" {
+  cluster_name = aws_eks_cluster.main.name
+  principal_arn = var.admin_principal_arn
+  type = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "admin" {
+  cluster_name = aws_eks_cluster.main.name
+  principal_arn = var.admin_principal_arn
+  policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  access_scope {                                                                                          
+      type = "cluster"                                                                                       
+  }                                                                                                       
+}
