@@ -20,6 +20,15 @@ echo "Tearing down EKS infrastructure..."
 echo "AWS config: $AWS_CONFIG_FILE"
 echo "AWS profile: $AWS_PROFILE"
 
+echo "Deleting Kubernetes ingress resources to allow ALB cleanup..."
+if kubectl cluster-info &>/dev/null; then
+  kubectl delete ingress --all --all-namespaces --ignore-not-found=true
+  echo "Waiting for ALB to be deprovisioned..."
+  sleep 30
+else
+  echo "Cluster unreachable, skipping ingress cleanup."
+fi
+
 terraform -chdir="$PROJECT_ROOT/terraform/environments/dev-eks" destroy -auto-approve
 
 echo "EKS infrastructure successfully destroyed."
