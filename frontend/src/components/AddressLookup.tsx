@@ -256,7 +256,9 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
 
   React.useEffect(() => {
     if (!coordinates || !coordinates.lat || !coordinates.lng) return;
-    onCoordinatesSuccessfullyRetrieved?.(coordinates);
+    onCoordinatesSuccessfullyRetrieved?.(
+      coordinates as { lat: number; lng: number }
+    );
   }, [coordinates]);
 
   return (
@@ -294,7 +296,7 @@ const AddressLookup: React.FC<AddressLookupProps> = ({
           fontSize="sm"
           underline="always"
           disabled={
-            currentCoordinatesAreUserCoordinates &&
+            !!currentCoordinatesAreUserCoordinates &&
             allowUserCoordinatesRequest === false
           }
           startDecorator={

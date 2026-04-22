@@ -25,7 +25,7 @@ const FormAutocomplete: React.FC<FormAutocompleteProps> = ({
   formControlProps,
   ...autoCompleteProps
 }) => {
-  const { error, helperText, ...rest } = inputProps || {};
+  const { error, helperText, ref: _ref, size: _size, ...rest } = inputProps || {};
 
   return (
     <FormControl error={error} {...formControlProps}>

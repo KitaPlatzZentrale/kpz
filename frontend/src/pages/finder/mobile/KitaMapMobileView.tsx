@@ -13,7 +13,7 @@ const KitaMapMobileView: React.FC<KitaMapMobileViewProps> = ({}) => {
     <div id="finder-map" className="fixed flex h-full w-full flex-grow">
       <KitaMap
         kitas={kitas || []}
-        centerCoordinates={coordinates}
+        centerCoordinates={coordinates ?? undefined}
         showNavigation={false}
       />
     </div>

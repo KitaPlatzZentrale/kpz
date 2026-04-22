@@ -1,6 +1,6 @@
 import React from "react";
 import { Popup } from "react-map-gl";
-import { Kita } from "../../../../../types";
+import { Kita } from "../../../../../../types";
 import KitaPopupInner from "./KitaPopupInner";
 
 type KitaPopupProps = {

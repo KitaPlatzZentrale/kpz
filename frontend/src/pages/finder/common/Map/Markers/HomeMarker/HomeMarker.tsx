@@ -1,6 +1,6 @@
 import React from "react";
 import { Marker } from "react-map-gl";
-import type { LatLng } from "../../../SearchContext";
+import type { LatLng } from "../../../types";
 import HomeMarkerInner from "./HomeMarkerInner";
 
 type HomeMarkerProps = {

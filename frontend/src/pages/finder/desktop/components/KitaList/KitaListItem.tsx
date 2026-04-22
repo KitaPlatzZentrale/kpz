@@ -41,7 +41,7 @@ const KitaListItem: React.FC<KitaListItemProps> = ({ kita, id }) => {
   const handleOpen = () => {
     setEmailSubmitModalOpen(true);
 
-    setValue("kitaDesiredAvailability", desiredStartingMonth);
+    setValue("kitaDesiredAvailability", desiredStartingMonth ?? "");
     setValue("kitaId", kita.uuid);
     setValue("kitaName", kita.name);
   };
