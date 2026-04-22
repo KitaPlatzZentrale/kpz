@@ -100,7 +100,7 @@ const SingleKitaSignup: React.FC<SingleKitaSignupProps> = ({ onClose }) => {
       ) : (
         <div className="flex flex-col items-center justify-center">
           <div className="mb-4">
-            <CheckCircle color="info" fontSize="xl7" />
+            <CheckCircle color="info" fontSize="large" />
           </div>
           <div className="mb-4 flex flex-col items-center p-2">
             <h3 className="mb-2 text-2xl font-black">

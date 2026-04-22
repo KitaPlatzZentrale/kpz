@@ -56,7 +56,7 @@ const SearchContextProvider: React.FC<SearchContextProviderProps> = ({
   >(null);
 
   const coordinatesAreValid = React.useMemo(() => {
-    return (
+    return !!(
       coordinates && coordinates?.lat !== null && coordinates?.lng !== null
     );
   }, [coordinates]);

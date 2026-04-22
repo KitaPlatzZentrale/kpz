@@ -70,7 +70,7 @@ export const KitaPopupInner: React.FC<KitaPopupInnerProps> = ({
       >
         <ModalClose variant="solid" size="sm" />
       </div>
-      <EmailSubmitModal open={openModal} onClose={() => setOpenModal(false)} />
+      <EmailSubmitModal onClose={() => setOpenModal(false)} />
       <div
         className="flex flex-col gap-1 px-3"
         onClick={() =>

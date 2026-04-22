@@ -15,10 +15,9 @@ export function generateKitasAndDetails(count: number): {
       uuid,
       name: `Kita ${i + 1}`,
       number: `${1000 + i}`,
-      coordinates: {
-        lat: 52.52 + i * 0.01,
-        lng: 13.4 + i * 0.01,
-        dist: 0.5,
+      location: {
+        type: "Point",
+        coordinates: [13.4 + i * 0.01, 52.52 + i * 0.01],
       },
       address: {
         street: `Kita Street ${i + 1}`,

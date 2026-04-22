@@ -10,7 +10,10 @@ import React from "react";
 
 type FormFieldProps = {
   label: string;
-  inputProps?: InputProps & { helperText?: string };
+  inputProps?: Omit<InputProps, "defaultValue"> & {
+    helperText?: string;
+    defaultValue?: string | number | readonly string[] | null;
+  };
 } & FormControlProps;
 
 const FormField: React.FC<FormFieldProps> = ({
@@ -20,12 +23,12 @@ const FormField: React.FC<FormFieldProps> = ({
   inputProps,
   ...formControlProps
 }) => {
-  const { error, helperText } = inputProps || {};
+  const { error, helperText, defaultValue, ...restInputProps } = inputProps || {};
 
   return (
     <FormControl error={error} {...formControlProps}>
       <FormLabel>{label}</FormLabel>
-      <Input placeholder={placeholder} {...inputProps} />
+      <Input placeholder={placeholder} defaultValue={defaultValue ?? undefined} {...restInputProps} />
       {helperText && (
         <FormHelperText color="primary">{helperText}</FormHelperText>
       )}

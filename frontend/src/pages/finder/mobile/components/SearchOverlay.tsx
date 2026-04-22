@@ -7,6 +7,7 @@ import AddressLookup from "../../../../components/AddressLookup";
 import FormAutocomplete from "../../../../components/FormAutocomplete";
 import { useKitaListContext } from "../../common/KitaDataContext";
 import { useSearchContext } from "../../common/KitaSearchContext";
+import { generateMonthOptions, getCurrentMonth } from "../../common/utils";
 import MobileOverlay from "../../../../components/MobileOverlay/MobileOverlay";
 import { useMobileOverlay } from "../../../../components/MobileOverlay/MobileOverlayContext";
 
@@ -87,35 +88,10 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ onClose }) => {
               className: "w-full lg:w-1/4",
             }}
             label=""
-            placeholder="z.B. Mai 2023"
+            placeholder={`z.B. ${getCurrentMonth()}`}
             startDecorator={<DateRange />}
             value={desiredStartingMonth}
-            options={[
-              "Mai 2023",
-              "Juni 2023",
-              "Juli 2023",
-              "August 2023",
-              "September 2023",
-              "Oktober 2023",
-              "November 2023",
-              "Dezember 2023",
-              "Januar 2024",
-              "Februar 2024",
-              "März 2024",
-              "April 2024",
-              "Mai 2024",
-              "Juni 2024",
-              "Juli 2024",
-              "August 2024",
-              "September 2024",
-              "Oktober 2024",
-              "November 2024",
-              "Dezember 2024",
-              "Januar 2025",
-              "Februar 2025",
-              "März 2025",
-              "April 2025",
-            ]}
+            options={generateMonthOptions()}
             defaultValue={desiredStartingMonth}
             onChange={(event, value) => {
               setDesiredStartingMonth(value);

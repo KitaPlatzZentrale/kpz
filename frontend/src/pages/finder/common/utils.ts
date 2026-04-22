@@ -23,8 +23,9 @@ export const screenIsBiggerOrEqualToXl = () => {
  */
 export const getDescribedHaversineDistanceBetweenCoordinates = (
   coordinates1: { lat: number; lng: number },
-  coordinates2: { lat: number; lng: number }
+  coordinates2: { lat: number; lng: number } | null | undefined
 ): string => {
+  if (!coordinates2) return "";
   const distance = haversineDistance(coordinates1, coordinates2);
   if (distance < 1000) {
     return `${Math.round(distance)}m`;

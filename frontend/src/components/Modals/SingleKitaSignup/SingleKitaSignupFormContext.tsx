@@ -92,6 +92,7 @@ const SingleKitaSignupFormContextProvider: React.FC<
     return {
       ...rest,
       ref,
+      onChange,
       defaultValue: value,
       inputRef: ref,
       helperText: error?.message,

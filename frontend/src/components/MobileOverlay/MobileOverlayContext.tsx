@@ -57,7 +57,17 @@ const MobileOverlayContextProvider: React.FC<
   );
 };
 
-export const useMobileOverlay = (id?: string) => {
+type UseMobileOverlayWithId = {
+  isOpen: boolean;
+  setOpen: (open: boolean) => void;
+  z: number;
+};
+
+export function useMobileOverlay(id: string): UseMobileOverlayWithId;
+export function useMobileOverlay(): MobileOverlayContext;
+export function useMobileOverlay(
+  id?: string
+): UseMobileOverlayWithId | MobileOverlayContext {
   const ctx = React.useContext(MobileOverlayContext);
 
   if (!ctx) {
@@ -75,5 +85,5 @@ export const useMobileOverlay = (id?: string) => {
   }
 
   return ctx;
-};
+}
 export default MobileOverlayContextProvider;

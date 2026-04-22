@@ -17,7 +17,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 type KitaMapProps = {
   kitas: Kita[];
-  centerCoordinates: {
+  centerCoordinates?: {
     lat?: number;
     lng?: number;
   };
@@ -63,8 +63,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
       <Map
         id="finderMap" // used to find the map with useMap(), if you remove this the programmatic control won't work
         reuseMaps
-        //TODO: move this to an env once we separate dev and prod map keys
-        mapboxAccessToken="pk.eyJ1IjoiaGFubm9ncmltbSIsImEiOiJjbGdtamwyZHowNmxnM2VxbTd6eHZhMjExIn0.0wHQJStc2kgDh29Ewv_g-w"
+        mapboxAccessToken={import.meta.env.VITE_MAPBOX_ACCESS_TOKEN}
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         initialViewState={{
@@ -82,7 +81,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
         {centerCoordinates &&
           typeof centerCoordinates.lat === "number" &&
           typeof centerCoordinates.lng === "number" && (
-            <HomeMarker coordinates={centerCoordinates} />
+            <HomeMarker coordinates={centerCoordinates as LatLng} />
           )}
         {kitaMarkers}
         {featuredKitaInPopup && (
@@ -106,7 +105,7 @@ const KitaMap: React.FC<KitaMapProps> = ({
 
 type ProgrammaticMapControlProps = {
   markers?: JSX.Element[];
-  coordinates: LatLng;
+  coordinates: { lat?: number; lng?: number };
 };
 
 const ProgrammaticMapControl: React.FC<ProgrammaticMapControlProps> = ({
@@ -128,9 +127,9 @@ const ProgrammaticMapControl: React.FC<ProgrammaticMapControlProps> = ({
 
   React.useEffect(() => {
     if (!finderMap) return;
-    if (coordinates.lat === null || coordinates.lng === null) return;
+    if (coordinates.lat == null || coordinates.lng == null) return;
 
-    handleCoordinatesChange(coordinates);
+    handleCoordinatesChange(coordinates as LatLng);
   }, [coordinates]);
 
   React.useEffect(() => {
