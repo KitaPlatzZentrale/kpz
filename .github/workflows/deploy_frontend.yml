@@ -1,13 +1,13 @@
-name: Deploy Frontend to S3/CloudFront (Dev)
-# Trigger deployment
+name: Deploy Frontend
 
 on:
   push:
     branches:
       - dev
+      - main
     paths:
       - 'frontend/**'
-      - '.github/workflows/deploy_frontend_dev.yml'
+      - '.github/workflows/deploy_frontend.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,9 +15,35 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  prepare:
     runs-on: ubuntu-latest
-    environment: dev
+    outputs:
+      env_name: ${{ steps.map.outputs.env_name }}
+      backend_url: ${{ steps.map.outputs.backend_url }}
+      s3_bucket: ${{ steps.map.outputs.s3_bucket }}
+      s3_origin: ${{ steps.map.outputs.s3_origin }}
+    steps:
+      - name: Map branch to environment config
+        id: map
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "env_name=prod" >> $GITHUB_OUTPUT
+            echo "backend_url=https://PROD_API_PLACEHOLDER" >> $GITHUB_OUTPUT
+            echo "s3_bucket=kpz-frontend-prod" >> $GITHUB_OUTPUT
+            echo "s3_origin=kpz-frontend-prod.s3-website.eu-central-1.amazonaws.com" >> $GITHUB_OUTPUT
+          else
+            echo "env_name=dev" >> $GITHUB_OUTPUT
+            echo "backend_url=https://q53a8x2xfl.execute-api.eu-central-1.amazonaws.com" >> $GITHUB_OUTPUT
+            echo "s3_bucket=kpz-frontend-dev" >> $GITHUB_OUTPUT
+            echo "s3_origin=kpz-frontend-dev.s3-website.eu-central-1.amazonaws.com" >> $GITHUB_OUTPUT
+          fi
+
+  deploy:
+    needs: prepare
+    runs-on: ubuntu-latest
+    # Remove when prod infra is provisioned (terraform-prod.yml enabled and applied)
+    if: needs.prepare.outputs.env_name == 'dev'
+    environment: ${{ needs.prepare.outputs.env_name }}
 
     steps:
       - name: Checkout code
@@ -37,8 +63,7 @@ jobs:
 
       - name: Build frontend
         env:
-          # Use .env.development for dev environment
-          VITE_BACKEND_URL: https://q53a8x2xfl.execute-api.eu-central-1.amazonaws.com
+          VITE_BACKEND_URL: ${{ needs.prepare.outputs.backend_url }}
           VITE_PUBLIC_HERE_API_KEY: ${{ secrets.VITE_PUBLIC_HERE_API_KEY }}
           VITE_MAPBOX_ACCESS_TOKEN: ${{ secrets.VITE_MAPBOX_ACCESS_TOKEN }}
         run: |
@@ -53,14 +78,14 @@ jobs:
 
       - name: Sync to S3 bucket
         run: |
-          aws s3 sync frontend/dist/ s3://kpz-frontend-dev/ \
+          aws s3 sync frontend/dist/ s3://${{ needs.prepare.outputs.s3_bucket }}/ \
             --delete \
             --cache-control "public,max-age=31536000,immutable" \
             --exclude "*.html" \
             --region eu-central-1
 
           # HTML files with short cache (for SPA routing)
-          aws s3 sync frontend/dist/ s3://kpz-frontend-dev/ \
+          aws s3 sync frontend/dist/ s3://${{ needs.prepare.outputs.s3_bucket }}/ \
             --exclude "*" \
             --include "*.html" \
             --cache-control "public,max-age=0,must-revalidate" \
@@ -70,12 +95,12 @@ jobs:
         id: cloudfront
         run: |
           DISTRIBUTION_ID=$(aws cloudfront list-distributions \
-            --query "DistributionList.Items[?Origins.Items[?DomainName=='kpz-frontend-dev.s3-website.eu-central-1.amazonaws.com']].Id | [0]" \
+            --query "DistributionList.Items[?Origins.Items[?DomainName=='${{ needs.prepare.outputs.s3_origin }}']].Id | [0]" \
             --output text \
             --region eu-central-1)
 
           DISTRIBUTION_URL=$(aws cloudfront list-distributions \
-            --query "DistributionList.Items[?Origins.Items[?DomainName=='kpz-frontend-dev.s3-website.eu-central-1.amazonaws.com']].DomainName | [0]" \
+            --query "DistributionList.Items[?Origins.Items[?DomainName=='${{ needs.prepare.outputs.s3_origin }}']].DomainName | [0]" \
             --output text \
             --region eu-central-1)
 
@@ -93,8 +118,8 @@ jobs:
 
       - name: Deployment summary
         run: |
-          echo "✅ Frontend deployed to S3/CloudFront (dev)"
-          echo "S3 Bucket: kpz-frontend-dev"
+          echo "✅ Frontend deployed to S3/CloudFront (${{ needs.prepare.outputs.env_name }})"
+          echo "S3 Bucket: ${{ needs.prepare.outputs.s3_bucket }}"
           echo "CloudFront Distribution: ${{ steps.cloudfront.outputs.distribution_id }}"
           echo "CloudFront URL: ${{ steps.cloudfront.outputs.distribution_url }}"
           echo "Region: eu-central-1"
